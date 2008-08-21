@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<UserConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Login>jabberadmin</Login>
+  <WorkspaceWidth>350</WorkspaceWidth>
+  <WorkspaceHeight>443</WorkspaceHeight>
+</UserConfig>

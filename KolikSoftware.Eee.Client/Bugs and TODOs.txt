@@ -1,0 +1,38 @@
+- Oznacovanie novych sprav (napr. podfarbenie, alebo nastavenie na prvu)
+
+- zle pocita pocet poziadaviek, ak je v queue sprava, ktora sa neda odoslat (nepocita neuspesne requesty)
+- pri autoafk sa prijimaju messidze
+- autoafk 2x za sebou (rovnaky user, rovnaky cas)?
+- pri odosielani systemovej spravy (ako UNAFK) sa neaktualizuje statusbar
+- search v history
+
+- eee klient online zobrazit v default browseri a cache-aware.
+- ak sa neodosle uspesne sprava UNAFK, treba s tym nieco spavit...
+- [REPORTVER Sajo/sajo]
+- wakeup systray ikona
+- zobrazenie offline users
+- posielat udaje cez post, nie cez get a checkovat dlzku spravy
+- sizeable history win
+
+
+Changes & BUGFixes:
+**** 2.5 ****
+- nove bublinky sa nezatvaraju, ak sa nad nimi podrzi mys
+- opat funguje ukladanie nastavenia roomov
+- klient je mozne otvorit kombinaciou klavesov Ctrl+` (t.j. klaves nalavo od 1ky)
+- obrazky smilikov: :), :-), ;), ;-)
+- odstranene bugy so zobrazovanim
+**** 2.4 ****
+- minimalizacia na ESC
+- zobrazenie okna naspat na povodne
+- odstranenie problemov so spustanim klienta
+**** 2.3 ****
+- pri afk je ina ikona v trayi
+- alt+tab nezobrazuje ikonu, ak nie je zobrazeny v taskbare
+- afk mesidz sa uz nezobrazuje, je to v tooltipe
+- autologin & autostart
+- klikanie na link v historii
+- klik na link spusti default browser, nie explorer
+- autoupdate
+- ukladanie pozicie splitterov
+*************

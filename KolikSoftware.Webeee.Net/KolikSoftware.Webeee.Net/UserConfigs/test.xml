@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<UserConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Login>test</Login>
+  <WorkspaceWidth>599</WorkspaceWidth>
+  <WorkspaceHeight>333</WorkspaceHeight>
+</UserConfig>

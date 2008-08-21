@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{00000000-0000-0000-0000-000000000000}") = "KolikSoftware.Webeee.Net", "KolikSoftware.Webeee.Net\KolikSoftware.Webeee.Net.csproj", "{7EC9BA64-C388-46A0-9881-7B1553B85E14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Service", "..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj", "{F41504E2-DCA4-4559-A84E-C393CB951C83}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 1
+		SccProjectUniqueName0 = ..\\KolikSoftware.Eee.Service\\KolikSoftware.Eee.Service.csproj
+		SccProjectName0 = \u0022$/EeeClient2006/EeeClient2006/KolikSoftware.Eee.Service\u0022,\u0020ZNAAAAAA
+		SccLocalPath0 = ..\\KolikSoftware.Eee.Service
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<UserConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Login>kolik</Login>
+  <WorkspaceWidth>648</WorkspaceWidth>
+  <WorkspaceHeight>522</WorkspaceHeight>
+</UserConfig>

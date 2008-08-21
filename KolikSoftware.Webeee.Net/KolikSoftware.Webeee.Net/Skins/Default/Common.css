@@ -1,0 +1,74 @@
+﻿body
+{
+	background-color: Black;
+}
+
+.GradientWhite
+{
+	position: relative;
+	display:inline;
+	color: White;
+}
+
+.GradientWhiteImg
+{
+	background: url(Gradient/Gradient.White.png) repeat-x;
+	position: absolute;
+	display: block;
+	width: 100%;
+	top: 0;
+	height: 10px;
+}
+
+.HandleImage
+{
+    width:15px;
+    height:16px;
+    background-image:url(HandleGrip.png);
+    overflow:hidden;
+    cursor:se-resize;
+}
+.ResizingImage
+{
+    padding:0px;
+    border-style:solid;
+    border-width:3px;
+    border-color:#B4D35D;
+}
+
+.Workspace
+{
+	background-color: White;
+}
+
+#UsersContentDiv
+{
+	margin : 4px 4px 4px 4px;
+	background-color: Black;
+	color: White;
+}
+
+#UsersContentDiv input
+{
+	padding: 2px 2px 2px 2px;
+}
+
+#RoomsContentDiv
+{
+	padding : 4px 4px 4px 4px;
+	background-color: Black;
+	color: White;
+}
+
+#SmiliesDiv
+{
+	text-align: right;
+	padding: 2px 2px 2px 2px;
+	position: absolute;
+	left: 200px;
+	top: 250px;
+	border-color: #8B0000;
+	border-style: solid;
+	border-width: 1px;
+	background-color: #111111;
+}

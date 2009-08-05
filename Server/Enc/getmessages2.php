@@ -1,5 +1,5 @@
 <?php
-    $link = mysql_connect("localhost", "eeechatn_kolik", "kuratko") or die("Could not connect");
+    $link = mysql_connect("localhost", "eeechatn_kolik", "xxx") or die("Could not connect");
 
     mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
 

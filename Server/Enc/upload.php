@@ -1,11 +1,11 @@
 <?php
-    $link = mysql_connect("localhost", "eeechatn_kolik", "kuratko") or die("Could not connect");
+    $link = mysql_connect("localhost", "eeechatn_kolik", "xxx") or die("Could not connect");
 
     mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
 
-    $myUserID = $_POST["myUserID"];
-    $myPasswordHash = $_POST["myPasswordHash"];
-    $fileId = $_POST["fileId"];
+    $myUserID = $_GET["myUserID"];
+    $myPasswordHash = $_GET["myPasswordHash"];
+    $fileId = $_GET["fileId"];
 
     $query = "SELECT UserID FROM eee_User WHERE UserID=$myUserID AND Password = '$myPasswordHash' AND State>0";
     $result = mysql_query($query) or die("<EeeResponse>Query failed</EeeResponse>");

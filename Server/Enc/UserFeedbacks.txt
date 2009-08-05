@@ -1,0 +1,539 @@
+Feedback Type: Bug Report
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+Description:
+Upload doesn\'t work on new eeechat.net server.
+
+Steps:
+Upload of any french female alternative pop song fails.
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+Description:
+Texts in Slovak language are not transfered correctly. Special characters are corrupted.
+
+Steps:
+send a message like this:
+> Zastaví manželský pár pri benzínovej pumpe a pumpár hovorí
+> manželovi:
+> - Máte nové auto, že áno?
+> Manželka na manžela:
+> - Čo povedal?
+> - Že máme nové auto.
+> O chvíľu pumpár hovorí:
+> - Pozerám podľa ešpézetky, že ste z Košíc.
+> Manželka na manžela:
+> - Čo povedal?
+> - Že sme z Košíc!
+> Pumpár na to:
+> - Ja som poznal jednu ženskú z Košíc. Tá bola taká škaredá,
+> blbá, nevedela
+> ani súložiť, ani variť, no hrôza!
+> Manželka zase na manžela:
+> - Čo povedal?
+> - Že ťa pozná!
+____________________________________
+Feedback Type: Suggestion
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+It should be possible to display and toggle the login/logout messages in chat area. Default state should be disabled, but a menu entry or an icon should be available to toggle the user preference.
+____________________________________
+Feedback Type: Suggestion
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+It should be possible to change properties of the user account (e.g. color, name) from the eee client without the need to create new account.
+____________________________________
+Feedback Type: Comment
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+Your-email in User Feedback field shall be persisted so that user doesn\'t have to write it again and again.
+____________________________________
+Feedback Type: Suggestion
+From: firewalker
+Mail: firewalker42@gmail.com
+
+Description:
+Client shall enable user to change background color of chat-view window regardless of choosen graphic scheme.
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 3/31/2008 5:13:16 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+??  aja viem ze co sa stalo ?
+____________________________________
+Feedback Type: Bug Report
+From: kolik
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 8.4.2008 15:00:25.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 4/15/2008 1:16:17 PM.
+
+System.ComponentModel.Win32Exception: An error occurred in sending the command to the application
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 6/9/2008 3:46:10 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Suggestion
+From: firewalker
+Mail: marek.estok@gmail.com
+
+Description:
+Rooms should be converted to Tags. It should be possible for one message to have multiple tags associated with it. This will effectively enable one user to send e.g. funny quote for developers by marking it as \"Vtipy\" and \"Developeri\", so the devs interested in jokes would see them while at the same time user interested only in non-developer jokes won\'t be bothered by some geeky humor.
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 6/17/2008 11:19:02 AM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 6/23/2008 2:53:29 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+??? a ja viem ?sa to len tak zrazu to. .objavilo.. 
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 7/2/2008 3:13:43 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 7/9/2008 11:25:49 AM.
+
+System.ComponentModel.Win32Exception: The parameter is incorrect
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: kolik
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2008 (7.9), at 28.8.2008 11:55:50.
+
+System.ApplicationException: Unhandled Application Error ---> System.IO.FileNotFoundException: Could not load file or assembly \'Interop.Shell32, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\' or one of its dependencies. The system cannot find the file specified.
+File name: \'Interop.Shell32, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\'
+   at KolikSoftware.Eee.Client.Media.MediaPlayer.GetTrackInfo(String link, String filePath)
+   at KolikSoftware.Eee.Client.Media.MediaPlayer.SetFile(String link, String filePath)
+   at KolikSoftware.Eee.Client.MainForm.PlayFile(String link, String filePath)
+   at KolikSoftware.Eee.Client.MainForm.eeeServiceController_DownloadFinished(Object sender, DownloadFinishedEventArgs e)
+   at System.EventHandler`1.Invoke(Object sender, TEventArgs e)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.OnDownloadFinished(DownloadFinishedEventArgs e)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.ProcessDownloadFile(InvocationParameters invocationParameters)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.ProcessResult(InvocationParameters invocationParameters)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.invocationWorker_RunWorkerCompleted(Object sender, RunWorkerCompletedEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnRunWorkerCompleted(RunWorkerCompletedEventArgs e)
+   at System.ComponentModel.BackgroundWorker.AsyncOperationCompleted(Object arg)
+
+WRN: Assembly binding logging is turned OFF.
+To enable assembly bind failure logging, set the registry value [HKLM\\Software\\Microsoft\\Fusion!EnableLog] (DWORD) to 1.
+Note: There is some performance penalty associated with assembly bind failure logging.
+To turn this feature off, remove the registry value [HKLM\\Software\\Microsoft\\Fusion!EnableLog].
+
+   --- End of inner exception stack trace ---
+
+Steps:
+Stiahnut wmv
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 9/2/2008 2:19:04 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+heh... nejaky WTF error.. alebo co.. 
+
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 9/2/2008 3:17:17 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+kliknem na link, a ono bac.. .otvori IE ale neotvori obsah.. IE ostane prazdne..  a ma nejake problemy asi zo spustanim,  a potom to EEE reportuje.. . tak asi tolko.. papluhnata chyba !
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 9/17/2008 10:07:40 AM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: kolik
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2008 (7.9), at 18.9.2008 11:25:14.
+
+System.ApplicationException: Unhandled Application Error ---> System.IO.FileNotFoundException: Could not load file or assembly \'KolikSoftware.Controls.Options, Version=7.0.0.1, Culture=neutral, PublicKeyToken=null\' or one of its dependencies. The system cannot find the file specified.
+File name: \'KolikSoftware.Controls.Options, Version=7.0.0.1, Culture=neutral, PublicKeyToken=null\'
+   at KolikSoftware.Eee.Client.OptionsForm.InitializeComponent()
+   at KolikSoftware.Eee.Client.OptionsForm..ctor()
+   at KolikSoftware.Eee.Client.MainForm.optionsMenuItem_Click(Object sender, EventArgs e)
+   at System.Windows.Forms.ToolStripItem.RaiseEvent(Object key, EventArgs e)
+   at System.Windows.Forms.ToolStripMenuItem.OnClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleMouseUp(MouseEventArgs e)
+   at System.Windows.Forms.ToolStripItem.FireEventInteractive(EventArgs e, ToolStripItemEventType met)
+   at System.Windows.Forms.ToolStripItem.FireEvent(EventArgs e, ToolStripItemEventType met)
+   at System.Windows.Forms.ToolStrip.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.ToolStripDropDown.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.ToolStrip.WndProc(Message& m)
+   at System.Windows.Forms.ToolStripDropDown.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+
+WRN: Assembly binding logging is turned OFF.
+To enable assembly bind failure logging, set the registry value [HKLM\\Software\\Microsoft\\Fusion!EnableLog] (DWORD) to 1.
+Note: There is some performance penalty associated with assembly bind failure logging.
+To turn this feature off, remove the registry value [HKLM\\Software\\Microsoft\\Fusion!EnableLog].
+
+   --- End of inner exception stack trace ---
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 9/30/2008 5:58:19 PM.
+
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at KolikSoftware.Eee.Service.EeePhpService.GetMessages()
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   at System.RuntimeMethodHandle.InvokeMethodFast(Object target, Object[] arguments, Signature sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.RuntimeType.InvokeMember(String name, BindingFlags bindingFlags, Binder binder, Object target, Object[] providedArgs, ParameterModifier[] modifiers, CultureInfo culture, String[] namedParams)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.Invoke(InvocationParameters invocationParameters)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.invocationWorker_DoWork(Object sender, DoWorkEventArgs e)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 9/30/2008 5:58:19 PM.
+
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at KolikSoftware.Eee.Service.EeePhpService.GetMessages()
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   at System.RuntimeMethodHandle.InvokeMethodFast(Object target, Object[] arguments, Signature sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.RuntimeType.InvokeMember(String name, BindingFlags bindingFlags, Binder binder, Object target, Object[] providedArgs, ParameterModifier[] modifiers, CultureInfo culture, String[] namedParams)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.Invoke(InvocationParameters invocationParameters)
+   at KolikSoftware.Eee.Client.BackgroundServiceController.invocationWorker_DoWork(Object sender, DoWorkEventArgs e)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 10/7/2008 3:39:06 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 10/10/2008 9:25:56 AM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 10/13/2008 11:13:19 AM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________
+Feedback Type: Suggestion
+From: kolik
+Mail: 
+
+Description:
+Filtrovat podla neprihlaseneho usra
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 10/17/2008 4:53:41 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+dalsi WTF error.... ale asi je to sposobene nejakymlagom..bo mam dost vytazeny procak a disk vrci o 106
+____________________________________
+Feedback Type: Bug Report
+From: btb
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 10/21/2008 7:05:38 PM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+WTF error 3 - asi zase bol vytazeny komp a kliknute spustenie explorera sa neudialo tak ako malo.. apotom ze toto !
+____________________________________
+Feedback Type: Bug Report
+From: firewalker
+Mail: 
+
+Description:
+Description:
+An error has occured in Eee Client 2007 (7.3), at 11/6/2008 9:17:29 AM.
+
+System.ComponentModel.Win32Exception: The system cannot find the file specified
+   at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start()
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(String fileName)
+   at KolikSoftware.Eee.Client.MainForm.browserStarter_DoWork(Object sender, DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Steps:
+
+____________________________________

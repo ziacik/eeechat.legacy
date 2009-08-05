@@ -1,37 +1,22 @@
 #region Usings
 using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Data;
-
-using System.Threading;
-
-using System.Runtime.InteropServices;
-using System.Reflection;
-using System.Text;
-
-using System.Xml;
-using System.Xml.XPath;
-
-using System.IO;
-
-using Microsoft.Win32;
-
-using System.Text.RegularExpressions;
-using KolikSoftware.Eee.Service;
-using KolikSoftware.Eee.Processor;
-using Security.Windows.Forms;
-using KolikSoftware.Eee.Client.Helpers;
 using System.Collections.Generic;
-using KolikSoftware.Eee.Client.Reporting;
-using KolikSoftware.Eee.Client.Notifications;
-using KolikSoftware.Eee.Client.Updating;
-using System.Diagnostics;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using KolikSoftware.Eee.Client.Helpers;
 using KolikSoftware.Eee.Client.LoginProcess;
 using KolikSoftware.Eee.Client.Media;
-using KolikSoftware.Eee.Client.AI;
+using KolikSoftware.Eee.Client.Notifications;
+using KolikSoftware.Eee.Client.Reporting;
+using KolikSoftware.Eee.Client.Updating;
+using KolikSoftware.Eee.Processor;
+using KolikSoftware.Eee.Service;
 #endregion
 
 namespace KolikSoftware.Eee.Client
@@ -64,8 +49,6 @@ namespace KolikSoftware.Eee.Client
 
         Dictionary<int, InvisibleMessageProperties> invisibleUserMessages = new Dictionary<int, InvisibleMessageProperties>();
         Dictionary<int, InvisibleMessageProperties> invisibleRoomMessages = new Dictionary<int, InvisibleMessageProperties>();
-
-        SuggestionController suggestionController;
         #endregion
 
         void AddInvisibleUserMessage(int messageId, int userId)
@@ -123,8 +106,6 @@ namespace KolikSoftware.Eee.Client
             LoadLayout();
 
             this.loginManager.Login(this);
-
-            this.suggestionController = new SuggestionController(this, this.text);
         }
 
         void ResetSettingsForThisVersion()
@@ -935,6 +916,9 @@ namespace KolikSoftware.Eee.Client
             this.Visible = true;
             this.WindowState = this.lastState;
             this.Activate();
+
+            if (this.eeeServiceController != null && this.eeeServiceController.Service != null)
+                this.statusLabel.Text = string.Format("Rq: {0} Bytes: {1}", this.eeeServiceController.Service.RequestsMade, this.eeeServiceController.Service.BytesReceived);
         }
 
         private void MinimizeMe()
@@ -1171,11 +1155,6 @@ namespace KolikSoftware.Eee.Client
                     if (roomRow != null && roomRow != mainRoom)
                     {
                         message.Room = roomRow.Name;
-                        this.suggestionController.Room(roomRow.Name);
-                    }
-                    else
-                    {
-                        this.suggestionController.Room(null);
                     }
 
                     SetMessageVisibility(message, history);
@@ -1406,7 +1385,7 @@ namespace KolikSoftware.Eee.Client
                                 if (this.loginManager.IsConnected)
                                 {
                                     this.eeeServiceController.AddMessage(this.SelectedRoomId, recipient, textToSend);
-                                    this.eeeServiceController.GetMessages(new TimeSpan(0, 0, 2));
+                                    //this.eeeServiceController.GetMessages(new TimeSpan(0, 0, 2));
                                 }
                             }
                         }
@@ -1842,6 +1821,8 @@ namespace KolikSoftware.Eee.Client
 
         void RefreshUnbindableProperties(bool templateChanged)
         {
+            this.eeeServiceController.Service.ServiceUrl = Properties.Settings.Default.ServiceUrl;
+
             this.ShowNotifications = Properties.Settings.Default.ShowNotifications;
             this.ShowInTaskbar = Properties.Settings.Default.ShowInTaskbar;
             if (Properties.Settings.Default.UseProfessionalAppearance)

@@ -8,9 +8,14 @@ namespace KolikSoftware.Eee.Service
     /// </summary>
     public interface IEeeService
     {
+        int RequestsMade { get; }
+        int BytesReceived { get; }
+
         string PasswordHash { get; }
 
         EeeDataSet.UserRow CurrentUser { get; }
+
+        string ServiceUrl { get; set; }
 
         /// <summary>
         /// Connects and logins the user at the web service. Returns false if login fails.

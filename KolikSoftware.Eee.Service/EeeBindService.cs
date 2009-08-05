@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace KolikSoftware.Eee.Service
 {
-    public class EeePhpService : IEeeService
+    public class EeeBindService : IEeeService
     {
         public string ServiceUrl { get; set; }
 
@@ -30,7 +30,7 @@ namespace KolikSoftware.Eee.Service
         public int RequestsMade { get; private set; }
         public int BytesReceived { get; private set; }
 
-        public EeePhpService(string phpServiceAddress, ProxySettings proxySettings, bool clientInstalled, string clientVersion, string versionNumber)
+        public EeeBindService(string phpServiceAddress, ProxySettings proxySettings, bool clientInstalled, string clientVersion, string versionNumber)
         {
             this.ServiceUrl = phpServiceAddress;
             this.proxySettings = proxySettings;
@@ -135,13 +135,28 @@ namespace KolikSoftware.Eee.Service
 
         protected virtual EeeDataSet InvokeToDataSet(string page, params object[] paramsAndValues)
         {
-            string response = InvokeAny(false, page, "<EeeDataSet xmlns=\"http://tempuri.org/EeeDataSet.xsd\">", "</EeeDataSet>", paramsAndValues);
+            bool invokeLong = false;
+
+            if (page == "streammessages.php")
+                invokeLong = true;
 
             EeeDataSet dataSet = new EeeDataSet();
 
-            using (StringReader reader = new StringReader(response))
+            try
             {
-                dataSet.ReadXml(reader, XmlReadMode.Auto);
+                string response = InvokeAny(invokeLong, page, "<EeeDataSet xmlns=\"http://tempuri.org/EeeDataSet.xsd\">", "</EeeDataSet>", paramsAndValues);
+
+                using (StringReader reader = new StringReader(response))
+                {
+                    dataSet.ReadXml(reader, XmlReadMode.Auto);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.StartsWith("The server committed a protocol violation."))
+                    return dataSet;
+                else
+                    throw;
             }
 
             return dataSet;
@@ -213,7 +228,7 @@ namespace KolikSoftware.Eee.Service
             request.ContentLength = data.Length;
 
             if (invokeLong)
-                request.Timeout = 120000;
+                request.Timeout = 1200000;
 
             //using
             Stream requestStream = request.GetRequestStream();
@@ -221,10 +236,10 @@ namespace KolikSoftware.Eee.Service
                 requestStream.Write(data, 0, data.Length);
             //}
 
+            this.RequestsMade++;
+
             using (response = request.GetResponse())
             {
-                this.RequestsMade++;
-
                 using (Stream stream = response.GetResponseStream())
                 {
                     using (StreamReader reader = new StreamReader(stream))
@@ -261,6 +276,153 @@ namespace KolikSoftware.Eee.Service
                 }
             }
         }
+
+        protected void InvokeBind(string page, params object[] paramsAndValues)
+        {
+            string openTag = "<EeeDataSet xmlns=\"http://tempuri.org/EeeDataSet.xsd\">";
+            string closeTag = "</EeeDataSet>";
+
+            StringBuilder stringStream = new StringBuilder();
+
+            HttpWebRequest request = BuildRequest(page, paramsAndValues);            
+
+            using (WebResponse response = request.GetResponse())
+            {
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string line = null;
+
+                        do
+                        {
+                            line = reader.ReadLine();
+                            stringStream.Append(line);
+
+                            string text = stringStream.ToString();
+
+                            int startIdx = text.IndexOf(openTag);
+                            int endIdx = text.IndexOf(closeTag);
+
+                            if (startIdx < 0 || endIdx < 0)
+                            {
+                                startIdx = text.IndexOf("<EeeResponse>");
+                                endIdx = text.IndexOf("</EeeResponse>");
+
+                                if (startIdx >= 0 && endIdx >= 0)
+                                {
+                                    string eeeResponse = text.Substring(startIdx + "<EeeResponse>".Length, endIdx - startIdx - "<EeeResponse>".Length);
+
+                                    if (eeeResponse == "Invalid password or user ID." && this.CurrentUser != null)
+                                        throw new DisconnectedException();
+                                    else
+                                        throw new WebException(eeeResponse);
+                                }
+                            }
+                            else
+                            {
+                                text = text.Substring(startIdx, endIdx - startIdx + 1);
+                                stringStream.Remove(startIdx, endIdx - startIdx + 1);
+
+                                EeeDataSet dataSet = new EeeDataSet();
+
+                                using (StringReader dataReader = new StringReader(text))
+                                {
+                                    dataSet.ReadXml(dataReader, XmlReadMode.Auto);
+                                }
+
+                                foreach (EeeDataSet.MessageRow messageRow in dataSet.Message)
+                                {
+                                    OnMessageAvailable(new MessageAvailableEventArgs(messageRow));
+                                }
+                            }
+                        }
+                        while (line != null);
+                    }
+                }
+            }
+        }
+
+        private HttpWebRequest BuildRequest(string page, object[] paramsAndValues)
+        {
+            string query = BuildQuery(paramsAndValues);
+            string url = this.ServiceUrl;
+
+            if (url.EndsWith("/") == false)
+                url += "/";
+
+            Uri uri;
+
+            if (page.StartsWith("http://"))
+                uri = new Uri(page);
+            else
+                uri = new Uri(url + page);
+
+            HttpWebRequest request = null;
+
+            //TODO: Static proxy
+            request = (HttpWebRequest)HttpWebRequest.Create(uri);
+
+            if (this.proxySettings.Server.Length > 0)
+                request.Proxy = new WebProxy(this.proxySettings.Server);
+            else
+                request.Proxy = WebRequest.GetSystemWebProxy();
+
+            //if (this.proxySettings.NoCredentials == false)
+            {
+                if (this.proxySettings.User.Length > 0)
+                    request.Proxy.Credentials = new NetworkCredential(this.proxySettings.User, this.proxySettings.Password, this.proxySettings.Domain);
+                else
+                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+            }
+
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] data = encoding.GetBytes(query);
+
+            //request.ServicePoint.ConnectionLimit = 10;
+            request.Method = "POST";
+            request.KeepAlive = false;
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            request.Timeout = 120000;
+
+            //using
+            Stream requestStream = request.GetRequestStream();
+            //{
+            requestStream.Write(data, 0, data.Length);
+            //}
+            return request;
+        }
+
+        protected string BuildQuery(object[] paramsAndValues)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < paramsAndValues.Length; i++)
+            {
+                if (i != 0)
+                    builder.Append("&");
+
+                string param = paramsAndValues[i].ToString();
+                i++;
+
+                object objVal = paramsAndValues[i];
+                if (objVal == null) objVal = "";
+
+                string value = HttpUtility.UrlEncode(objVal.ToString());
+                value = value.Replace("+", "%20");
+
+                builder.Append(param);
+                builder.Append("=");
+                builder.Append(value);
+            }
+
+            string query = builder.ToString();
+            return query;
+        }
+
+
 
         protected virtual string AdjustResponse(string page, string openTag, string closeTag, string response)
         {
@@ -337,15 +499,26 @@ namespace KolikSoftware.Eee.Service
             return ds.User;
         }
 
+        public event EventHandler<MessageAvailableEventArgs> MessageAvailable;
+
+        protected virtual void OnMessageAvailable(MessageAvailableEventArgs e)
+        {
+            EventHandler<MessageAvailableEventArgs> handler = this.MessageAvailable;
+            if (handler != null) handler(this, e);
+        }
+
         public EeeDataSet.MessageDataTable GetMessages()
         {
-            EeeDataSet ds = InvokeToDataSet("getmessages.php", "myUserID", this.currentUser.UserID, "myPasswordHash", this.passwordHash, "fromID", this.messageIdToStartAt);
+            //EeeDataSet ds = InvokeToDataSet("getmessages.php", "myUserID", this.currentUser.UserID, "myPasswordHash", this.passwordHash, "fromID", this.messageIdToStartAt);
+            EeeDataSet ds = InvokeToDataSet("streammessages.php", "myUser", this.currentUser.Login, "fromID", this.messageIdToStartAt);
 
             if (ds.Message.Count > 0)
             {
                 int maxId = (int)ds.Message.Compute("Max(" + ds.Message.MessageIDColumn.ColumnName + ")", null);
                 this.messageIdToStartAt = maxId + 1;
             }
+
+            //InvokeBind("streammessages.php", "myUser", this.currentUser.Login);
 
             return ds.Message;
         }

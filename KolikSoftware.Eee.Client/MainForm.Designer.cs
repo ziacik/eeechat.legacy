@@ -164,7 +164,7 @@ namespace KolikSoftware.Eee.Client
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.mediaLabel = new System.Windows.Forms.ToolStripLabel();
             this.mainBottomPanel = new System.Windows.Forms.Panel();
-            this.text = new KolikSoftware.Controls.SuggestiveTextEdit();
+            this.text = new System.Windows.Forms.TextBox();
             this.actionsToolStrip = new System.Windows.Forms.ToolStrip();
             this.replyToolItem = new System.Windows.Forms.ToolStripButton();
             this.followToolItem = new System.Windows.Forms.ToolStripButton();
@@ -952,13 +952,14 @@ namespace KolikSoftware.Eee.Client
             // 
             this.text.Dock = System.Windows.Forms.DockStyle.Fill;
             this.text.Location = new System.Drawing.Point(0, 0);
+            this.text.Multiline = true;
             this.text.Name = "text";
             this.text.Size = new System.Drawing.Size(590, 72);
-            this.text.TabIndex = 1;
-            this.text.Text = "";
-            this.text.DragEnter += new System.Windows.Forms.DragEventHandler(this.text_DragEnter);
+            this.text.TabIndex = 0;
+            this.text.TextChanged += new System.EventHandler(this.text_TextChanged);
             this.text.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
             this.text.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
+            this.text.DragEnter += new System.Windows.Forms.DragEventHandler(this.text_DragEnter);
             // 
             // actionsToolStrip
             // 
@@ -1278,15 +1279,15 @@ namespace KolikSoftware.Eee.Client
             this.eeeServiceController.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
             this.eeeServiceController.ExternalUserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.ExternalUserStateChangedEventArgs>(this.eeeServiceController_ExternalUserStateChanged);
             this.eeeServiceController.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
+            this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
             this.eeeServiceController.UserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.UserStateChangedEventArgs>(this.eeeServiceController_UserStateChanged);
             this.eeeServiceController.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
             this.eeeServiceController.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
             this.eeeServiceController.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
-            this.eeeServiceController.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
-            this.eeeServiceController.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
             this.eeeServiceController.GetUsersFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetUsersFinishedEventArgs>(this.eeeServiceController_GetUsersFinished);
-            this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
+            this.eeeServiceController.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
             this.eeeServiceController.DownloadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFinishedEventArgs>(this.eeeServiceController_DownloadFinished);
+            this.eeeServiceController.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
             // 
             // activatingHotkey
             // 
@@ -1319,12 +1320,12 @@ namespace KolikSoftware.Eee.Client
             // updateManager
             // 
             this.updateManager.ServiceController = this.eeeServiceController;
-            this.updateManager.DownloadAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadAllFinishedEventArgs>(this.updateManager_DownloadAllFinished);
             this.updateManager.InstallFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallFailedEventArgs>(this.updateManager_InstallFailed);
+            this.updateManager.DownloadAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadAllFinishedEventArgs>(this.updateManager_DownloadAllFinished);
+            this.updateManager.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadFailedEventArgs>(this.updateManager_DownloadFailed);
             this.updateManager.DownloadStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadStartedEventArgs>(this.updateManager_DownloadStarted);
             this.updateManager.InstallStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallStartedEventArgs>(this.updateManager_InstallStarted);
             this.updateManager.InstallAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallAllFinishedEventArgs>(this.updateManager_InstallAllFinished);
-            this.updateManager.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadFailedEventArgs>(this.updateManager_DownloadFailed);
             // 
             // mediaPlayer
             // 
@@ -1363,6 +1364,7 @@ namespace KolikSoftware.Eee.Client
             this.mediaToolStrip.ResumeLayout(false);
             this.mediaToolStrip.PerformLayout();
             this.mainBottomPanel.ResumeLayout(false);
+            this.mainBottomPanel.PerformLayout();
             this.actionsToolStrip.ResumeLayout(false);
             this.actionsToolStrip.PerformLayout();
             this.userMenu.ResumeLayout(false);
@@ -1475,9 +1477,9 @@ namespace KolikSoftware.Eee.Client
         private ToolStripMenuItem copyMenuItem;
         private ToolStripSeparator toolStripSeparator17;
         private ToolStripMenuItem uploadMediaMenuItem;
-        private KolikSoftware.Controls.SuggestiveTextEdit text;
         private ToolStrip externalUsersToolStrip;
         private WebBrowser chatBrowser;
+        private TextBox text;
 
 
     }

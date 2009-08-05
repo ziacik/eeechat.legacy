@@ -1,6 +1,6 @@
 <?php
     /* Connecting, selecting database */
-    $link = mysql_connect("localhost", "eeechatn_kolik", "kuratko")
+    $link = mysql_connect("localhost", "eeechatn_kolik", "xxx")
         or die("Could not connect");
 
     mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");

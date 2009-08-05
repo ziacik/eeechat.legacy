@@ -15,7 +15,7 @@
 	$mail->SMTPAuth = true; // je nutná SMTP autorizace
 	$mail->Host = 'smtp.gmail.com'; // adresa SMTP serveru
 	$mail->Username = '5kolik'; // uživatelské jméno
-	$mail->Password = 'xxxxxxxxxxx'; // uživatelské heslo
+	$mail->Password = 'xxx'; // uživatelské heslo
 	$mail->Port = 465;
 
 	$mail->From = 'kolik777@gmail.com'; // e-mailová adresa odesílatele

@@ -2,7 +2,7 @@
   <UsingTask TaskName="BuildIncrementer.Incrementer" AssemblyFile="C:\Development\Components\BuildIncrementer.dll" />
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -136,10 +136,6 @@
       <Project>{E012C958-C833-4D6E-AC0C-ECF18547C472}</Project>
       <Name>KolikSoftware.Controls.MutexController</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KolikSoftware.Controls.SuggestiveTextEdit\KolikSoftware.Controls.SuggestiveTextEdit.csproj">
-      <Project>{3EA27E82-C4CF-4820-B0C1-57B1569D0BDE}</Project>
-      <Name>KolikSoftware.Controls.SuggestiveTextEdit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Processor\KolikSoftware.Eee.Processor.csproj">
       <Name>KolikSoftware.Eee.Processor</Name>
       <Project>{DB273059-FA70-481D-9F29-14692DDEC6C2}</Project>
@@ -161,7 +157,6 @@
     <Compile Include="AboutBox.designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="AI\SuggestionController.cs" />
     <Compile Include="AwayModeReasonDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,7 +170,6 @@
       <DependentUpon>BackgroundServiceController.cs</DependentUpon>
     </Compile>
     <None Include="app.config" />
-    <None Include="Class1.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers\GlobalHotKey.cs">
       <SubType>Component</SubType>

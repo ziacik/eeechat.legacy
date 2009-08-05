@@ -30,7 +30,7 @@
     <ManifestCertificateThumbprint>29AE0ECE95C4C278DDA001E310FC2B98A0095E59</ManifestCertificateThumbprint>
     <ManifestKeyFile>EeeClient_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>

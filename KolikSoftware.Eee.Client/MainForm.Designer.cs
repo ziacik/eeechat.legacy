@@ -207,6 +207,7 @@ namespace KolikSoftware.Eee.Client
             this.autoAwayMonitor = new KolikSoftware.Eee.Client.Notifications.AutoAwayMonitor(this.components);
             this.updateManager = new KolikSoftware.Eee.Client.Updating.UpdateManager(this.components);
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
+            this.linkResolver = new KolikSoftware.Eee.Client.LinkResolver(this.components);
             this.notifyMenu.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.toolbarContainer.BottomToolStripPanel.SuspendLayout();
@@ -751,10 +752,10 @@ namespace KolikSoftware.Eee.Client
             this.chatBrowser.ContextMenuStrip = this.browserMenu;
             this.chatBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chatBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.chatBrowser.Location = new System.Drawing.Point(26, 0);
+            this.chatBrowser.Location = new System.Drawing.Point(32, 0);
             this.chatBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.chatBrowser.Name = "chatBrowser";
-            this.chatBrowser.Size = new System.Drawing.Size(564, 399);
+            this.chatBrowser.Size = new System.Drawing.Size(558, 399);
             this.chatBrowser.TabIndex = 8;
             this.chatBrowser.Url = new System.Uri("about:blank", System.UriKind.Absolute);
             this.chatBrowser.WebBrowserShortcutsEnabled = false;
@@ -798,9 +799,10 @@ namespace KolikSoftware.Eee.Client
             this.externalUsersToolStrip.Dock = System.Windows.Forms.DockStyle.Left;
             this.externalUsersToolStrip.Location = new System.Drawing.Point(0, 0);
             this.externalUsersToolStrip.Name = "externalUsersToolStrip";
-            this.externalUsersToolStrip.Size = new System.Drawing.Size(26, 399);
+            this.externalUsersToolStrip.Size = new System.Drawing.Size(32, 399);
             this.externalUsersToolStrip.TabIndex = 7;
             this.externalUsersToolStrip.Text = "toolStrip1";
+            this.externalUsersToolStrip.Visible = false;
             // 
             // mediaToolStrip
             // 
@@ -1332,6 +1334,11 @@ namespace KolikSoftware.Eee.Client
             this.mediaPlayer.ModeChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.ModeChangedEventArgs>(this.mediaPlayer_ModeChanged);
             this.mediaPlayer.MediaChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.MediaChangedEventArgs>(this.mediaPlayer_MediaChanged);
             // 
+            // linkResolver
+            // 
+            this.linkResolver.ProxySettings = null;
+            this.linkResolver.LinkResolved += new System.EventHandler<KolikSoftware.Eee.Client.LinkResolverEventArgs>(this.linkResolver_LinkResolved);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -1480,6 +1487,7 @@ namespace KolikSoftware.Eee.Client
         private ToolStrip externalUsersToolStrip;
         private WebBrowser chatBrowser;
         private TextBox text;
+        private LinkResolver linkResolver;
 
 
     }

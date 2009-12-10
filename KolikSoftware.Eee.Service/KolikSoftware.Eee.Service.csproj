@@ -2,7 +2,7 @@
   <UsingTask TaskName="BuildIncrementer.Incrementer" AssemblyFile="C:\Development\Components\BuildIncrementer.dll" />
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F41504E2-DCA4-4559-A84E-C393CB951C83}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -146,6 +146,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestFactory.cs" />
     <Compile Include="Security.cs" />
     <Content Include="EeeDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>

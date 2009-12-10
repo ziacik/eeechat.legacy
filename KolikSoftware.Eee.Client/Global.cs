@@ -34,7 +34,7 @@ namespace KolikSoftware.Eee.Client
             proxySettings.Password = Properties.Settings.Default.ProxyPassword;
             proxySettings.NoCredentials = Properties.Settings.Default.ProxyUser.Trim().Length == 0;
 
-            return new EeeBindService(Properties.Settings.Default.ServiceUrl, proxySettings, this.Installed, this.ApplicationAndVersion, Application.ProductVersion);
+            //return new EeeBindService(Properties.Settings.Default.ServiceUrl, proxySettings, this.Installed, this.ApplicationAndVersion, Application.ProductVersion);
 
             //TODO: 
             if (Properties.Settings.Default.ServiceUrl.ToLower().Contains("enc"))
@@ -68,7 +68,7 @@ namespace KolikSoftware.Eee.Client
             get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return version.Major.ToString() + "." + version.Minor.ToString() + " (Bind)"; //TODO:
+                return version.Major.ToString() + "." + version.Minor.ToString() + " (Preview)"; //TODO:
             }
         }
 

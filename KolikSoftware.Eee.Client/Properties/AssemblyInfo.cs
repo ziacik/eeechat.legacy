@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Eee Client 2008")]
+[assembly: AssemblyTitle("Eee Client 2010")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Kolik Software")]
-[assembly: AssemblyProduct("Eee Client 2008")]
-[assembly: AssemblyCopyright("© Kolik 2008")]
+[assembly: AssemblyProduct("Eee Client 2010")]
+[assembly: AssemblyCopyright("© Kolik Software 2008-2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("7.9.9.13")]
-[assembly: AssemblyFileVersionAttribute("7.9.9.13")]
+[assembly: AssemblyVersion("10.0.0.0")]
+[assembly: AssemblyFileVersionAttribute("10.0.0.0")]

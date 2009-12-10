@@ -188,6 +188,12 @@
     <Compile Include="History\HistoryManager.Designer.cs">
       <DependentUpon>HistoryManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="LinkResolver.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LinkResolver.Designer.cs">
+      <DependentUpon>LinkResolver.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginProcess\AccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +306,9 @@
       <DependentUpon>HistoryManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="licenses.licx" />
+    <EmbeddedResource Include="LinkResolver.resx">
+      <DependentUpon>LinkResolver.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginProcess\AccountForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AccountForm.cs</DependentUpon>

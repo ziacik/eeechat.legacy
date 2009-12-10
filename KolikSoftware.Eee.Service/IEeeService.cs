@@ -17,6 +17,8 @@ namespace KolikSoftware.Eee.Service
 
         string ServiceUrl { get; set; }
 
+        ProxySettings ProxySettings { get; set; }
+
         /// <summary>
         /// Connects and logins the user at the web service. Returns false if login fails.
         /// </summary>

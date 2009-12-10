@@ -154,7 +154,7 @@ namespace KolikSoftware.Eee.Client.Helpers
             }
             else
             {
-                return @"<a style=""text-decoration:none"" xmlns="""" href=""" + link + @""">[<img border=""0"" src=""" + MessageTextProcessor.UrlPicPath + @""" /> " + server + "]</a>";
+                return @"<a id=""" + Guid.NewGuid().ToString() + @""" style=""text-decoration:none"" xmlns="""" href=""" + link + @""">[<img border=""0"" src=""" + MessageTextProcessor.UrlPicPath + @""" /> " + server + "]</a>";
             }
         }
 

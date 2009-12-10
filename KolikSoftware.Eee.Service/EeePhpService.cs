@@ -20,8 +20,8 @@ namespace KolikSoftware.Eee.Service
         private string passwordHash = null;
 
         int messageIdToStartAt = 0;
-
-        ProxySettings proxySettings = null;
+        
+        public ProxySettings ProxySettings { get; set; }
 
         string client;
         string clientVersion;
@@ -33,7 +33,7 @@ namespace KolikSoftware.Eee.Service
         public EeePhpService(string phpServiceAddress, ProxySettings proxySettings, bool clientInstalled, string clientVersion, string versionNumber)
         {
             this.ServiceUrl = phpServiceAddress;
-            this.proxySettings = proxySettings;
+            this.ProxySettings = proxySettings;
 
 #if DEBUG
             this.client = "KolikSoftware.Eee.Client.Devel";
@@ -184,24 +184,8 @@ namespace KolikSoftware.Eee.Service
             else
                 uri = new Uri(url + page);
 
-            HttpWebRequest request = null;
+            HttpWebRequest request = (HttpWebRequest)RequestFactory.Instance.CreateRequest(uri, this.ProxySettings);
             WebResponse response = null;
-
-            //TODO: Static proxy
-            request = (HttpWebRequest)HttpWebRequest.Create(uri);
-
-            if (this.proxySettings.Server.Length > 0)
-                request.Proxy = new WebProxy(this.proxySettings.Server);
-            else
-                request.Proxy = WebRequest.GetSystemWebProxy();
-
-            //if (this.proxySettings.NoCredentials == false)
-            {
-                if (this.proxySettings.User.Length > 0)
-                    request.Proxy.Credentials = new NetworkCredential(this.proxySettings.User, this.proxySettings.Password, this.proxySettings.Domain);
-                else
-                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-            }
 
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] data = encoding.GetBytes(query);
@@ -456,15 +440,15 @@ namespace KolikSoftware.Eee.Service
                 client.QueryString.Add("myPasswordHash", this.passwordHash);
                 client.QueryString.Add("fileId", fileId);
 
-                if (this.proxySettings.Server.Length > 0)
-                    client.Proxy = new WebProxy(this.proxySettings.Server);
+                if (this.ProxySettings.Server.Length > 0)
+                    client.Proxy = new WebProxy(this.ProxySettings.Server);
                 else
                     client.Proxy = WebRequest.GetSystemWebProxy();
 
                 //if (this.proxySettings.NoCredentials == false)
                 {
-                    if (this.proxySettings.User.Length > 0)
-                        client.Proxy.Credentials = new NetworkCredential(this.proxySettings.User, this.proxySettings.Password, this.proxySettings.Domain);
+                    if (this.ProxySettings.User.Length > 0)
+                        client.Proxy.Credentials = new NetworkCredential(this.ProxySettings.User, this.ProxySettings.Password, this.ProxySettings.Domain);
                     else
                         client.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
                 }
@@ -485,15 +469,15 @@ namespace KolikSoftware.Eee.Service
         {
             using (WebClient client = new WebClient())
             {
-                if (this.proxySettings.Server.Length > 0)
-                    client.Proxy = new WebProxy(this.proxySettings.Server);
+                if (this.ProxySettings.Server.Length > 0)
+                    client.Proxy = new WebProxy(this.ProxySettings.Server);
                 else
                     client.Proxy = WebRequest.GetSystemWebProxy();
 
                 //if (this.proxySettings.NoCredentials == false)
                 {
-                    if (this.proxySettings.User.Length > 0)
-                        client.Proxy.Credentials = new NetworkCredential(this.proxySettings.User, this.proxySettings.Password, this.proxySettings.Domain);
+                    if (this.ProxySettings.User.Length > 0)
+                        client.Proxy.Credentials = new NetworkCredential(this.ProxySettings.User, this.ProxySettings.Password, this.ProxySettings.Domain);
                     else
                         client.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
                 }

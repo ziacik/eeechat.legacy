@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Timers;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace KolikSoftware.Eee.Client.Notifications
 {
@@ -13,61 +14,98 @@ namespace KolikSoftware.Eee.Client.Notifications
         public AutoAwayMonitor()
         {
             InitializeComponent();
-            this.autoAwayTimer.Elapsed += new ElapsedEventHandler(autoAwayTimer_Elapsed);
-            this.autoAwayTimer.Start();
+            InitMonitor();
         }
 
         public AutoAwayMonitor(IContainer container)
         {
             container.Add(this);
-
             InitializeComponent();
+            InitMonitor();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (this.components != null))
+            {
+                UnsubscribeSystemEvents();
+                this.components.Dispose();
+            }
+            
+            base.Dispose(disposing);
+        }
+
+        void InitMonitor()
+        {
+            this.Enabled = true;
+
+            SubscribeSystemEvents();
+
             this.autoAwayTimer.Elapsed += new ElapsedEventHandler(autoAwayTimer_Elapsed);
             this.autoAwayTimer.Start();
         }
 
-        bool enabled = true;
-
-        [DefaultValue(true)]
-        public bool Enabled
+        void SubscribeSystemEvents()
         {
-            get
+            SystemEvents.PowerModeChanged += new PowerModeChangedEventHandler(SystemEvents_PowerModeChanged);
+            SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
+            SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+        }
+
+        void UnsubscribeSystemEvents()
+        {
+            SystemEvents.PowerModeChanged -= SystemEvents_PowerModeChanged;
+            SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
+            SystemEvents.SessionSwitch -= SystemEvents_SessionSwitch;
+        }
+
+        void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            if (this.Enabled && !this.IsAutoAway)
+                OnAutoAway(new AutoAwayEventArgs(true, "Locked", false));
+        }
+
+        void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            OnAutoAway(new AutoAwayEventArgs(false, null, true));           
+        }
+
+        void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if (e.Mode == PowerModes.Suspend)
             {
-                return this.enabled;
-            }
-            set
-            {
-                this.enabled = value;
+                OnAutoAway(new AutoAwayEventArgs(false, null, true));
             }
         }
+
+        [DefaultValue(true)]
+        public bool Enabled { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsAutoAway { get; set; }
 
         #region Auto Away
         #region Event
         public class AutoAwayEventArgs : EventArgs
         {
-            public AutoAwayEventArgs(bool away)
+            public AutoAwayEventArgs(bool away, string awayComment, bool logout)
             {
-                this.away = away;
+                this.Away = away;
+                this.AwayComment = awayComment;
+                this.Logout = logout;
             }
 
-            bool away;
-
-            /// <summary>
-            /// True if we got to away mode, false if we woke up.
-            /// </summary>
-            public bool Away
-            {
-                get
-                {
-                    return this.away;
-                }
-            }
+            public bool Away { get; private set; }
+            public bool Logout { get; private set; }
+            public string AwayComment { get; private set; }
         }
 
         public event EventHandler<AutoAwayEventArgs> AutoAway;
 
         protected virtual void OnAutoAway(AutoAwayEventArgs e)
         {
+            this.IsAutoAway = e.Away;
+
             EventHandler<AutoAwayEventArgs> handler = AutoAway;
             if (handler != null)
             {
@@ -92,7 +130,6 @@ namespace KolikSoftware.Eee.Client.Notifications
         Win32LastInputInfo lastInputBuffer = new Win32LastInputInfo();
         uint lastTicks = 0;
         DateTime lastActivity = DateTime.Now;
-        bool isAutoAway = false;
         #endregion
 
         void autoAwayTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -112,22 +149,20 @@ namespace KolikSoftware.Eee.Client.Notifications
                 this.lastActivity = DateTime.Now;
             }
 
-            if (this.enabled)
+            if (this.Enabled)
             {
-                if (this.isAutoAway)
+                if (this.IsAutoAway)
                 {
                     if ((DateTime.Now - this.lastActivity).TotalMinutes < Properties.Settings.Default.AutoAwayDelay)
                     {
-                        OnAutoAway(new AutoAwayEventArgs(false));
-                        this.isAutoAway = false;
+                        OnAutoAway(new AutoAwayEventArgs(false, null, false));
                     }
                 }
                 else
                 {
                     if ((DateTime.Now - this.lastActivity).TotalMinutes >= Properties.Settings.Default.AutoAwayDelay)
                     {
-                        this.isAutoAway = true;
-                        OnAutoAway(new AutoAwayEventArgs(true));
+                        OnAutoAway(new AutoAwayEventArgs(true, "Idle", true));
                     }
                 }
             }

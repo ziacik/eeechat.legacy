@@ -115,7 +115,7 @@ namespace KolikSoftware.Eee.Client
         {
             try
             {
-                Process.Start("http://eee.php5.sk");
+                Process.Start(Properties.Resources.HomePageUrl);
             }
             catch
             {

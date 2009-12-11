@@ -55,7 +55,7 @@ namespace KolikSoftware.Eee.Client
             this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(0, 18);
+            this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(0, Properties.Resources.HomePageUrl.Length);
             this.linkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabel2.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.linkLabel2.Location = new System.Drawing.Point(106, 100);
@@ -63,7 +63,7 @@ namespace KolikSoftware.Eee.Client
             this.linkLabel2.Size = new System.Drawing.Size(97, 13);
             this.linkLabel2.TabIndex = 25;
             this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "http://eee.php5.sk";
+            this.linkLabel2.Text = Properties.Resources.HomePageUrl;
             this.linkLabel2.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 

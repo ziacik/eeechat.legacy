@@ -182,10 +182,18 @@ namespace KolikSoftware.Eee.Client.LoginProcess
         }
         #endregion
 
-        public void Login(Form callerForm)
+        public void Login(Form callerForm, bool mustShowDialog)
         {
             using (UserCredentialsDialog dialog = new UserCredentialsDialog())
             {
+                dialog.Flags =
+                    UserCredentialsDialogFlags.GenericCredentials |
+                    UserCredentialsDialogFlags.ShowSaveCheckbox |
+                    UserCredentialsDialogFlags.ExpectConfirmation;
+
+                if (mustShowDialog)
+                    dialog.Flags = dialog.Flags | UserCredentialsDialogFlags.AlwaysShowUI;
+
                 if (Properties.Settings.Default.SaveCredentials)
                 {
                     dialog.SaveChecked = true;

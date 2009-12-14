@@ -8,6 +8,7 @@ namespace KolikSoftware.Eee.Service
     /// </summary>
     public interface IEeeService
     {
+        bool IsBound { get; }
         int RequestsMade { get; }
         int BytesReceived { get; }
 

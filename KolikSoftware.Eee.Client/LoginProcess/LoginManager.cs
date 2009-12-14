@@ -152,6 +152,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
         public class DisconnectedEventArgs : EventArgs
         {
             public static readonly new DisconnectedEventArgs Empty = new DisconnectedEventArgs();
+            public bool NoClear { get; set; }
         }
 
         public event EventHandler<DisconnectedEventArgs> Disconnected;
@@ -191,7 +192,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
                     UserCredentialsDialogFlags.ShowSaveCheckbox |
                     UserCredentialsDialogFlags.ExpectConfirmation;
 
-                if (mustShowDialog)
+                //TODO: if (mustShowDialog)
                     dialog.Flags = dialog.Flags | UserCredentialsDialogFlags.AlwaysShowUI;
 
                 if (Properties.Settings.Default.SaveCredentials)
@@ -289,7 +290,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
         {
             this.loginPhase = LoginPhase.Disconnected;
 
-            OnDisconnected(DisconnectedEventArgs.Empty);
+            OnDisconnected(new DisconnectedEventArgs() { NoClear = e.NoClear });
             OnAfterLogin(AfterLoginEventArgs.Empty);
             
             if (this.wantToLogin)

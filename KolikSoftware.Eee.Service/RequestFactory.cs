@@ -35,6 +35,8 @@ namespace KolikSoftware.Eee.Service
                     request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
 
+            WebProxy proxy = (WebProxy)request.Proxy;
+            
             return request;
         }
 

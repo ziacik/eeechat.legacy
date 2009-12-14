@@ -142,6 +142,7 @@ namespace KolikSoftware.Eee.Client
         public class DisconnectedEventArgs : EventArgs
         {
             public static readonly new DisconnectedEventArgs Empty = new DisconnectedEventArgs();
+            public bool NoClear { get; set; }            
         }
 
         public event EventHandler<DisconnectedEventArgs> Disconnected;
@@ -765,8 +766,9 @@ namespace KolikSoftware.Eee.Client
                     }
 
                     messages.AcceptChanges();
-                    OnGetMessagesFinished(new GetMessagesFinishedEventArgs(messages));
                 }
+
+                OnGetMessagesFinished(new GetMessagesFinishedEventArgs(messages));
             }
         }
 
@@ -794,9 +796,14 @@ namespace KolikSoftware.Eee.Client
 
         private void ProcessDisconnectUser(InvocationParameters invocationParameters)
         {
+            ProcessDisconnectUser(invocationParameters, false);
+        }
+
+        private void ProcessDisconnectUser(InvocationParameters invocationParameters, bool noClear)
+        {
             this.disconnecting = false;
             DisposeProcessor();
-            OnDisconnected(DisconnectedEventArgs.Empty);
+            OnDisconnected(new DisconnectedEventArgs() { NoClear = noClear });
         }
 
         private void ProcessConnectUser(InvocationParameters invocationParameters)
@@ -915,11 +922,15 @@ namespace KolikSoftware.Eee.Client
         void invocationWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             InvocationParameters invocationParameters = (InvocationParameters)e.Argument;
-            
+
             try
             {
                 invocationParameters.Result = Invoke(invocationParameters);
                 e.Result = invocationParameters;
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw new InvocationException(ex.InnerException, invocationParameters);
             }
             catch (Exception ex)
             {
@@ -946,7 +957,9 @@ namespace KolikSoftware.Eee.Client
                     }
                     else if (error.InnerException is DisconnectedException)
                     {
-                        ProcessDisconnectUser(error.InvocationParameters);
+                        RemoveInvocations();
+                        ProcessDisconnectUser(error.InvocationParameters, true);
+                        OnErrorOccured(new ErrorOccuredEventArgs(error.InnerException));
                     }
                     else if (error.InvocationParameters.Name == "UploadFile")
                     {
@@ -959,7 +972,7 @@ namespace KolikSoftware.Eee.Client
                     else
                     {
                         OnErrorOccured(new ErrorOccuredEventArgs(error.InnerException));
-                        AddInvocation(error.InvocationParameters.InvocationScope, error.InvocationParameters.InvocationType, DateTime.Now.AddSeconds(15), error.InvocationParameters.Name, error.InvocationParameters.Arguments);
+                        AddInvocation(error.InvocationParameters.InvocationScope, error.InvocationParameters.InvocationType, DateTime.Now.AddSeconds(1), error.InvocationParameters.Name, error.InvocationParameters.Arguments); //TODO: seconds
                     }
                 }
                 else

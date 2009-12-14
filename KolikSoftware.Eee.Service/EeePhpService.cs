@@ -14,6 +14,14 @@ namespace KolikSoftware.Eee.Service
 {
     public class EeePhpService : IEeeService
     {
+        public bool IsBound
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public string ServiceUrl { get; set; }
 
         private EeeDataSet.UserRow currentUser;

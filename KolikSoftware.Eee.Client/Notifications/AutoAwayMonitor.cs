@@ -67,11 +67,11 @@ namespace KolikSoftware.Eee.Client.Notifications
 
         void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
-            OnAutoAway(new AutoAwayEventArgs(false, null, true));           
+            OnAutoAway(new AutoAwayEventArgs(false, null, true));
         }
 
         void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
-        {
+        {            
             if (e.Mode == PowerModes.Suspend)
             {
                 OnAutoAway(new AutoAwayEventArgs(false, null, true));

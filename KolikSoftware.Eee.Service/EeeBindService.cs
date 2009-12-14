@@ -9,11 +9,20 @@ using System.Configuration;
 using System.Text;
 using System.Globalization;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace KolikSoftware.Eee.Service
 {
     public class EeeBindService : IEeeService
     {
+        public bool IsBound
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public string ServiceUrl { get; set; }
 
         private EeeDataSet.UserRow currentUser;
@@ -162,6 +171,9 @@ namespace KolikSoftware.Eee.Service
             return dataSet;
         }
 
+        List<Guid> previousGuids = new List<Guid>();
+        Guid currentGuid;
+
         protected string InvokeAny(bool invokeLong, string page, string openTag, string closeTag, object[] paramsAndValues)
         {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -185,6 +197,15 @@ namespace KolikSoftware.Eee.Service
                 builder.Append(value);
             }
 
+            if (page == "streammessages.php")
+            {
+                if (this.currentGuid != null)
+                    this.previousGuids.Add(this.currentGuid);
+
+                this.currentGuid = Guid.NewGuid();
+                builder.Append(string.Format("&guid={0}", this.currentGuid));
+            }
+
             string query = builder.ToString();
 
             string url = this.ServiceUrl;
@@ -199,98 +220,63 @@ namespace KolikSoftware.Eee.Service
             else
                 uri = new Uri(url + page);
 
-            HttpWebRequest request = null;
-            WebResponse response = null;
+            HttpWebRequest request = (HttpWebRequest)RequestFactory.Instance.CreateRequest(uri, this.ProxySettings);
+            request.KeepAlive = false;
+            //request.Timeout = 15000;
+            request.Timeout = Timeout.Infinite;
 
-            //TODO: Static proxy
-            request = (HttpWebRequest)HttpWebRequest.Create(uri);
-            IWebProxy proxy = WebRequest.GetSystemWebProxy();
-            proxy.Credentials = CredentialCache.DefaultCredentials;
-            request.Proxy = proxy;
-            request.PreAuthenticate = true;
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Method = "POST";
+            //request.Method = "GET";
 
-            request.UserAgent = "Mozilla/4.0+(compatible;+MSIE+6.0;+Windows+NT+5.1;+.NET+CLR+1.1.4322)";
-            request.Timeout = -1;
-            
-            //string o = WebRequest.DefaultWebProxy.GetProxy(uri).AbsolutePath;
+            byte[] data = Encoding.ASCII.GetBytes(query);
+            request.ContentLength = data.Length;
 
-            /*if (this.ProxySettings.Server.Length > 0)
-                request.Proxy = new WebProxy(this.ProxySettings.Server);
-            else
-                request.Proxy = WebRequest.GetSystemWebProxy();
-
-            request.Proxy = WebProxy.GetDefaultProxy();*/
-
-            //if (this.proxySettings.NoCredentials == false)
+            using (Stream requestStream = request.GetRequestStream())
             {
-              /*  if (this.ProxySettings.User.Length > 0)
-                    request.Proxy.Credentials = new NetworkCredential(this.ProxySettings.User, this.ProxySettings.Password, this.ProxySettings.Domain);
-                else
-                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;*/
-            }
-            
+                requestStream.Write(data, 0, data.Length);
 
-            //request.Proxy = new WebProxy("proxy.hq.gratex.com", 9090);
-            //request.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
-            //WebRequest.DefaultWebProxy.Credentials = new NetworkCredential(this.ProxySettings.User, this.ProxySettings.Password, this.ProxySettings.Domain);
-
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] data = encoding.GetBytes(query);
-
-            //request.ServicePoint.ConnectionLimit = 10;
-            request.Method = "GET";
-            //request.KeepAlive = false;
-           /* request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;*/
-            //request.Credentials = request.Proxy.Credentials;
-
-            //request.Headers.Add(HttpRequestHeader.ProxyAuthorization, "Basic " + this.ProxySettings.User + ":" + this.ProxySettings.Password);
-
-            /*if (invokeLong)
-                request.Timeout = 1200000;*/
-
-            //using
-            //Stream requestStream = request.GetRequestStream();
-            //{
-              //  requestStream.Write(data, 0, data.Length);
-            //}
-
-            this.RequestsMade++;
-
-            using (response = request.GetResponse())
-            {
-                using (Stream stream = response.GetResponseStream())
+                using (WebResponse response = request.GetResponse())
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    this.RequestsMade++;
+
+                    using (Stream stream = response.GetResponseStream())
                     {
-                        string text = reader.ReadToEnd();
-
-                        this.BytesReceived += System.Text.Encoding.UTF8.GetByteCount(text);
-
-                        int startIdx = text.IndexOf(openTag);
-                        int endIdx = text.IndexOf(closeTag);
-
-                        if (startIdx < 0 || endIdx < 0)
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            startIdx = text.IndexOf("<EeeResponse>");
-                            endIdx = text.IndexOf("</EeeResponse>");
+                            string text = reader.ReadToEnd();
+
+                            this.BytesReceived += System.Text.Encoding.UTF8.GetByteCount(text);
+
+                            int startIdx = text.IndexOf(openTag);
+                            int endIdx = text.IndexOf(closeTag);
 
                             if (startIdx < 0 || endIdx < 0)
                             {
-                                throw new WebException("Bad response: " + text);
-                            }
-                            else
-                            {
-                                string eeeResponse = text.Substring(startIdx + "<EeeResponse>".Length, endIdx - startIdx - "<EeeResponse>".Length);
+                                startIdx = text.IndexOf("<EeeResponse>");
+                                endIdx = text.IndexOf("</EeeResponse>");
 
-                                if (eeeResponse == "Invalid password or user ID." && this.CurrentUser != null)
-                                    throw new DisconnectedException();
+                                if (startIdx < 0 || endIdx < 0)
+                                {
+                                    throw new WebException("Bad response: " + text);
+                                }
                                 else
-                                    throw new WebException(eeeResponse);
-                            }
-                        }
+                                {
+                                    string eeeResponse = text.Substring(startIdx + "<EeeResponse>".Length, endIdx - startIdx - "<EeeResponse>".Length);
 
-                        return AdjustResponse(page, openTag, closeTag, text.Substring(startIdx, endIdx - startIdx + closeTag.Length));
+                                    if (eeeResponse == "Invalid password or user ID." && this.CurrentUser != null)
+                                    {
+                                        throw new DisconnectedException();
+                                    }
+                                    else
+                                    {
+                                        throw new WebException(eeeResponse);
+                                    }
+                                }
+                            }
+
+                            return AdjustResponse(page, openTag, closeTag, text.Substring(startIdx, endIdx - startIdx + closeTag.Length));
+                        }
                     }
                 }
             }
@@ -441,8 +427,6 @@ namespace KolikSoftware.Eee.Service
             return query;
         }
 
-
-
         protected virtual string AdjustResponse(string page, string openTag, string closeTag, string response)
         {
             return response;
@@ -528,7 +512,6 @@ namespace KolikSoftware.Eee.Service
 
         public EeeDataSet.MessageDataTable GetMessages()
         {
-            //EeeDataSet ds = InvokeToDataSet("getmessages.php", "myUserID", this.currentUser.UserID, "myPasswordHash", this.passwordHash, "fromID", this.messageIdToStartAt);
             EeeDataSet ds = InvokeToDataSet("streammessages.php", "myUser", this.currentUser.Login, "fromID", this.messageIdToStartAt);
 
             if (ds.Message.Count > 0)
@@ -536,8 +519,6 @@ namespace KolikSoftware.Eee.Service
                 int maxId = (int)ds.Message.Compute("Max(" + ds.Message.MessageIDColumn.ColumnName + ")", null);
                 this.messageIdToStartAt = maxId + 1;
             }
-
-            //InvokeBind("streammessages.php", "myUser", this.currentUser.Login);
 
             return ds.Message;
         }

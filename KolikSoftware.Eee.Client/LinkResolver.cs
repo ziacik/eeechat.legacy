@@ -52,7 +52,7 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        static readonly Regex TitleRegex = new Regex("<title>(.*)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        static readonly Regex TitleRegex = new Regex("<title>(.*)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         static readonly Regex CharSetRegex = new Regex(@"charset=(.*?)['""]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         void linkResolverWorker_DoWork(object sender, DoWorkEventArgs e)

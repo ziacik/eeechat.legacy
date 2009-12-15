@@ -162,7 +162,7 @@ namespace KolikSoftware.Eee.Client.Notifications
                 {
                     if ((DateTime.Now - this.lastActivity).TotalMinutes >= Properties.Settings.Default.AutoAwayDelay)
                     {
-                        OnAutoAway(new AutoAwayEventArgs(true, "Idle", true));
+                        OnAutoAway(new AutoAwayEventArgs(true, "Idle", false));
                     }
                 }
             }

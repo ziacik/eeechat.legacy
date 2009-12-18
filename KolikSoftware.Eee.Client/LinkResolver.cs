@@ -120,7 +120,7 @@ namespace KolikSoftware.Eee.Client
 
                     if (match != null && match.Success)
                     {
-                        info.Title = match.Groups[1].Value.Trim();
+                        info.Title = match.Groups[1].Value.Trim().Replace("&nbsp", " ");
                         e.Result = info;
                     }
                 }

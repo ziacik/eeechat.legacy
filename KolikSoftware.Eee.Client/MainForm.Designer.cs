@@ -164,7 +164,7 @@ namespace KolikSoftware.Eee.Client
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.mediaLabel = new System.Windows.Forms.ToolStripLabel();
             this.mainBottomPanel = new System.Windows.Forms.Panel();
-            this.text = new System.Windows.Forms.TextBox();
+            this.text = new System.Windows.Forms.RichTextBox();
             this.actionsToolStrip = new System.Windows.Forms.ToolStrip();
             this.replyToolItem = new System.Windows.Forms.ToolStripButton();
             this.followToolItem = new System.Windows.Forms.ToolStripButton();
@@ -728,6 +728,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.Color.CornflowerBlue;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -741,9 +742,13 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.CornflowerBlue;
             this.splitContainer1.Panel2.Controls.Add(this.mainBottomPanel);
+            this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Size = new System.Drawing.Size(590, 475);
             this.splitContainer1.SplitterDistance = 399;
+            this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 0;
             // 
             // chatBrowser
@@ -752,10 +757,10 @@ namespace KolikSoftware.Eee.Client
             this.chatBrowser.ContextMenuStrip = this.browserMenu;
             this.chatBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chatBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.chatBrowser.Location = new System.Drawing.Point(32, 0);
+            this.chatBrowser.Location = new System.Drawing.Point(0, 0);
             this.chatBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.chatBrowser.Name = "chatBrowser";
-            this.chatBrowser.Size = new System.Drawing.Size(558, 399);
+            this.chatBrowser.Size = new System.Drawing.Size(590, 399);
             this.chatBrowser.TabIndex = 8;
             this.chatBrowser.Url = new System.Uri("about:blank", System.UriKind.Absolute);
             this.chatBrowser.WebBrowserShortcutsEnabled = false;
@@ -945,18 +950,19 @@ namespace KolikSoftware.Eee.Client
             // 
             this.mainBottomPanel.Controls.Add(this.text);
             this.mainBottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainBottomPanel.Location = new System.Drawing.Point(0, 0);
+            this.mainBottomPanel.Location = new System.Drawing.Point(4, 4);
             this.mainBottomPanel.Name = "mainBottomPanel";
-            this.mainBottomPanel.Size = new System.Drawing.Size(590, 72);
+            this.mainBottomPanel.Size = new System.Drawing.Size(582, 66);
             this.mainBottomPanel.TabIndex = 60;
             // 
             // text
             // 
+            this.text.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.text.Dock = System.Windows.Forms.DockStyle.Fill;
             this.text.Location = new System.Drawing.Point(0, 0);
             this.text.Multiline = true;
             this.text.Name = "text";
-            this.text.Size = new System.Drawing.Size(590, 72);
+            this.text.Size = new System.Drawing.Size(582, 66);
             this.text.TabIndex = 0;
             this.text.TextChanged += new System.EventHandler(this.text_TextChanged);
             this.text.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
@@ -1486,7 +1492,7 @@ namespace KolikSoftware.Eee.Client
         private ToolStripMenuItem uploadMediaMenuItem;
         private ToolStrip externalUsersToolStrip;
         private WebBrowser chatBrowser;
-        private TextBox text;
+        private RichTextBox text;
         private LinkResolver linkResolver;
 
 

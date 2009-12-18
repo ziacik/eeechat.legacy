@@ -472,12 +472,14 @@ namespace KolikSoftware.Eee.Client
         public BackgroundServiceController()
         {
             InitializeComponent();
+            this.MessagesToCommit = new List<int>();
         }
 
         public BackgroundServiceController(IContainer container)
         {
             container.Add(this);
             InitializeComponent();
+            this.MessagesToCommit = new List<int>();
         }
 
         public IEeeService Service
@@ -493,6 +495,8 @@ namespace KolikSoftware.Eee.Client
         }
 
         #region Public
+        public List<int> MessagesToCommit { get; private set; }
+
         public EeeDataSet.UserRow CurrentUser
         {
             get
@@ -548,13 +552,37 @@ namespace KolikSoftware.Eee.Client
         public void GetMessages()
         {
             CheckUser();
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetMessages");
+
+            string commit = GetCommitMessages();
+
+            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetMessages", commit);
+        }
+
+        private string GetCommitMessages()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (int messageId in this.MessagesToCommit)
+            {
+                if (builder.Length > 0)
+                    builder.Append(',');
+
+                builder.Append(messageId);
+            }
+
+            this.MessagesToCommit.Clear();
+
+            string commit = builder.ToString();
+            return commit;
         }
 
         public void GetMessages(TimeSpan timeToWait)
         {
             CheckUser();
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, DateTime.Now + timeToWait, "GetMessages");
+
+            string commit = GetCommitMessages();
+
+            AddInvocation(InvocationScope.Receiver, InvocationType.Method, DateTime.Now + timeToWait, "GetMessages", commit);
         }
 
         public void GetUpdates()

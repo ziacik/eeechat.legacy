@@ -33,7 +33,7 @@
                                 </div>
                             </xsl:when>
                             <xsl:otherwise>
-                                <div style="clear: left; border: 1px #{eee:ColorHex} solid; padding: 4px 4px 4px 4px;">
+                                <div style="clear: left; border: 1px #{eee:ColorHex} solid; padding: 4px 4px 4px 4px; background-color: White;">
                                     <xsl:copy-of select="eee:Message" />
                                 </div>
                             </xsl:otherwise>

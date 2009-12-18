@@ -329,9 +329,9 @@ namespace KolikSoftware.Eee.Service
             return ds.User;
         }
 
-        public EeeDataSet.MessageDataTable GetMessages()
+        public EeeDataSet.MessageDataTable GetMessages(string commitMessages)
         {
-            EeeDataSet ds = InvokeToDataSet("getmessages.php", "myUserID", this.currentUser.UserID, "myPasswordHash", this.passwordHash, "fromID", this.messageIdToStartAt);
+            EeeDataSet ds = InvokeToDataSet("getmessages.php", "myUserID", this.currentUser.UserID, "myPasswordHash", this.passwordHash, "fromID", this.messageIdToStartAt, "commit", commitMessages);
 
             if (ds.Message.Count > 0)
             {

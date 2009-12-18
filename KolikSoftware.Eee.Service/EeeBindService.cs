@@ -227,6 +227,8 @@ namespace KolikSoftware.Eee.Service
 
             request.ContentType = "application/x-www-form-urlencoded";
             request.Method = "POST";
+            request.AllowAutoRedirect = false;
+            request.ProtocolVersion = HttpVersion.Version11;
             //request.Method = "GET";
 
             byte[] data = Encoding.ASCII.GetBytes(query);
@@ -510,9 +512,9 @@ namespace KolikSoftware.Eee.Service
             if (handler != null) handler(this, e);
         }
 
-        public EeeDataSet.MessageDataTable GetMessages()
+        public EeeDataSet.MessageDataTable GetMessages(string commitMessages)
         {
-            EeeDataSet ds = InvokeToDataSet("streammessages.php", "myUser", this.currentUser.Login, "fromID", this.messageIdToStartAt);
+            EeeDataSet ds = InvokeToDataSet("streammessages.php", "myUser", this.currentUser.Login, "fromID", this.messageIdToStartAt, "commit", commitMessages);
 
             if (ds.Message.Count > 0)
             {

@@ -63,7 +63,7 @@ namespace KolikSoftware.Eee.Service
         /// <summary>
         /// Gets the list of new messages.
         /// </summary>
-        EeeDataSet.MessageDataTable GetMessages();
+        EeeDataSet.MessageDataTable GetMessages(string commitMessages);
 
         /// <summary>
         /// Sends a new message to the server.

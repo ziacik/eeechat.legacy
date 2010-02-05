@@ -111,10 +111,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Components\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NHunspell, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\NHunspell.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

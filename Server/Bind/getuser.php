@@ -1,27 +1,22 @@
 <?php
-    $link = mysql_connect("localhost", "eeechatn_kolik", "xxx") or die("Could not connect");
-
-    mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
+	require_once("common.php");
 
 	$login = $_POST["login"];
 
-    $query = "SELECT UserID, Salt, Color FROM eee_User WHERE Login='$login'";
-    $result = mysql_query($query) or die("<EeeResponse>Query failed</EeeResponse>");
+	$result = ConnectRunQuery("SELECT UserID, Salt, Color FROM eee_User WHERE Login='$login'", "Unable to fetch user data.");
 
-    print '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
+	echo '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
 
-    while ($user = mysql_fetch_object($result))
-    {
-    	print '<LoginUser>';
-    	print "<UserID>$user->UserID</UserID>";
-    	print "<Salt>$user->Salt</Salt>";
-    	print "<Color>$user->Color</Color>";
-    	print '</LoginUser>';
-    }
+	while ($user = mysql_fetch_object($result))
+	{
+		echo '<LoginUser>';
+		echo "<UserID>$user->UserID</UserID>";
+		echo "<Salt>$user->Salt</Salt>";
+		echo "<Color>$user->Color</Color>";
+		echo '</LoginUser>';
+	}
 
-    print '</EeeDataSet>';
+	echo '</EeeDataSet>';
 
-    mysql_free_result($result);
-
-    mysql_close($link);
+	mysql_free_result($result);
 ?>

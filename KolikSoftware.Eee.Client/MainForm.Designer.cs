@@ -728,7 +728,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1
             // 
-            this.splitContainer1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.splitContainer1.BackColor = ThemeBackColor;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -742,7 +742,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.splitContainer1.Panel2.BackColor = ThemeBackColor;
             this.splitContainer1.Panel2.Controls.Add(this.mainBottomPanel);
             this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(4);

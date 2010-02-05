@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<ActivityDataSet xmlns="http://www.koliksoftware.net/ActivityDataSet.xsd">
+  <Activity>
+    <ActivityId>c127b6f3-033b-4700-a302-c6f43ce92ddf</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>Notifications\AutoAwayMonitor.cs</ItemName>
+    <StartTime>2010-01-11T12:17:00+01:00</StartTime>
+    <EndTime>2010-01-11T12:18:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>57a316ec-6c92-423e-93c2-2d8dde966f05</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>Notifications\AutoAwayMonitor.cs</ItemName>
+    <StartTime>2010-01-11T12:17:00+01:00</StartTime>
+    <EndTime>2010-01-11T12:18:00+01:00</EndTime>
+  </Activity>
+  <Solution>
+    <SolutionName>EeeClient</SolutionName>
+  </Solution>
+  <Project>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <SolutionName>EeeClient</SolutionName>
+  </Project>
+  <Item>
+    <ItemName>Notifications\AutoAwayMonitor.cs</ItemName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+  </Item>
+</ActivityDataSet>

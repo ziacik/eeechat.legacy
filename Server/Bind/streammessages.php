@@ -1,105 +1,110 @@
 <?php
-
-header("Cache-Control: no-store, must-revalidate");
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Content-Type: text/plain");
-
-
-$link = mysql_connect("localhost", "eeechatn_kolik", "XXX") or die("Could not connect");
-mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
-mysql_query("SET NAMES latin2");
-
-/*$myUserID = $_GET["myUserID"];
-$myPasswordHash = $_GET["myPasswordHash"];
-$fromID = $_GET["fromID"];*/
-
-$fromID = $_POST["fromID"];
-$myUser = $_POST["myUser"];
-
-$userQuery = "SELECT UserID FROM eee_User WHERE Login='$myUser' AND State>0";
-
-$result = mysql_query($userQuery) or die("<EeeResponse>Query failed</EeeResponse>");
-$user = mysql_fetch_object($result);
-
-$myUserID = $user->UserID;
-
-if (!$user)
-{
-	mysql_free_result($result);
-	mysql_close($link);
+	require_once("common.php");
 	
-	die("<EeeResponse>Invalid password or user ID.</EeeResponse>");
-}
-
-mysql_free_result($result);
-mysql_close($link);
-
-$last = false;
-
-while ($user && ! $last && ! connection_aborted())
-{
-	$link = mysql_connect("localhost", "eeechatn_kolik", "XXX") or die("Could not connect");
-	mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
-	mysql_query("SET NAMES latin2");
-
-	$query = "SELECT M.MessageID, M.FromUserID, M.RoomID, M.ToUserID, M.Message, M.Time, M.Seen, U.Login, U.Color";
-	$query = $query . " FROM eee_Message as M, eee_User as U, eee_User as Ja";
-	$query = $query . " WHERE Ja.UserID=$myUserID AND M.FromUserID=U.UserID";
-	$query = $query . " AND	( (M.ToUserID=$myUserID AND M.Seen=0) OR (M.MessageID>=$fromID AND M.Time>=Ja.LoginTime AND (M.ToUserID IS NULL OR M.ToUserID=0 OR M.FromUserID=$myUserID)) )";
-	$query = $query . " ORDER BY M.Time";
-
-	$result = mysql_query($query) or die("<EeeResponse>Message query failed.</EeeResponse>");
-
-	$first = true;
-	$last = false;
-
-	while ($message = mysql_fetch_object($result))
+	function IsUserTimestampHigher($userId, $timeStamp)
 	{
-		if ($first)
-			print '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
-
-		$time = gmdate('Y-m-d\TH\:i\:s', strtotime($message->Time)) . '.0000000-00:00';
+		$result = ConnectRunQuery("SELECT Access FROM eee_User WHERE UserID=$userId", 'Unable to fetch user timestamp.');				
+		$row = mysql_fetch_object($result);
 		
-		print '<Message>';
-		print "<MessageID>$message->MessageID</MessageID>";
-		print "<FromUserID>$message->FromUserID</FromUserID>";
-		print "<ToUserID>$message->ToUserID</ToUserID>";
+		echo "Current timestamp: $timeStamp    User timestamp: " . $row->Access . "<br />";
 		
-		if (isset($message->RoomID))
-			print "<RoomID>$message->RoomID</RoomID>";
+		$isHigher = ($row->Access) > $timeStamp;
+		mysql_free_result($result);
+		
+		return $isHigher;
+	}
+	
+	function SetUserTimestamp($userId, $timeStamp)
+	{
+		ConnectRunQuery("UPDATE eee_User SET Access = '$timeStamp' WHERE UserID=$userId", 'Unable to set user timestamp.');
+	}	
+	
+	function DoCycle($userId, $fromId)
+	{
+		$last = false;
+		
+		$startTime = date("Y-m-d H:i:s");
+		SetUserTimestamp($userId, $startTime);		
 
-		print "<Message>" . htmlspecialchars($message->Message) . "</Message>";
-		print "<Time>$time</Time>";
-		print "<Seen>$message->Seen</Seen>";
-		print "<Login>$message->Login</Login>";
-		print "<Color>$message->Color</Color>";
-		print '</Message>';
+		for ($cycleNo = 1; $cycleNo < 120; $cycleNo++)
+		{		
+			if ($any || connection_aborted())
+				break;
+				
+			if (IsUserTimestampHigher($userId, $startTime))
+				break;
 
-		$fromID = $message->MessageID + 1;
-		$last = true;
-		$first = false;
+			$query = "SELECT M.MessageID, M.FromUserID, M.RoomID, M.ToUserID, M.Message, M.Time, M.Seen, U.Login, U.Color";
+			$query = $query . " FROM eee_Message as M, eee_User as U, eee_User as Ja";
+			$query = $query . " WHERE Ja.UserID=$userId AND M.FromUserID=U.UserID";
+			$query = $query . " AND	( (M.ToUserID=$userId AND M.Seen=0) OR (M.MessageID>=$fromId AND M.Time>=Ja.LoginTime AND (M.ToUserID IS NULL OR M.ToUserID=0 OR M.FromUserID=$userId)) )";
+			$query = $query . " ORDER BY M.Time";
+
+			$result = ConnectRunQuery($query, "Unable to get messages.");
+
+			$first = true;
+			$any = false;
+
+			while ($message = mysql_fetch_object($result))
+			{
+				if ($first)
+					echo '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
+
+				$time = gmdate('Y-m-d\TH\:i\:s', strtotime($message->Time)) . '.0000000-00:00';
+				
+				echo '<Message>';
+				echo "<MessageID>$message->MessageID</MessageID>";
+				echo "<FromUserID>$message->FromUserID</FromUserID>";
+				echo "<ToUserID>$message->ToUserID</ToUserID>";
+				
+				if (isset($message->RoomID))
+					echo "<RoomID>$message->RoomID</RoomID>";
+
+				echo "<Message>" . htmlspecialchars($message->Message) . "</Message>";
+				echo "<Time>$time</Time>";
+				echo "<Seen>$message->Seen</Seen>";
+				echo "<Login>$message->Login</Login>";
+				echo "<Color>$message->Color</Color>";
+				echo '</Message>';
+				
+				$fromId = $message->MessageID + 1;
+				$any = true;
+				$first = false;
+			}
+
+			if ($any)
+				echo '</EeeDataSet>';
+			else
+				sleep(1);
+		}
+		
+		if (!$any)
+		    echo "<EeeResponse>Timeout</EeeResponse>";
 	}
 
-	if ($last)
-	{
-		print '</EeeDataSet>';
+	set_time_limit(0);
 
-		$query = "UPDATE eee_Message SET Seen=1 WHERE ToUserID=$myUserID AND Seen=0";
-		mysql_query($query);
-	}
+	//TODO: ConnectValidateUser($_POST["myUserID"], $_POST["myPasswordHash"]);
 
-	$query = "UPDATE eee_User SET Access = Now() WHERE UserID=$myUserID";
-	mysql_query($query);
+	$fromId = $_POST["fromID"];
+	$myUser = $_POST["myUser"];
+	$guid = $_POST["guid"];
+	$commit = $_POST["commit"];
 
-	$result = mysql_query($userQuery) or die("<EeeResponse>Query failed</EeeResponse>");
-	$user = mysql_fetch_object($result);    
-
+	$userQuery = "SELECT UserID FROM eee_User WHERE Login='$myUser' AND State>0";
+	
+	$result = ConnectRunQuery("SELECT UserID FROM eee_User WHERE Login='$myUser' AND State>0", "Unable to fetch user.");	
+	$user = mysql_fetch_object($result);
 	mysql_free_result($result);
-	mysql_close($link);
+	
+	$userId = $user->UserID;
 
-	print 'X';
-	flush();
-	sleep(1);
-}
+	if (!$user)
+		die("<EeeResponse>Invalid password or user ID.</EeeResponse>");
 
+	if ($commit)
+		ConnectRunQuery("UPDATE eee_Message SET Seen=1 WHERE MessageId IN ($commit)", "Unable to commit messages.");
+
+	DoCycle($userId, $fromId);
 ?>
+	

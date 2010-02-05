@@ -1,40 +1,24 @@
 <?php
-    $link = mysql_connect("localhost", "eeechatn_kolik", "xxx") or die("Could not connect");
+	require_once("common.php");
 
-    mysql_select_db("eeechatn_eeechatdb") or die("Could not select database");
+	ConnectValidateUser($_POST["myUserID"], $_POST["myPasswordHash"]);
+	
+    	$result = ConnectRunQuery("SELECT * FROM eee_User WHERE State>0", "Unable to get active users.");
 
-	$myUserID = $_POST["myUserID"];
-	$myPasswordHash = $_POST["myPasswordHash"];
+	echo '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
 
-    $query = "SELECT UserID FROM eee_User WHERE UserID=$myUserID AND Password = '$myPasswordHash' AND State>0";
-    $result = mysql_query($query) or die("<EeeResponse>Query failed</EeeResponse>");
-
-    if ($user = mysql_fetch_object($result))
-    {
-    	$query = "SELECT * FROM eee_User WHERE State>0";
-	    $result = mysql_query($query) or die("<EeeResponse>Query failed</EeeResponse>");
-
-	    print '<EeeDataSet xmlns="http://tempuri.org/EeeDataSet.xsd">';
-
-	    while ($user = mysql_fetch_object($result))
-	    {
-	    	print '<User>';
-	    	print "<UserID>$user->UserID</UserID>";
-	    	print "<Login>$user->Login</Login>";
-	    	print "<State>$user->State</State>";
-	    	print "<Client>$user->Client</Client>";                
-	    	print "<LoginTime>" . strtr($user->LoginTime, " ", "T") . "+02:00" . "</LoginTime>";                
-	    	print '</User>';
-	    }
-
-	    print '</EeeDataSet>';
-	}
-	else
+	while ($user = mysql_fetch_object($result))
 	{
-		print "<EeeResponse>Invalid password or user ID.</EeeResponse>";
+		echo '<User>';
+		echo "<UserID>$user->UserID</UserID>";
+		echo "<Login>$user->Login</Login>";
+		echo "<State>$user->State</State>";
+		echo "<Client>$user->Client</Client>";                
+		echo "<LoginTime>" . strtr($user->LoginTime, " ", "T") . "+02:00" . "</LoginTime>";                
+		echo '</User>';
 	}
 
-    mysql_free_result($result);
+	echo '</EeeDataSet>';
 
-    mysql_close($link);
+	mysql_free_result($result);
 ?>

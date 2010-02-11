@@ -192,7 +192,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
                     UserCredentialsDialogFlags.ShowSaveCheckbox |
                     UserCredentialsDialogFlags.ExpectConfirmation;
 
-                //TODO: if (mustShowDialog)
+                if (mustShowDialog)
                     dialog.Flags = dialog.Flags | UserCredentialsDialogFlags.AlwaysShowUI;
 
                 if (Properties.Settings.Default.SaveCredentials)

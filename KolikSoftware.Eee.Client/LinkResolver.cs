@@ -54,12 +54,22 @@ namespace KolikSoftware.Eee.Client
 
         static readonly Regex TitleRegex = new Regex("<title>(.*)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         static readonly Regex CharSetRegex = new Regex(@"charset=(.*?)['""]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        static readonly Regex YouTubeRegex = new Regex(@"youtube\.com/watch\?v=([0-9a-zA-Z]+)", RegexOptions.Compiled);
 
         void linkResolverWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
                 LinkResolverEventArgs info = (LinkResolverEventArgs)e.Argument;
+
+                Match youTubeMatch = YouTubeRegex.Match(info.Href);
+                
+                if (youTubeMatch.Success)
+                {
+                    info.YouTubeVideo = youTubeMatch.Groups[1].Value;
+                    e.Result = info;
+                    return;
+                }
 
                 HttpWebRequest request = RequestFactory.Instance.CreateRequest(new Uri(info.Href), this.ProxySettings);
 
@@ -145,5 +155,6 @@ namespace KolikSoftware.Eee.Client
         public string Href { get; internal set; }
         public string Title { get; internal set; }
         public string ImageUrl { get; internal set; }
+        public string YouTubeVideo { get; set; }
     }
 }

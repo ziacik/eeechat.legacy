@@ -62,11 +62,69 @@
     <StartTime>2010-02-11T15:19:00+01:00</StartTime>
     <EndTime>2010-02-11T15:26:00+01:00</EndTime>
   </Activity>
+  <Activity>
+    <ActivityId>b09842dd-7a8f-4080-a7aa-fb0e45d0fafe</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <StartTime>2010-02-15T15:13:00+01:00</StartTime>
+    <EndTime>2010-02-15T15:16:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>176ebe30-0e09-4a6d-b75d-69363cc7e918</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>LinkResolver.cs</ItemName>
+    <StartTime>2010-02-15T15:16:00+01:00</StartTime>
+    <EndTime>2010-02-15T15:20:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>1dcbb48d-3eb3-4f77-84e8-b06076e251d6</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainForm.cs</ItemName>
+    <StartTime>2010-02-15T15:20:00+01:00</StartTime>
+    <EndTime>2010-02-15T15:41:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>f374aee7-359c-4520-bc7a-31f7c7cd7683</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainForm.cs</ItemName>
+    <StartTime>2010-02-19T10:25:00+01:00</StartTime>
+    <EndTime>2010-02-19T10:33:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>c2472797-b7f1-4776-a35e-0fd76ff68fc0</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Service</ProjectName>
+    <ItemName>EeeBindService.cs</ItemName>
+    <StartTime>2010-02-19T10:33:00+01:00</StartTime>
+    <EndTime>2010-02-19T10:49:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>4e3e16ee-f4ea-45e6-9f1a-b278396b8e63</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainForm.cs</ItemName>
+    <StartTime>2010-02-24T11:56:00+01:00</StartTime>
+    <EndTime>2010-02-24T12:00:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>7642527b-13e6-4784-86ec-a165d3a646b8</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>LinkResolver.cs</ItemName>
+    <StartTime>2010-02-24T12:00:00+01:00</StartTime>
+    <EndTime>2010-02-24T12:06:00+01:00</EndTime>
+  </Activity>
   <Solution>
     <SolutionName>EeeClient</SolutionName>
   </Solution>
   <Project>
     <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <SolutionName>EeeClient</SolutionName>
+  </Project>
+  <Project>
+    <ProjectName>KolikSoftware.Eee.Service</ProjectName>
     <SolutionName>EeeClient</SolutionName>
   </Project>
   <Item>
@@ -76,5 +134,9 @@
   <Item>
     <ItemName>LinkResolver.cs</ItemName>
     <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+  </Item>
+  <Item>
+    <ItemName>EeeBindService.cs</ItemName>
+    <ProjectName>KolikSoftware.Eee.Service</ProjectName>
   </Item>
 </ActivityDataSet>

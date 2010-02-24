@@ -255,26 +255,12 @@ namespace KolikSoftware.Eee.Service
 
                             if (startIdx < 0 || endIdx < 0)
                             {
-                                startIdx = text.IndexOf("<EeeResponse>");
-                                endIdx = text.IndexOf("</EeeResponse>");
-
-                                if (startIdx < 0 || endIdx < 0)
-                                {
-                                    throw new WebException("Bad response: " + text);
-                                }
+                                string eeeResponse = ParseEeeResponse(text);
+                             
+                                if (eeeResponse == "Invalid password or user ID." && this.CurrentUser != null)
+                                    throw new DisconnectedException();
                                 else
-                                {
-                                    string eeeResponse = text.Substring(startIdx + "<EeeResponse>".Length, endIdx - startIdx - "<EeeResponse>".Length);
-
-                                    if (eeeResponse == "Invalid password or user ID." && this.CurrentUser != null)
-                                    {
-                                        throw new DisconnectedException();
-                                    }
-                                    else
-                                    {
-                                        throw new WebException(eeeResponse);
-                                    }
-                                }
+                                    throw new WebException(eeeResponse);
                             }
 
                             return AdjustResponse(page, openTag, closeTag, text.Substring(startIdx, endIdx - startIdx + closeTag.Length));
@@ -282,6 +268,25 @@ namespace KolikSoftware.Eee.Service
                     }
                 }
             }
+        }
+
+        string ParseEeeResponse(string text)
+        {
+            int startIdx = text.IndexOf("<EeeResponse>");
+            int endIdx = text.IndexOf("</EeeResponse>");
+
+            string eeeResponse = null;
+
+            if (startIdx < 0 || endIdx < 0)
+            {
+                throw new WebException("Bad response: " + text);
+            }
+            else
+            {
+                eeeResponse = text.Substring(startIdx + "<EeeResponse>".Length, endIdx - startIdx - "<EeeResponse>".Length);
+            }
+
+            return eeeResponse;
         }
 
         protected void InvokeBind(string page, params object[] paramsAndValues)
@@ -651,7 +656,7 @@ namespace KolikSoftware.Eee.Service
 
                 byte[] responseBytes = client.UploadFile(url + "upload.php", "POST", filePath);
                 string response = Encoding.ASCII.GetString(responseBytes);
-                response = response.Substring("<EeeResponse>".Length, response.Length - "<EeeResponse>".Length - "</EeeResponse>".Length);
+                response = ParseEeeResponse(response);
                 return response == "OK";
             }
         }

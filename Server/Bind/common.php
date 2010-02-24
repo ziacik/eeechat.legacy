@@ -68,12 +68,10 @@
 		if (!$password)
 			$password = '(missing)';
 	
-		$result = ConnectDo('ValidateUser', $userId, $password);
+		$user = ConnectDo('ValidateUser', $userId, $password);
 		
 		if ($getUser)
-			return $result;
-		else
-			mysql_free_result($result);
+			return $user;
 	}
 	
 	function LogToFile($logName, $data)

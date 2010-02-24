@@ -54,7 +54,7 @@ namespace KolikSoftware.Eee.Client
 
         static readonly Regex TitleRegex = new Regex("<title>(.*)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         static readonly Regex CharSetRegex = new Regex(@"charset=(.*?)['""]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        static readonly Regex YouTubeRegex = new Regex(@"youtube\.com/watch\?v=([0-9a-zA-Z]+)", RegexOptions.Compiled);
+        static readonly Regex YouTubeRegex = new Regex(@"youtube\.com/watch\?v=([^&]+)", RegexOptions.Compiled);
 
         void linkResolverWorker_DoWork(object sender, DoWorkEventArgs e)
         {

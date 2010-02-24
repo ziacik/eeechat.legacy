@@ -34,6 +34,12 @@ namespace KolikSoftware.Eee.Client
             proxySettings.Password = Properties.Settings.Default.ProxyPassword;
             proxySettings.NoCredentials = Properties.Settings.Default.ProxyUser.Trim().Length == 0;
 
+            IEeeService service = new EeeJsonService();
+            service.ServiceUrl = Properties.Settings.Default.ServiceUrl;
+            service.ProxySettings = proxySettings;
+            return service;
+
+            /*
             if (Properties.Settings.Default.ServiceUrl.ToLower().Contains("bind"))
             {
                 return new EeeBindService(Properties.Settings.Default.ServiceUrl, proxySettings, this.Installed, this.ApplicationAndVersion, Application.ProductVersion);
@@ -45,7 +51,7 @@ namespace KolikSoftware.Eee.Client
             else
             {
                 return new EeePhpService(Properties.Settings.Default.ServiceUrl, proxySettings, this.Installed, this.ApplicationAndVersion, Application.ProductVersion);
-            }
+            }*/
         }
 
         public string ApplicationName

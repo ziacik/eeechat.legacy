@@ -10,11 +10,25 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KolikSoftware.Eee.Setup", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Controls.Options", "KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj", "{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Controls.MutexController", "KolikSoftware.Controls.MutexController\KolikSoftware.Controls.MutexController.csproj", "{E012C958-C833-4D6E-AC0C-ECF18547C472}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{B612E285-A9C9-48C9-84E1-535698FC8E8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Jabber.Service", "KolikSoftware.Jabber.Service\KolikSoftware.Jabber.Service.csproj", "{4615ACA5-D69A-4F1A-87E6-378E246BA24B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Webeee.Net", "KolikSoftware.Webeee.Net\KolikSoftware.Webeee.Net\KolikSoftware.Webeee.Net.csproj", "{7EC9BA64-C388-46A0-9881-7B1553B85E14}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json", "Json", "{D34250B0-C07B-4BA8-8FD7-BB8972A206B6}"
+	ProjectSection(SolutionItems) = preProject
+		Server\JsonBind\addmessage.php = Server\JsonBind\addmessage.php
+		AuthenticationData.php = AuthenticationData.php
+		Server\JsonBind\autologoff.php = Server\JsonBind\autologoff.php
+		Server\JsonBind\changestate.php = Server\JsonBind\changestate.php
+		Server\JsonBind\Common.php = Server\JsonBind\Common.php
+		Server\JsonBind\getrooms.php = Server\JsonBind\getrooms.php
+		Server\JsonBind\getupdates.php = Server\JsonBind\getupdates.php
+		Server\JsonBind\getuser.php = Server\JsonBind\getuser.php
+		Server\JsonBind\getusers.php = Server\JsonBind\getusers.php
+		Server\JsonBind\register.php = Server\JsonBind\register.php
+		Server\JsonBind\streammessages.php = Server\JsonBind\streammessages.php
+		Server\JsonBind\test.php = Server\JsonBind\test.php
+		Server\JsonBind\upload.php = Server\JsonBind\upload.php
+		Server\JsonBind\userfeedback.php = Server\JsonBind\userfeedback.php
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,16 +54,11 @@ Global
 		{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E012C958-C833-4D6E-AC0C-ECF18547C472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E012C958-C833-4D6E-AC0C-ECF18547C472}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E012C958-C833-4D6E-AC0C-ECF18547C472}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E012C958-C833-4D6E-AC0C-ECF18547C472}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4615ACA5-D69A-4F1A-87E6-378E246BA24B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4615ACA5-D69A-4F1A-87E6-378E246BA24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EC9BA64-C388-46A0-9881-7B1553B85E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D34250B0-C07B-4BA8-8FD7-BB8972A206B6} = {B612E285-A9C9-48C9-84E1-535698FC8E8C}
 	EndGlobalSection
 EndGlobal

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 
-namespace KolikSoftware.Eee.Service
+namespace KolikSoftware.Eee.Service.Core
 {
-    public class RequestFactory
+    internal class RequestFactory
     {
         static readonly RequestFactory instance = new RequestFactory();
 

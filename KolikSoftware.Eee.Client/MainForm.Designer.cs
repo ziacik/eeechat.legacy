@@ -69,8 +69,8 @@ namespace KolikSoftware.Eee.Client
                 if (components != null)
                     components.Dispose();
 
-                if (this.rooms != null)
-                    this.rooms.Dispose();
+                //if (this.rooms != null)
+                //    this.rooms.Dispose();
 
                 if (this.smilieStreams != null)
                 {
@@ -1285,10 +1285,10 @@ namespace KolikSoftware.Eee.Client
             // 
             this.eeeServiceController.Service = null;
             this.eeeServiceController.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
-            this.eeeServiceController.ExternalUserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.ExternalUserStateChangedEventArgs>(this.eeeServiceController_ExternalUserStateChanged);
+            //this.eeeServiceController.ExternalUserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.ExternalUserStateChangedEventArgs>(this.eeeServiceController_ExternalUserStateChanged);
             this.eeeServiceController.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
             this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
-            this.eeeServiceController.UserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.UserStateChangedEventArgs>(this.eeeServiceController_UserStateChanged);
+            //this.eeeServiceController.UserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.UserStateChangedEventArgs>(this.eeeServiceController_UserStateChanged);
             this.eeeServiceController.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
             this.eeeServiceController.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
             this.eeeServiceController.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
@@ -1327,13 +1327,13 @@ namespace KolikSoftware.Eee.Client
             // 
             // updateManager
             // 
-            this.updateManager.ServiceController = this.eeeServiceController;
-            this.updateManager.InstallFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallFailedEventArgs>(this.updateManager_InstallFailed);
-            this.updateManager.DownloadAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadAllFinishedEventArgs>(this.updateManager_DownloadAllFinished);
-            this.updateManager.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadFailedEventArgs>(this.updateManager_DownloadFailed);
-            this.updateManager.DownloadStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadStartedEventArgs>(this.updateManager_DownloadStarted);
-            this.updateManager.InstallStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallStartedEventArgs>(this.updateManager_InstallStarted);
-            this.updateManager.InstallAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallAllFinishedEventArgs>(this.updateManager_InstallAllFinished);
+            //this.updateManager.ServiceController = this.eeeServiceController;
+            //this.updateManager.InstallFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallFailedEventArgs>(this.updateManager_InstallFailed);
+            //this.updateManager.DownloadAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadAllFinishedEventArgs>(this.updateManager_DownloadAllFinished);
+            //this.updateManager.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadFailedEventArgs>(this.updateManager_DownloadFailed);
+            //this.updateManager.DownloadStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadStartedEventArgs>(this.updateManager_DownloadStarted);
+            //this.updateManager.InstallStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallStartedEventArgs>(this.updateManager_InstallStarted);
+            //this.updateManager.InstallAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallAllFinishedEventArgs>(this.updateManager_InstallAllFinished);
             // 
             // mediaPlayer
             // 

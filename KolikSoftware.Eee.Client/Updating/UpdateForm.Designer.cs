@@ -57,7 +57,7 @@ namespace KolikSoftware.Eee.Client.Updating
             this.closeButton.TabIndex = 2;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            //this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // picture
             // 
@@ -78,7 +78,7 @@ namespace KolikSoftware.Eee.Client.Updating
             this.downloadButton.TabIndex = 3;
             this.downloadButton.Text = "&Download";
             this.downloadButton.UseVisualStyleBackColor = true;
-            this.downloadButton.Click += new System.EventHandler(this.downloadButton_Click);
+            //this.downloadButton.Click += new System.EventHandler(this.downloadButton_Click);
             // 
             // updatesText
             // 

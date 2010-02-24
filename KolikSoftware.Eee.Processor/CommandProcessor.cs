@@ -1,5 +1,6 @@
 using System;
 using KolikSoftware.Eee.Service;
+using KolikSoftware.Eee.Service.Domain;
 
 namespace KolikSoftware.Eee.Processor
 {
@@ -60,7 +61,7 @@ namespace KolikSoftware.Eee.Processor
     {
         protected int myUserID;
         protected string myLogin;
-        protected Notificator notificator;
+        //protected Notificator notificator;
 
         #region Events
         public class IdentifyRequestedEventArgs : EventArgs
@@ -251,11 +252,11 @@ namespace KolikSoftware.Eee.Processor
         }
         #endregion
 
-        public CommandProcessor(Notificator notificator, int myUserID, string myLogin)
+        public CommandProcessor(/*Notificator notificator, */int myUserID, string myLogin)
         {
             this.myUserID = myUserID;
             this.myLogin = myLogin;
-            this.notificator = notificator;
+            //this.notificator = notificator;
         }
 
         public virtual void ProcessMessage(EeeDataSet.MessageRow message, out bool continueProcessing)

@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 using System.Security;
 using System.Runtime.InteropServices;
 
-namespace KolikSoftware.Eee.Service
+namespace KolikSoftware.Eee.Service.Core
 {
-    public class Security
+    internal static class SecurityHelper
     {
         public static string CreatePasswordHash(SecureString password, string salt)
         {

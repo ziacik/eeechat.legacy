@@ -17,8 +17,8 @@ namespace KolikSoftware.Eee.Client.Reporting
             InitializeComponent();
             this.serviceController = serviceController;
             this.feedbackTypeCombo.SelectedIndex = 0;
-            if (this.serviceController != null && this.serviceController.CurrentUser != null)
-                this.nameText.Text = this.serviceController.CurrentUser.Login;
+            //if (this.serviceController != null && this.serviceController.CurrentUser != null)
+            //    this.nameText.Text = this.serviceController.CurrentUser.Login;
         }
 
         public void ReportError(Exception ex)

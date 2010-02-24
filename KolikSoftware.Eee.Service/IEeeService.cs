@@ -1,5 +1,6 @@
 using System;
 using System.Security;
+using KolikSoftware.Eee.Service.Domain;
 
 namespace KolikSoftware.Eee.Service
 {
@@ -8,6 +9,32 @@ namespace KolikSoftware.Eee.Service
     /// </summary>
     public interface IEeeService
     {
+        /// <summary>
+        /// Address of service.
+        /// </summary>
+        string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// Proxy settings.
+        /// </summary>
+        ProxySettings ProxySettings { get; set; }
+
+        /// <summary>
+        /// Get data used for authentication of a user specified by login.
+        /// </summary>
+        AuthenticationData GetAuthenticationData(string login);
+
+        /// <summary>
+        /// Connects and logins the user at the web service. Returns false if login fails.
+        /// </summary>
+        bool ConnectUser(string login, SecureString password);
+
+        /// <summary>
+        /// Logouts user and disconnects from the web service.
+        /// </summary>
+        void DisconnectUser();
+
+        /*
         bool IsBound { get; }
         int RequestsMade { get; }
         int BytesReceived { get; }
@@ -19,11 +46,6 @@ namespace KolikSoftware.Eee.Service
         string ServiceUrl { get; set; }
 
         ProxySettings ProxySettings { get; set; }
-
-        /// <summary>
-        /// Connects and logins the user at the web service. Returns false if login fails.
-        /// </summary>
-        bool ConnectUser(string login, SecureString password);
 
         /// <summary>
         /// Logouts user and disconnects from the web service.
@@ -114,6 +136,6 @@ namespace KolikSoftware.Eee.Service
 
         EeeDataSet.MessageDataTable GetMessagesTran();
 
-        void GetMessagesCommit();
+        void GetMessagesCommit();*/
     }
 }

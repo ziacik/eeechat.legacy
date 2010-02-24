@@ -33,9 +33,9 @@ namespace KolikSoftware.Eee.Client.Updating
             // installWorker
             // 
             this.installWorker.WorkerReportsProgress = true;
-            this.installWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.installWorker_DoWork);
-            this.installWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.installWorker_RunWorkerCompleted);
-            this.installWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.installWorker_ProgressChanged);
+            //this.installWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.installWorker_DoWork);
+            //this.installWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.installWorker_RunWorkerCompleted);
+            //this.installWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.installWorker_ProgressChanged);
 
         }
 

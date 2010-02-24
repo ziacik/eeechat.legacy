@@ -6,12 +6,12 @@ using System.Text;
 using KolikSoftware.Eee.Service;
 using System.Reflection;
 using System.Security;
-using KolikSoftware.Eee.Processor;
 using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Windows.Forms;
 using System.Threading;
+using KolikSoftware.Eee.Service.Exceptions;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -21,8 +21,6 @@ namespace KolikSoftware.Eee.Client
         bool disconnecting = false;
         bool forceDisconnect;
         IEeeService service = null;
-        CommandProcessor processor = null;
-        Notificator notificator = null;
         List<InvocationParameters> senderInvocations = new List<InvocationParameters>();
         List<InvocationParameters> receiverInvocations = new List<InvocationParameters>();
         List<InvocationParameters> downloadInvocations = new List<InvocationParameters>();
@@ -158,21 +156,21 @@ namespace KolikSoftware.Eee.Client
 
         public class GetRoomsFinishedEventArgs : EventArgs
         {
-            private EeeDataSet.RoomDataTable rooms;
+            //private EeeDataSet.RoomDataTable rooms;
 
-            public GetRoomsFinishedEventArgs(EeeDataSet.RoomDataTable rooms)
-                : base()
-            {
-                this.rooms = rooms;
-            }
+            //public GetRoomsFinishedEventArgs(EeeDataSet.RoomDataTable rooms)
+            //    : base()
+            //{
+            //    this.rooms = rooms;
+            //}
 
-            public EeeDataSet.RoomDataTable Rooms
-            {
-                get
-                {
-                    return this.rooms;
-                }
-            }
+            //public EeeDataSet.RoomDataTable Rooms
+            //{
+            //    get
+            //    {
+            //        return this.rooms;
+            //    }
+            //}
         }
 
         public event EventHandler<GetRoomsFinishedEventArgs> GetRoomsFinished;
@@ -188,21 +186,21 @@ namespace KolikSoftware.Eee.Client
 
         public class GetUsersFinishedEventArgs : EventArgs
         {
-            private EeeDataSet.UserDataTable users;
+            //private EeeDataSet.UserDataTable users;
 
-            public GetUsersFinishedEventArgs(EeeDataSet.UserDataTable users)
-                : base()
-            {
-                this.users = users;
-            }
+            //public GetUsersFinishedEventArgs(EeeDataSet.UserDataTable users)
+            //    : base()
+            //{
+            //    this.users = users;
+            //}
 
-            public EeeDataSet.UserDataTable Users
-            {
-                get
-                {
-                    return this.users;
-                }
-            }
+            //public EeeDataSet.UserDataTable Users
+            //{
+            //    get
+            //    {
+            //        return this.users;
+            //    }
+            //}
         }
 
         public event EventHandler<GetUsersFinishedEventArgs> GetUsersFinished;
@@ -218,21 +216,21 @@ namespace KolikSoftware.Eee.Client
 
         public class GetMessagesFinishedEventArgs : EventArgs
         {
-            private EeeDataSet.MessageDataTable messages;
+            //private EeeDataSet.MessageDataTable messages;
 
-            public GetMessagesFinishedEventArgs(EeeDataSet.MessageDataTable messages)
-                : base()
-            {
-                this.messages = messages;
-            }
+            //public GetMessagesFinishedEventArgs(EeeDataSet.MessageDataTable messages)
+            //    : base()
+            //{
+            //    this.messages = messages;
+            //}
 
-            public EeeDataSet.MessageDataTable Messages
-            {
-                get
-                {
-                    return this.messages;
-                }
-            }
+            //public EeeDataSet.MessageDataTable Messages
+            //{
+            //    get
+            //    {
+            //        return this.messages;
+            //    }
+            //}
         }
 
         public event EventHandler<GetMessagesFinishedEventArgs> GetMessagesFinished;
@@ -246,44 +244,44 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        public event EventHandler<CommandProcessor.UserStateChangedEventArgs> UserStateChanged;
+        //public event EventHandler<CommandProcessor.UserStateChangedEventArgs> UserStateChanged;
 
-        protected virtual void OnUserStateChanged(CommandProcessor.UserStateChangedEventArgs e)
-        {
-            EventHandler<CommandProcessor.UserStateChangedEventArgs> handler = UserStateChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
+        //protected virtual void OnUserStateChanged(CommandProcessor.UserStateChangedEventArgs e)
+        //{
+        //    EventHandler<CommandProcessor.UserStateChangedEventArgs> handler = UserStateChanged;
+        //    if (handler != null)
+        //    {
+        //        handler(this, e);
+        //    }
+        //}
 
-        public event EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs> ExternalUserStateChanged;
+        //public event EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs> ExternalUserStateChanged;
 
-        protected virtual void OnExternalUserStateChanged(CommandProcessor.ExternalUserStateChangedEventArgs e)
-        {
-            EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs> handler = ExternalUserStateChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
+        //protected virtual void OnExternalUserStateChanged(CommandProcessor.ExternalUserStateChangedEventArgs e)
+        //{
+        //    EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs> handler = ExternalUserStateChanged;
+        //    if (handler != null)
+        //    {
+        //        handler(this, e);
+        //    }
+        //}
 
         public class UpdatesAvailableEventArgs : EventArgs
         {
-            EeeDataSet.UpdateDataTable updates;
+            //EeeDataSet.UpdateDataTable updates;
 
-            public UpdatesAvailableEventArgs(EeeDataSet.UpdateDataTable updates)
-            {
-                this.updates = updates;
-            }
+            //public UpdatesAvailableEventArgs(EeeDataSet.UpdateDataTable updates)
+            //{
+            //    this.updates = updates;
+            //}
 
-            public EeeDataSet.UpdateDataTable Updates
-            {
-                get
-                {
-                    return this.updates;
-                }
-            }
+            //public EeeDataSet.UpdateDataTable Updates
+            //{
+            //    get
+            //    {
+            //        return this.updates;
+            //    }
+            //}
         }
 
         public event EventHandler<UpdatesAvailableEventArgs> UpdatesAvailable;
@@ -497,16 +495,16 @@ namespace KolikSoftware.Eee.Client
         #region Public
         public List<int> MessagesToCommit { get; private set; }
 
-        public EeeDataSet.UserRow CurrentUser
-        {
-            get
-            {
-                if (this.service == null)
-                    return null;
-                else
-                    return this.service.CurrentUser;
-            }
-        }
+        //public EeeDataSet.UserRow CurrentUser
+        //{
+        //    get
+        //    {
+        //        if (this.service == null)
+        //            return null;
+        //        else
+        //            return this.service.CurrentUser;
+        //    }
+        //}
 
         public void ConnectUser(string login, SecureString password)
         {
@@ -640,10 +638,11 @@ namespace KolikSoftware.Eee.Client
         /// </summary>
         public string GetPathToSave(string context)
         {
-            if (this.CurrentUser == null)
-                throw new Exception("Current User not set.");
+            //if (this.CurrentUser == null)
+            //    throw new Exception("Current User not set.");
             
-            return Path.Combine(this.basePath, this.CurrentUser.Login + @"\" + context);
+            //return Path.Combine(this.basePath, this.CurrentUser.Login + @"\" + context);
+            return null;
         }
         #endregion
 
@@ -678,8 +677,8 @@ namespace KolikSoftware.Eee.Client
         #region Private
         private void CheckUser()
         {
-            if (this.CurrentUser == null)
-                throw new InvalidOperationException("The user is not logged.");
+            //if (this.CurrentUser == null)
+            //    throw new InvalidOperationException("The user is not logged.");
         }
 
         private object Invoke(InvocationParameters invocationParameters)
@@ -766,60 +765,60 @@ namespace KolikSoftware.Eee.Client
 
         void ProcessGetUpdates(InvocationParameters invocationParameters)
         {
-            using (EeeDataSet.UpdateDataTable updates = invocationParameters.Result as EeeDataSet.UpdateDataTable)
-            {
-                if (updates.Count > 0)
-                    OnUpdatesAvailable(new UpdatesAvailableEventArgs(updates));
-            }
+            //using (EeeDataSet.UpdateDataTable updates = invocationParameters.Result as EeeDataSet.UpdateDataTable)
+            //{
+            //    if (updates.Count > 0)
+            //        OnUpdatesAvailable(new UpdatesAvailableEventArgs(updates));
+            //}
         }
 
         void ProcessGetMessages(InvocationParameters invocationParameters)
         {
-            using (EeeDataSet.MessageDataTable messages = invocationParameters.Result as EeeDataSet.MessageDataTable)
-            {
-                if (messages.Count > 0)
-                {
-                    for (int i = 0; i < messages.Count; i++)
-                    {
-                        EeeDataSet.MessageRow message = messages[i];
+            //using (EeeDataSet.MessageDataTable messages = invocationParameters.Result as EeeDataSet.MessageDataTable)
+            //{
+            //    if (messages.Count > 0)
+            //    {
+            //        for (int i = 0; i < messages.Count; i++)
+            //        {
+            //            EeeDataSet.MessageRow message = messages[i];
 
-                        bool continueProcessing;
-                        this.processor.ProcessMessage(message, out continueProcessing);
+            //            bool continueProcessing;
+            //            this.processor.ProcessMessage(message, out continueProcessing);
 
-                        if (continueProcessing == false)
-                        {
-                            message.Delete();
-                            i--;
-                        }
-                    }
+            //            if (continueProcessing == false)
+            //            {
+            //                message.Delete();
+            //                i--;
+            //            }
+            //        }
 
-                    messages.AcceptChanges();
-                }
+            //        messages.AcceptChanges();
+            //    }
 
-                OnGetMessagesFinished(new GetMessagesFinishedEventArgs(messages));
-            }
+            //    OnGetMessagesFinished(new GetMessagesFinishedEventArgs(messages));
+            //}
         }
 
         void ProcessGetUsers(InvocationParameters invocationParameters)
         {
-            using (EeeDataSet.UserDataTable users = invocationParameters.Result as EeeDataSet.UserDataTable)
-            {
-                if (users.Count > 0)
-                {
-                    OnGetUsersFinished(new GetUsersFinishedEventArgs(users));
-                }
-            }
+            //using (EeeDataSet.UserDataTable users = invocationParameters.Result as EeeDataSet.UserDataTable)
+            //{
+            //    if (users.Count > 0)
+            //    {
+            //        OnGetUsersFinished(new GetUsersFinishedEventArgs(users));
+            //    }
+            //}
         }
 
         void ProcessGetRooms(InvocationParameters invocationParameters)
         {
-            using (EeeDataSet.RoomDataTable rooms = invocationParameters.Result as EeeDataSet.RoomDataTable)
-            {
-                if (rooms.Count > 0)
-                {
-                    OnGetRoomsFinished(new GetRoomsFinishedEventArgs(rooms));
-                }
-            }
+            //using (EeeDataSet.RoomDataTable rooms = invocationParameters.Result as EeeDataSet.RoomDataTable)
+            //{
+            //    if (rooms.Count > 0)
+            //    {
+            //        OnGetRoomsFinished(new GetRoomsFinishedEventArgs(rooms));
+            //    }
+            //}
         }
 
         private void ProcessDisconnectUser(InvocationParameters invocationParameters)
@@ -849,31 +848,31 @@ namespace KolikSoftware.Eee.Client
 
         private void InitProcessor()
         {
-            this.processor = new CommandProcessor(this.notificator, this.CurrentUser.UserID, this.CurrentUser.Login);
-            this.processor.IdentifyRequested += new EventHandler<CommandProcessor.IdentifyRequestedEventArgs>(processor_IdentifyRequested);
-            this.processor.UserStateChanged += new EventHandler<CommandProcessor.UserStateChangedEventArgs>(processor_UserStateChanged);
-            this.processor.ExternalUserStateChanged += new EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs>(processor_ExternalUserStateChanged);
+            //this.processor = new CommandProcessor(this.notificator, this.CurrentUser.UserID, this.CurrentUser.Login);
+            //this.processor.IdentifyRequested += new EventHandler<CommandProcessor.IdentifyRequestedEventArgs>(processor_IdentifyRequested);
+            //this.processor.UserStateChanged += new EventHandler<CommandProcessor.UserStateChangedEventArgs>(processor_UserStateChanged);
+            //this.processor.ExternalUserStateChanged += new EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs>(processor_ExternalUserStateChanged);
         }
 
         private void DisposeProcessor()
         {
-            this.processor = null;
+            //this.processor = null;
         }
 
-        void processor_UserStateChanged(object sender, CommandProcessor.UserStateChangedEventArgs e)
-        {
-            OnUserStateChanged(e);
-        }
+        //void processor_UserStateChanged(object sender, CommandProcessor.UserStateChangedEventArgs e)
+        //{
+        //    OnUserStateChanged(e);
+        //}
 
-        void processor_ExternalUserStateChanged(object sender, CommandProcessor.ExternalUserStateChangedEventArgs e)
-        {
-            OnExternalUserStateChanged(e);
-        }
+        //void processor_ExternalUserStateChanged(object sender, CommandProcessor.ExternalUserStateChangedEventArgs e)
+        //{
+        //    OnExternalUserStateChanged(e);
+        //}
 
-        void processor_IdentifyRequested(object sender, CommandProcessor.IdentifyRequestedEventArgs e)
-        {
-            //TODO: implement
-        }
+        //void processor_IdentifyRequested(object sender, CommandProcessor.IdentifyRequestedEventArgs e)
+        //{
+        //    //TODO: implement
+        //}
 
         void AddInvocation(InvocationScope invocationScope, InvocationType invocationType, DateTime? invocationTime, string name, params object[] arguments)
         {
@@ -1024,15 +1023,15 @@ namespace KolikSoftware.Eee.Client
 
         void externalServicesWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
-            {
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-                    this.service.JabberConnect(Properties.Settings.Default.JabberID, Security.Decrypt(Properties.Settings.Default.JabberPassword, true));
-            }
-            finally
-            {
-                Thread.Sleep(30000);
-            }
+            //try
+            //{
+            //    if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
+            //        this.service.JabberConnect(Properties.Settings.Default.JabberID, Security.Decrypt(Properties.Settings.Default.JabberPassword, true));
+            //}
+            //finally
+            //{
+            //    Thread.Sleep(30000);
+            //}
         }
 
         void externalServicesWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1046,8 +1045,8 @@ namespace KolikSoftware.Eee.Client
 
         void externalServicesWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-                this.service.JabberRenew(Properties.Settings.Default.JabberID);
+            //if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
+            //    this.service.JabberRenew(Properties.Settings.Default.JabberID);
         }
 
         internal void SendJabber(string externalUser, string text, string externalNick)
@@ -1060,17 +1059,17 @@ namespace KolikSoftware.Eee.Client
 
         internal void DisconnectJabber()
         {
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-            {
-                try
-                {
-                    this.service.JabberDisconnect(Properties.Settings.Default.JabberID);
-                }
-                catch
-                {
-                    //TODO: Log?
-                }
-            }
+        //    if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
+        //    {
+        //        try
+        //        {
+        //            this.service.JabberDisconnect(Properties.Settings.Default.JabberID);
+        //        }
+        //        catch
+        //        {
+        //            //TODO: Log?
+        //        }
+        //    }
         }
     }
 

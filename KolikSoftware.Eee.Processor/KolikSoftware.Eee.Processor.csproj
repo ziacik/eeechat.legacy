@@ -2,7 +2,7 @@
   <UsingTask TaskName="BuildIncrementer.Incrementer" AssemblyFile="C:\Development\Components\BuildIncrementer.dll" />
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DB273059-FA70-481D-9F29-14692DDEC6C2}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,9 +98,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandProcessor.cs">
+    <None Include="CommandProcessor.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">

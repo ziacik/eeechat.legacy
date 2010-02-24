@@ -135,10 +135,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\KolikSoftware.Controls.MutexController\KolikSoftware.Controls.MutexController.csproj">
-      <Project>{E012C958-C833-4D6E-AC0C-ECF18547C472}</Project>
-      <Name>KolikSoftware.Controls.MutexController</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Processor\KolikSoftware.Eee.Processor.csproj">
       <Name>KolikSoftware.Eee.Processor</Name>
       <Project>{DB273059-FA70-481D-9F29-14692DDEC6C2}</Project>

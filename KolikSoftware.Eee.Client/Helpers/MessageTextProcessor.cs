@@ -40,66 +40,66 @@ namespace KolikSoftware.Eee.Client.Helpers
             this.transformation.Load(document);
         }
 
-        public XmlDocument ProcessMessages(EeeDataSet.MessageDataTable messages, List<string> links)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                messages.WriteXml(stream);
+        //public XmlDocument ProcessMessages(EeeDataSet.MessageDataTable messages, List<string> links)
+        //{
+        //    using (MemoryStream stream = new MemoryStream())
+        //    {
+        //        messages.WriteXml(stream);
 
-                stream.Flush();
-                stream.Position = 0;
+        //        stream.Flush();
+        //        stream.Position = 0;
 
-                XmlNamespaceManager nsmgr = new XmlNamespaceManager(new NameTable());
-                nsmgr.AddNamespace("eee", messages.Namespace);
+        //        XmlNamespaceManager nsmgr = new XmlNamespaceManager(new NameTable());
+        //        nsmgr.AddNamespace("eee", messages.Namespace);
 
-                XmlDocument document = new XmlDocument();
-                document.Load(stream);
+        //        XmlDocument document = new XmlDocument();
+        //        document.Load(stream);
 
-                XmlNodeList list = document.SelectNodes("/eee:EeeDataSet/eee:Message/eee:Message", nsmgr);
+        //        XmlNodeList list = document.SelectNodes("/eee:EeeDataSet/eee:Message/eee:Message", nsmgr);
 
-                string conversion;
+        //        string conversion;
 
-                foreach (XmlNode node in list)
-                {
-                    conversion = ConvertHyperLinks(node.InnerXml);
-                    conversion = Smilies.Instance.ConvertSmilies(conversion);
-                    conversion = conversion.Replace("\n", "<br xmlns=\"\"/>\n");
-                    node.InnerXml = conversion;
+        //        foreach (XmlNode node in list)
+        //        {
+        //            conversion = ConvertHyperLinks(node.InnerXml);
+        //            conversion = Smilies.Instance.ConvertSmilies(conversion);
+        //            conversion = conversion.Replace("\n", "<br xmlns=\"\"/>\n");
+        //            node.InnerXml = conversion;
 
-                    foreach (XmlNode childNode in node.ChildNodes)
-                    {
-                        if (childNode.LocalName == "a")
-                        {
-                            string href = childNode.Attributes["href"].Value;
+        //            foreach (XmlNode childNode in node.ChildNodes)
+        //            {
+        //                if (childNode.LocalName == "a")
+        //                {
+        //                    string href = childNode.Attributes["href"].Value;
 
-                            if (href.Contains("#MEDIA"))
-                            {
-                                href = href.Substring(0, href.Length - "#MEDIA".Length);
-                                if (!links.Contains(href))
-                                    links.Add(href);
-                            }
-                        }
-                    }
-                }
+        //                    if (href.Contains("#MEDIA"))
+        //                    {
+        //                        href = href.Substring(0, href.Length - "#MEDIA".Length);
+        //                        if (!links.Contains(href))
+        //                            links.Add(href);
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                using (MemoryStream outputStream = new MemoryStream())
-                {
-                    this.transformation.Transform(document, null, outputStream);
+        //        using (MemoryStream outputStream = new MemoryStream())
+        //        {
+        //            this.transformation.Transform(document, null, outputStream);
 
-                    outputStream.Position = 0;
+        //            outputStream.Position = 0;
 
-                    StreamReader r = new StreamReader(outputStream);
-                    string x = r.ReadToEnd();
+        //            StreamReader r = new StreamReader(outputStream);
+        //            string x = r.ReadToEnd();
 
-                    outputStream.Position = 0;
+        //            outputStream.Position = 0;
 
-                    XmlDocument outputDocument = new XmlDocument();
-                    outputDocument.Load(outputStream);
+        //            XmlDocument outputDocument = new XmlDocument();
+        //            outputDocument.Load(outputStream);
 
-                    return outputDocument;
-                }
-            }
-        }
+        //            return outputDocument;
+        //        }
+        //    }
+        //}
 
         static readonly Regex HttpUrls = new Regex(
             @"(?<=(^|[^\w@]))(?<link>" +

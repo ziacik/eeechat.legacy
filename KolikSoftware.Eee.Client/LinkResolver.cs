@@ -71,20 +71,20 @@ namespace KolikSoftware.Eee.Client
                     return;
                 }
 
-                HttpWebRequest request = RequestFactory.Instance.CreateRequest(new Uri(info.Href), this.ProxySettings);
+                //HttpWebRequest request = RequestFactory.Instance.CreateRequest(new Uri(info.Href), this.ProxySettings);
 
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    if (response.ContentType.StartsWith("image/"))
-                    {
-                        info.ImageUrl = info.Href;
-                        e.Result = info;
-                    }
-                    else if (response.ContentType.StartsWith("text/html"))
-                    {
-                        ExtractTitle(e, info, response);
-                    }
-                }
+                //using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                //{
+                //    if (response.ContentType.StartsWith("image/"))
+                //    {
+                //        info.ImageUrl = info.Href;
+                //        e.Result = info;
+                //    }
+                //    else if (response.ContentType.StartsWith("text/html"))
+                //    {
+                //        ExtractTitle(e, info, response);
+                //    }
+                //}
             }
             catch
             {

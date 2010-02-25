@@ -1,6 +1,7 @@
 using System;
 using System.Security;
 using KolikSoftware.Eee.Service.Domain;
+using System.Collections.Generic;
 
 namespace KolikSoftware.Eee.Service
 {
@@ -10,9 +11,9 @@ namespace KolikSoftware.Eee.Service
     public interface IEeeService
     {
         /// <summary>
-        /// Address of service.
+        /// Service configuration.
         /// </summary>
-        string ServiceUrl { get; set; }
+        IServiceConfiguration Configuration { get; }
 
         /// <summary>
         /// Proxy settings.
@@ -27,12 +28,37 @@ namespace KolikSoftware.Eee.Service
         /// <summary>
         /// Connects and logins the user at the web service. Returns false if login fails.
         /// </summary>
-        bool ConnectUser(string login, SecureString password);
+        void Connect(string login, SecureString password);
 
         /// <summary>
         /// Logouts user and disconnects from the web service.
         /// </summary>
-        void DisconnectUser();
+        void Disconnect();
+
+        /// <summary>
+        /// Gets the list of the connected users.
+        /// </summary>
+        IList<User> GetUsers();
+
+        /// <summary>
+        /// Gets the list of chat rooms.
+        /// </summary>
+        IList<Room> GetRooms();
+
+        /// <summary>
+        /// Gets the list of new messages.
+        /// </summary>
+        IList<Message> GetMessages();
+
+        /// <summary>
+        /// Puts private message into commit queue.
+        /// </summary>
+        void CommitMessage(Message message);
+
+        /// <summary>
+        /// Gets currently connected user. Null if disconnected.
+        /// </summary>
+        User CurrentUser { get; }
 
         /*
         bool IsBound { get; }

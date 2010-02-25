@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
 namespace KolikSoftware.Eee.Service.Domain
 {
     [DataContract]
-    public class Room
+    public class ActionResult
     {
         [DataMember]
-        public string Name { get; set; }
+        public string Result { get; set; }
     }
 }

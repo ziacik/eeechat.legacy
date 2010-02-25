@@ -95,7 +95,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
         {
             get
             {
-                return this.loginPhase == LoginPhase.Connected;
+                return this.loginPhase != LoginPhase.Disconnected;
             }
         }
         #endregion
@@ -246,7 +246,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
 
                 OnBeforeLogin(BeforeLoginEventArgs.Empty);
 
-                this.serviceController.ConnectUser(this.user, this.password);
+                this.serviceController.Connect(this.user, this.password);
             }
         }
 
@@ -267,7 +267,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
             {
                 this.wantToLogout = false;
                 OnBeforeLogin(BeforeLoginEventArgs.Empty);
-                this.serviceController.DisconnectUser(force);
+                this.serviceController.Disconnect(force);
             }
         }
 
@@ -313,7 +313,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
 
             this.serviceController.GetUsers();
             this.serviceController.GetRooms();
-            this.serviceController.GetUpdates();
+            //this.serviceController.GetUpdates();
         }
     }
 }

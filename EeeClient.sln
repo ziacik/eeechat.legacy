@@ -15,19 +15,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json", "Json", "{D34250B0-C07B-4BA8-8FD7-BB8972A206B6}"
 	ProjectSection(SolutionItems) = preProject
 		Server\JsonBind\addmessage.php = Server\JsonBind\addmessage.php
-		AuthenticationData.php = AuthenticationData.php
 		Server\JsonBind\autologoff.php = Server\JsonBind\autologoff.php
-		Server\JsonBind\changestate.php = Server\JsonBind\changestate.php
 		Server\JsonBind\Common.php = Server\JsonBind\Common.php
-		Server\JsonBind\getrooms.php = Server\JsonBind\getrooms.php
 		Server\JsonBind\getupdates.php = Server\JsonBind\getupdates.php
 		Server\JsonBind\getuser.php = Server\JsonBind\getuser.php
-		Server\JsonBind\getusers.php = Server\JsonBind\getusers.php
+		Server\JsonBind\Messages.php = Server\JsonBind\Messages.php
 		Server\JsonBind\register.php = Server\JsonBind\register.php
-		Server\JsonBind\streammessages.php = Server\JsonBind\streammessages.php
+		Server\JsonBind\Rooms.php = Server\JsonBind\Rooms.php
 		Server\JsonBind\test.php = Server\JsonBind\test.php
 		Server\JsonBind\upload.php = Server\JsonBind\upload.php
 		Server\JsonBind\userfeedback.php = Server\JsonBind\userfeedback.php
+		Server\JsonBind\Users.php = Server\JsonBind\Users.php
+		Server\JsonBind\UserState.php = Server\JsonBind\UserState.php
 	EndProjectSection
 EndProject
 Global

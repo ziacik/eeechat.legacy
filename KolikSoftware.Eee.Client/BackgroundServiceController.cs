@@ -9,23 +9,43 @@ using System.Security;
 using System.Drawing;
 using System.IO;
 using System.Web;
-using System.Windows.Forms;
 using System.Threading;
 using KolikSoftware.Eee.Service.Exceptions;
+using KolikSoftware.Eee.Service.Domain;
 
 namespace KolikSoftware.Eee.Client
 {
-    public partial class BackgroundServiceController : Component
+    public partial class BackgroundServiceController : Component, IEeeService
     {
         #region Private Members
-        bool disconnecting = false;
-        bool forceDisconnect;
-        IEeeService service = null;
         List<InvocationParameters> senderInvocations = new List<InvocationParameters>();
         List<InvocationParameters> receiverInvocations = new List<InvocationParameters>();
         List<InvocationParameters> downloadInvocations = new List<InvocationParameters>();
         List<InvocationParameters> uploadInvocations = new List<InvocationParameters>();
+
+        Dictionary<BackgroundWorker, InvokeInfo> Workers { get; set; }
         #endregion
+
+        public IServiceConfiguration Configuration
+        {
+            get
+            {
+                return this.Service.Configuration;
+            }
+        }
+
+        public User CurrentUser
+        {
+            get
+            {
+                return this.Service.CurrentUser;
+            }
+        }
+
+        public void CommitMessage(Message message)
+        {
+            this.Service.CommitMessage(message);
+        }
 
         #region Events
         public class RegisteredEventArgs : EventArgs
@@ -101,6 +121,9 @@ namespace KolikSoftware.Eee.Client
             EventHandler<ErrorOccuredEventArgs> handler = ErrorOccured;
             if (handler != null)
             {
+                if (e.Error is DisconnectedException)
+                    OnDisconnected(DisconnectedEventArgs.Empty);
+
                 handler(this, e);
             }
         }
@@ -156,21 +179,12 @@ namespace KolikSoftware.Eee.Client
 
         public class GetRoomsFinishedEventArgs : EventArgs
         {
-            //private EeeDataSet.RoomDataTable rooms;
+            public IList<Room> Rooms { get; private set; }
 
-            //public GetRoomsFinishedEventArgs(EeeDataSet.RoomDataTable rooms)
-            //    : base()
-            //{
-            //    this.rooms = rooms;
-            //}
-
-            //public EeeDataSet.RoomDataTable Rooms
-            //{
-            //    get
-            //    {
-            //        return this.rooms;
-            //    }
-            //}
+            public GetRoomsFinishedEventArgs(IList<Room> rooms)
+            {
+                this.Rooms = rooms;
+            }
         }
 
         public event EventHandler<GetRoomsFinishedEventArgs> GetRoomsFinished;
@@ -186,21 +200,12 @@ namespace KolikSoftware.Eee.Client
 
         public class GetUsersFinishedEventArgs : EventArgs
         {
-            //private EeeDataSet.UserDataTable users;
+            public IList<User> Users { get; private set; }
 
-            //public GetUsersFinishedEventArgs(EeeDataSet.UserDataTable users)
-            //    : base()
-            //{
-            //    this.users = users;
-            //}
-
-            //public EeeDataSet.UserDataTable Users
-            //{
-            //    get
-            //    {
-            //        return this.users;
-            //    }
-            //}
+            public GetUsersFinishedEventArgs(IList<User> users)
+            {
+                this.Users = users;
+            }
         }
 
         public event EventHandler<GetUsersFinishedEventArgs> GetUsersFinished;
@@ -216,21 +221,12 @@ namespace KolikSoftware.Eee.Client
 
         public class GetMessagesFinishedEventArgs : EventArgs
         {
-            //private EeeDataSet.MessageDataTable messages;
+            public IList<Message> Messages { get; private set; }
 
-            //public GetMessagesFinishedEventArgs(EeeDataSet.MessageDataTable messages)
-            //    : base()
-            //{
-            //    this.messages = messages;
-            //}
-
-            //public EeeDataSet.MessageDataTable Messages
-            //{
-            //    get
-            //    {
-            //        return this.messages;
-            //    }
-            //}
+            public GetMessagesFinishedEventArgs(IList<Message> messages)
+            {
+                this.Messages = messages;
+            }
         }
 
         public event EventHandler<GetMessagesFinishedEventArgs> GetMessagesFinished;
@@ -471,6 +467,7 @@ namespace KolikSoftware.Eee.Client
         {
             InitializeComponent();
             this.MessagesToCommit = new List<int>();
+            this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
 
         public BackgroundServiceController(IContainer container)
@@ -478,46 +475,208 @@ namespace KolikSoftware.Eee.Client
             container.Add(this);
             InitializeComponent();
             this.MessagesToCommit = new List<int>();
+            this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
 
-        public IEeeService Service
-        {
-            get
-            {
-                return this.service;
-            }
-            set
-            {
-                this.service = value;
-            }
-        }
+        public IEeeService Service { get; set; }
+
 
         #region Public
-        public List<int> MessagesToCommit { get; private set; }
-
-        //public EeeDataSet.UserRow CurrentUser
-        //{
-        //    get
-        //    {
-        //        if (this.service == null)
-        //            return null;
-        //        else
-        //            return this.service.CurrentUser;
-        //    }
-        //}
-
-        public void ConnectUser(string login, SecureString password)
+        class InvokeInfo
         {
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "ConnectUser", login, password);
+            public int SleepSecs { get; set; }
+            public Action Work { get; set; }
+            public Func<object> Query { get; set; }
+            public Action<object> Success { get; set; }
+            public Action<Exception> Error { get; set; }
+            public object Result { get; set; }
         }
 
-        public void DisconnectUser(bool force)
+        public void InvokeInBackground(int sleepSecs, Action work, Action<object> success, Action<Exception> error)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+            InvokeInfo info = new InvokeInfo()
+            {
+                SleepSecs = sleepSecs,
+                Work = work,
+                Success = success,
+                Error = error
+            };
+            this.Workers.Add(worker, info);
+            worker.RunWorkerAsync(info);
+        }
+
+        public void QueryInBackground(int sleepSecs, Func<object> query, Action<object> success, Action<Exception> error)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+            InvokeInfo info = new InvokeInfo()
+            {
+                SleepSecs = sleepSecs,
+                Query = query,
+                Success = success,
+                Error = error
+            };
+            this.Workers.Add(worker, info);
+            worker.RunWorkerAsync(info);
+        }
+
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+
+            if (!e.Cancelled)
+            {
+                InvokeInfo info = this.Workers[worker];
+                if (e.Error != null)
+                    info.Error(e.Error);
+                else
+                    info.Success(e.Result);
+            }
+
+            this.Workers.Remove(worker);
+
+            worker.RunWorkerCompleted -= worker_RunWorkerCompleted;
+            worker.DoWork -= worker_DoWork;
+            worker.Dispose();
+        }
+
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            InvokeInfo info = (InvokeInfo)e.Argument;
+
+            if (info.SleepSecs > 0)
+                Thread.Sleep(info.SleepSecs * 1000);
+            
+            if (info.Work != null)
+                info.Work();
+
+            if (info.Query != null)
+                e.Result = info.Query();
+        }
+
+        public void Connect(string login, SecureString password)
+        {
+            DoConnect(0, login, password);
+        }
+
+        public void DoConnect(int sleepSecs, string login, SecureString password)
+        {
+            InvokeInBackground(
+                sleepSecs,
+                () => this.Service.Connect(login, password),
+                r => OnConnected(ConnectedEventArgs.Empty),
+                e =>
+                {
+                    OnErrorOccured(new ErrorOccuredEventArgs(e));
+                    /// Try reconnecting in 30 secs.
+                    DoConnect(30, login, password);
+                }
+            );
+        }
+
+        public void Disconnect(bool force)
+        {
+            DoDisconnect(0, force);
+        }
+
+        public void DoDisconnect(int sleepSecs, bool force)
         {
             CheckUser();
             RemoveInvocations();
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "DisconnectUser");
-            this.disconnecting = true;
-            this.forceDisconnect = force;
+
+            InvokeInBackground(
+                sleepSecs,
+                () => this.Service.Disconnect(),
+                r => OnDisconnected(DisconnectedEventArgs.Empty),
+                e =>
+                {
+                    if (force)
+                    {
+                        OnDisconnected(DisconnectedEventArgs.Empty);
+                    }
+                    else
+                    {
+                        OnErrorOccured(new ErrorOccuredEventArgs(e));
+                        DoDisconnect(3, force);
+                    }
+                }
+            );
+        }
+
+        public IList<User> GetUsers()
+        {
+            DoGetUsers(0);
+            return null;
+        }
+
+        void DoGetUsers(int sleepSecs)
+        {
+            QueryInBackground(
+                sleepSecs,
+                () => this.Service.GetUsers(),
+                r => OnGetUsersFinished(new GetUsersFinishedEventArgs((IList<User>)r)),
+                e =>
+                {
+                    OnErrorOccured(new ErrorOccuredEventArgs(e));
+                    DoGetUsers(3);
+                }
+            );
+        }
+
+        public IList<Room> GetRooms()
+        {
+            DoGetRooms(0);
+            return null;
+        }
+
+        void DoGetRooms(int sleepSecs)
+        {
+            QueryInBackground(
+                sleepSecs,
+                () => this.Service.GetRooms(),
+                r => OnGetRoomsFinished(new GetRoomsFinishedEventArgs((IList<Room>)r)),
+                e =>
+                {
+                    OnErrorOccured(new ErrorOccuredEventArgs(e));
+                    DoGetRooms(3);
+                }
+            );
+        }
+
+        public IList<Message> GetMessages()
+        {
+            DoGetMessages(0, 0);
+            return null;
+        }
+
+        void DoGetMessages(int sleepSecs, int retryNo)
+        {
+            QueryInBackground(
+                sleepSecs,
+                () => this.Service.GetMessages(),
+                r => 
+                {
+                    OnGetMessagesFinished(new GetMessagesFinishedEventArgs((IList<Message>)r));
+                    DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
+                },
+                e =>
+                {
+                    OnErrorOccured(new ErrorOccuredEventArgs(e));
+
+                    int delay;
+
+                    if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
+                        delay = this.Service.Configuration.MessageGetInstantRetryDelay;
+                    else
+                        delay = this.Service.Configuration.MessageGetRetryDelay;
+
+                    DoGetMessages(delay, retryNo + 1);
+                }
+            );
         }
 
         public void RegisterUser(string login, SecureString password, int color)
@@ -535,53 +694,6 @@ namespace KolikSoftware.Eee.Client
             AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "ResetAwayMode");
         }
 
-        public void GetRooms()
-        {
-            CheckUser();
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetRooms");
-        }
-
-        public void GetUsers()
-        {
-            CheckUser();
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetUsers");
-        }
-
-        public void GetMessages()
-        {
-            CheckUser();
-
-            string commit = GetCommitMessages();
-
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetMessages", commit);
-        }
-
-        private string GetCommitMessages()
-        {
-            StringBuilder builder = new StringBuilder();
-
-            foreach (int messageId in this.MessagesToCommit)
-            {
-                if (builder.Length > 0)
-                    builder.Append(',');
-
-                builder.Append(messageId);
-            }
-
-            this.MessagesToCommit.Clear();
-
-            string commit = builder.ToString();
-            return commit;
-        }
-
-        public void GetMessages(TimeSpan timeToWait)
-        {
-            CheckUser();
-
-            string commit = GetCommitMessages();
-
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, DateTime.Now + timeToWait, "GetMessages", commit);
-        }
 
         public void GetUpdates()
         {
@@ -631,7 +743,7 @@ namespace KolikSoftware.Eee.Client
         #endregion
 
         #region Public Helpers
-        string basePath = Path.GetDirectoryName(Application.UserAppDataPath);
+        //string basePath = Path.GetDirectoryName(Application.UserAppDataPath);
 
         /// <summary>
         /// Gets a path to save user data according to current user and context. User must be logged in.
@@ -686,9 +798,9 @@ namespace KolikSoftware.Eee.Client
             object result = null;
 
             if (invocationParameters.InvocationType == InvocationType.Method)
-                result = typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.InvokeMethod, null, this.service, invocationParameters.Arguments);
+                result = typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.InvokeMethod, null, this.Service, invocationParameters.Arguments);
             else
-                typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.SetProperty, null, this.service, invocationParameters.Arguments);
+                typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.SetProperty, null, this.Service, invocationParameters.Arguments);
 
             return result;
         }
@@ -697,12 +809,6 @@ namespace KolikSoftware.Eee.Client
         {
             switch (invocationParameters.Name)
             {
-                case "ConnectUser":
-                    ProcessConnectUser(invocationParameters);
-                    break;
-                case "DisconnectUser":
-                    ProcessDisconnectUser(invocationParameters);
-                    break;
                 case "RegisterUser":
                     ProcessRegisterUser(invocationParameters);
                     break;
@@ -821,17 +927,6 @@ namespace KolikSoftware.Eee.Client
             //}
         }
 
-        private void ProcessDisconnectUser(InvocationParameters invocationParameters)
-        {
-            ProcessDisconnectUser(invocationParameters, false);
-        }
-
-        private void ProcessDisconnectUser(InvocationParameters invocationParameters, bool noClear)
-        {
-            this.disconnecting = false;
-            DisposeProcessor();
-            OnDisconnected(new DisconnectedEventArgs() { NoClear = noClear });
-        }
 
         private void ProcessConnectUser(InvocationParameters invocationParameters)
         {
@@ -876,7 +971,7 @@ namespace KolikSoftware.Eee.Client
 
         void AddInvocation(InvocationScope invocationScope, InvocationType invocationType, DateTime? invocationTime, string name, params object[] arguments)
         {
-            if (this.disconnecting) return;
+            //if (this.disconnecting) return;
 
             List<InvocationParameters> invocationList = null;
 
@@ -927,6 +1022,7 @@ namespace KolikSoftware.Eee.Client
 
         void invocationTimer_Tick(object sender, EventArgs e)
         {
+            return;
             CheckNextInvocation(this.senderInvocations, this.sendingWorker);
             CheckNextInvocation(this.receiverInvocations, this.receivingWorker);
             CheckNextInvocation(this.downloadInvocations, this.downloadingWorker);
@@ -978,14 +1074,14 @@ namespace KolikSoftware.Eee.Client
                 {
                     InvocationException error = e.Error as InvocationException;
 
-                    if (this.disconnecting && this.forceDisconnect)
+                    /*if (this.disconnecting && this.forceDisconnect)
                     {
                         ProcessResult(error.InvocationParameters);
                     }
-                    else if (error.InnerException is DisconnectedException)
+                    else */if (error.InnerException is DisconnectedException)
                     {
                         RemoveInvocations();
-                        ProcessDisconnectUser(error.InvocationParameters, true);
+                        //ProcessDisconnectUser(error.InvocationParameters, true);
                         OnErrorOccured(new ErrorOccuredEventArgs(error.InnerException));
                     }
                     else if (error.InvocationParameters.Name == "UploadFile")
@@ -1071,6 +1167,44 @@ namespace KolikSoftware.Eee.Client
         //        }
         //    }
         }
+
+        #region IEeeService Members
+
+        public string ServiceUrl
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ProxySettings ProxySettings
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public KolikSoftware.Eee.Service.Domain.AuthenticationData GetAuthenticationData(string login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 
     enum InvocationScope

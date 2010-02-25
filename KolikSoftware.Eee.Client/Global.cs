@@ -35,7 +35,7 @@ namespace KolikSoftware.Eee.Client
             proxySettings.NoCredentials = Properties.Settings.Default.ProxyUser.Trim().Length == 0;
 
             IEeeService service = new EeeJsonService();
-            service.ServiceUrl = Properties.Settings.Default.ServiceUrl;
+            service.Configuration.ServiceUrl = Properties.Settings.Default.ServiceUrl;
             service.ProxySettings = proxySettings;
             return service;
 

@@ -124,6 +124,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindServiceConfiguration.cs" />
+    <Compile Include="Domain\ActionResult.cs" />
     <Compile Include="Domain\AuthenticationData.cs" />
     <Compile Include="Domain\Room.cs" />
     <Compile Include="Domain\User.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\RequestFactory.cs" />
     <Compile Include="Core\SecurityHelper.cs" />
+    <Compile Include="IServiceConfiguration.cs" />
     <None Include="KolikSoftware.Eee.Key.pfx" />
     <None Include="Resources\Private.pfx" />
   </ItemGroup>

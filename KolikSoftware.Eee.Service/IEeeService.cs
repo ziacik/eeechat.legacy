@@ -48,12 +48,12 @@ namespace KolikSoftware.Eee.Service
         /// <summary>
         /// Gets the list of new messages.
         /// </summary>
-        IList<Message> GetMessages();
+        IList<Post> GetMessages();
 
         /// <summary>
         /// Puts private message into commit queue.
         /// </summary>
-        void CommitMessage(Message message);
+        void CommitMessage(Post message);
 
         /// <summary>
         /// Gets currently connected user. Null if disconnected.

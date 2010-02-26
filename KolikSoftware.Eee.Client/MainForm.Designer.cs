@@ -7,6 +7,7 @@ using System.Data;
 using System.Reflection;
 using System.IO;
 using System.Diagnostics;
+using Skybound.Gecko;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -47,7 +48,11 @@ namespace KolikSoftware.Eee.Client
         public MainForm()
         {
             InitializeComponent();
-            
+
+            Xpcom.Initialize(true);
+            //Xpcom.Initialize(Path.Combine(Application.StartupPath, "xulrunner"));
+            //Xpcom.Initialize(@"c:\Program Files\Mozilla Firefox");
+
             this.notificationManager.NormalIcon = this.Icon;
             this.notificationManager.AwayIcon = Properties.Resources.AwayModeIco;
             this.notificationManager.MessageIcon = Properties.Resources.NotificationIco;
@@ -144,11 +149,7 @@ namespace KolikSoftware.Eee.Client
             this.uploadingLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.disconnectedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.chatBrowser = new System.Windows.Forms.WebBrowser();
-            this.browserMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.uploadMediaMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Browser = new Skybound.Gecko.GeckoWebBrowser();
             this.externalUsersToolStrip = new System.Windows.Forms.ToolStrip();
             this.mediaToolStrip = new System.Windows.Forms.ToolStrip();
             this.closeMediaBarToolItem = new System.Windows.Forms.ToolStripButton();
@@ -184,6 +185,10 @@ namespace KolikSoftware.Eee.Client
             this.pauseToolItem = new System.Windows.Forms.ToolStripButton();
             this.stopToolItem = new System.Windows.Forms.ToolStripButton();
             this.usersToolStrip = new System.Windows.Forms.ToolStrip();
+            this.browserMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.uploadMediaMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.messageCheckerTimer = new System.Windows.Forms.Timer(this.components);
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.userMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -208,6 +213,8 @@ namespace KolikSoftware.Eee.Client
             this.updateManager = new KolikSoftware.Eee.Client.Updating.UpdateManager(this.components);
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
             this.linkResolver = new KolikSoftware.Eee.Client.LinkResolver(this.components);
+            this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
+            this.testButton = new System.Windows.Forms.Button();
             this.notifyMenu.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.toolbarContainer.BottomToolStripPanel.SuspendLayout();
@@ -219,10 +226,10 @@ namespace KolikSoftware.Eee.Client
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.browserMenu.SuspendLayout();
             this.mediaToolStrip.SuspendLayout();
             this.mainBottomPanel.SuspendLayout();
             this.actionsToolStrip.SuspendLayout();
+            this.browserMenu.SuspendLayout();
             this.userMenu.SuspendLayout();
             this.roomMenu.SuspendLayout();
             this.SuspendLayout();
@@ -728,7 +735,6 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1
             // 
-            this.splitContainer1.BackColor = ThemeBackColor;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -736,13 +742,12 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.chatBrowser);
+            this.splitContainer1.Panel1.Controls.Add(this.Browser);
             this.splitContainer1.Panel1.Controls.Add(this.externalUsersToolStrip);
             this.splitContainer1.Panel1.Controls.Add(this.mediaToolStrip);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.BackColor = ThemeBackColor;
             this.splitContainer1.Panel2.Controls.Add(this.mainBottomPanel);
             this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(4);
@@ -751,53 +756,13 @@ namespace KolikSoftware.Eee.Client
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 0;
             // 
-            // chatBrowser
+            // Browser
             // 
-            this.chatBrowser.AllowWebBrowserDrop = false;
-            this.chatBrowser.ContextMenuStrip = this.browserMenu;
-            this.chatBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chatBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.chatBrowser.Location = new System.Drawing.Point(0, 0);
-            this.chatBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.chatBrowser.Name = "chatBrowser";
-            this.chatBrowser.Size = new System.Drawing.Size(590, 399);
-            this.chatBrowser.TabIndex = 8;
-            this.chatBrowser.Url = new System.Uri("about:blank", System.UriKind.Absolute);
-            this.chatBrowser.WebBrowserShortcutsEnabled = false;
-            this.chatBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
-            this.chatBrowser.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.chatBrowser_PreviewKeyDown);
-            this.chatBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.chatBrowser_DocumentCompleted);
-            // 
-            // browserMenu
-            // 
-            this.browserMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyMenuItem,
-            this.toolStripSeparator17,
-            this.uploadMediaMenuItem});
-            this.browserMenu.Name = "browserMenu";
-            this.browserMenu.Size = new System.Drawing.Size(162, 54);
-            // 
-            // copyMenuItem
-            // 
-            this.copyMenuItem.Image = global::KolikSoftware.Eee.Client.Properties.Resources.Copy;
-            this.copyMenuItem.Name = "copyMenuItem";
-            this.copyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.copyMenuItem.Text = "&Copy";
-            this.copyMenuItem.Click += new System.EventHandler(this.copyMenuItem_Click);
-            // 
-            // toolStripSeparator17
-            // 
-            this.toolStripSeparator17.Name = "toolStripSeparator17";
-            this.toolStripSeparator17.Size = new System.Drawing.Size(158, 6);
-            // 
-            // uploadMediaMenuItem
-            // 
-            this.uploadMediaMenuItem.Image = global::KolikSoftware.Eee.Client.Properties.Resources.Upload;
-            this.uploadMediaMenuItem.Name = "uploadMediaMenuItem";
-            this.uploadMediaMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.uploadMediaMenuItem.Text = "&Upload Media...";
-            this.uploadMediaMenuItem.Click += new System.EventHandler(this.uploadMediaMenuItem_Click);
+            this.Browser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Browser.Location = new System.Drawing.Point(0, 0);
+            this.Browser.Name = "Browser";
+            this.Browser.Size = new System.Drawing.Size(590, 399);
+            this.Browser.TabIndex = 8;
             // 
             // externalUsersToolStrip
             // 
@@ -948,6 +913,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // mainBottomPanel
             // 
+            this.mainBottomPanel.Controls.Add(this.testButton);
             this.mainBottomPanel.Controls.Add(this.text);
             this.mainBottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainBottomPanel.Location = new System.Drawing.Point(4, 4);
@@ -960,14 +926,14 @@ namespace KolikSoftware.Eee.Client
             this.text.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.text.Dock = System.Windows.Forms.DockStyle.Fill;
             this.text.Location = new System.Drawing.Point(0, 0);
-            this.text.Multiline = true;
             this.text.Name = "text";
             this.text.Size = new System.Drawing.Size(582, 66);
             this.text.TabIndex = 0;
-            this.text.TextChanged += new System.EventHandler(this.text_TextChanged);
-            this.text.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
+            this.text.Text = "";
             this.text.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
+            this.text.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
             this.text.DragEnter += new System.Windows.Forms.DragEventHandler(this.text_DragEnter);
+            this.text.TextChanged += new System.EventHandler(this.text_TextChanged);
             // 
             // actionsToolStrip
             // 
@@ -1177,6 +1143,37 @@ namespace KolikSoftware.Eee.Client
             this.usersToolStrip.TabIndex = 2;
             this.usersToolStrip.Resize += new System.EventHandler(this.usersToolStrip_Resize);
             // 
+            // browserMenu
+            // 
+            this.browserMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyMenuItem,
+            this.toolStripSeparator17,
+            this.uploadMediaMenuItem});
+            this.browserMenu.Name = "browserMenu";
+            this.browserMenu.Size = new System.Drawing.Size(162, 54);
+            // 
+            // copyMenuItem
+            // 
+            this.copyMenuItem.Image = global::KolikSoftware.Eee.Client.Properties.Resources.Copy;
+            this.copyMenuItem.Name = "copyMenuItem";
+            this.copyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyMenuItem.Text = "&Copy";
+            this.copyMenuItem.Click += new System.EventHandler(this.copyMenuItem_Click);
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(158, 6);
+            // 
+            // uploadMediaMenuItem
+            // 
+            this.uploadMediaMenuItem.Image = global::KolikSoftware.Eee.Client.Properties.Resources.Upload;
+            this.uploadMediaMenuItem.Name = "uploadMediaMenuItem";
+            this.uploadMediaMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.uploadMediaMenuItem.Text = "&Upload Media...";
+            this.uploadMediaMenuItem.Click += new System.EventHandler(this.uploadMediaMenuItem_Click);
+            // 
             // messageCheckerTimer
             // 
             this.messageCheckerTimer.Interval = 30000;
@@ -1283,19 +1280,19 @@ namespace KolikSoftware.Eee.Client
             // 
             // eeeServiceController
             // 
+            this.eeeServiceController.ProxySettings = null;
             this.eeeServiceController.Service = null;
-            this.eeeServiceController.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
-            //this.eeeServiceController.ExternalUserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.ExternalUserStateChangedEventArgs>(this.eeeServiceController_ExternalUserStateChanged);
-            this.eeeServiceController.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
-            this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
-            //this.eeeServiceController.UserStateChanged += new System.EventHandler<KolikSoftware.Eee.Processor.CommandProcessor.UserStateChangedEventArgs>(this.eeeServiceController_UserStateChanged);
-            this.eeeServiceController.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
-            this.eeeServiceController.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
-            this.eeeServiceController.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
-            this.eeeServiceController.GetUsersFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetUsersFinishedEventArgs>(this.eeeServiceController_GetUsersFinished);
+            this.eeeServiceController.ServiceUrl = null;
             this.eeeServiceController.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
-            this.eeeServiceController.DownloadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFinishedEventArgs>(this.eeeServiceController_DownloadFinished);
+            this.eeeServiceController.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
+            this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
+            this.eeeServiceController.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
             this.eeeServiceController.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
+            this.eeeServiceController.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
+            this.eeeServiceController.DownloadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFinishedEventArgs>(this.eeeServiceController_DownloadFinished);
+            this.eeeServiceController.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
+            this.eeeServiceController.GetUsersFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetUsersFinishedEventArgs>(this.eeeServiceController_GetUsersFinished);
+            this.eeeServiceController.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
             // 
             // activatingHotkey
             // 
@@ -1325,16 +1322,6 @@ namespace KolikSoftware.Eee.Client
             // 
             this.autoAwayMonitor.AutoAway += new System.EventHandler<KolikSoftware.Eee.Client.Notifications.AutoAwayMonitor.AutoAwayEventArgs>(this.autoAwayMonitor_AutoAway);
             // 
-            // updateManager
-            // 
-            //this.updateManager.ServiceController = this.eeeServiceController;
-            //this.updateManager.InstallFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallFailedEventArgs>(this.updateManager_InstallFailed);
-            //this.updateManager.DownloadAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadAllFinishedEventArgs>(this.updateManager_DownloadAllFinished);
-            //this.updateManager.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadFailedEventArgs>(this.updateManager_DownloadFailed);
-            //this.updateManager.DownloadStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.DownloadStartedEventArgs>(this.updateManager_DownloadStarted);
-            //this.updateManager.InstallStarted += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallStartedEventArgs>(this.updateManager_InstallStarted);
-            //this.updateManager.InstallAllFinished += new System.EventHandler<KolikSoftware.Eee.Client.Updating.UpdateManager.InstallAllFinishedEventArgs>(this.updateManager_InstallAllFinished);
-            // 
             // mediaPlayer
             // 
             this.mediaPlayer.ModeChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.ModeChangedEventArgs>(this.mediaPlayer_ModeChanged);
@@ -1344,6 +1331,24 @@ namespace KolikSoftware.Eee.Client
             // 
             this.linkResolver.ProxySettings = null;
             this.linkResolver.LinkResolved += new System.EventHandler<KolikSoftware.Eee.Client.LinkResolverEventArgs>(this.linkResolver_LinkResolved);
+            // 
+            // webBrowser
+            // 
+            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.Size = new System.Drawing.Size(590, 399);
+            this.webBrowser.TabIndex = 8;
+            // 
+            // testButton
+            // 
+            this.testButton.Location = new System.Drawing.Point(495, 4);
+            this.testButton.Name = "testButton";
+            this.testButton.Size = new System.Drawing.Size(75, 23);
+            this.testButton.TabIndex = 1;
+            this.testButton.Text = "Test";
+            this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // MainForm
             // 
@@ -1373,13 +1378,12 @@ namespace KolikSoftware.Eee.Client
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            this.browserMenu.ResumeLayout(false);
             this.mediaToolStrip.ResumeLayout(false);
             this.mediaToolStrip.PerformLayout();
             this.mainBottomPanel.ResumeLayout(false);
-            this.mainBottomPanel.PerformLayout();
             this.actionsToolStrip.ResumeLayout(false);
             this.actionsToolStrip.PerformLayout();
+            this.browserMenu.ResumeLayout(false);
             this.userMenu.ResumeLayout(false);
             this.roomMenu.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1491,9 +1495,11 @@ namespace KolikSoftware.Eee.Client
         private ToolStripSeparator toolStripSeparator17;
         private ToolStripMenuItem uploadMediaMenuItem;
         private ToolStrip externalUsersToolStrip;
-        private WebBrowser chatBrowser;
         private RichTextBox text;
         private LinkResolver linkResolver;
+        private GeckoWebBrowser webBrowser;
+        public GeckoWebBrowser Browser;
+        private Button testButton;
 
 
     }

@@ -73,12 +73,12 @@ namespace KolikSoftware.Eee.Service
             return QueryList<Room>("Rooms", () => this.CurrentUser.Login, () => this.PasswordHash);
         }
 
-        public IList<Message> GetMessages()
+        public IList<Post> GetMessages()
         {
-            return QueryList<Message>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
+            return QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
         }
 
-        public void CommitMessage(Message message)
+        public void CommitMessage(Post message)
         {
             if (message.Id >= this.ArgumentsHelper.FromId)
                 this.ArgumentsHelper.FromId = message.Id + 1;

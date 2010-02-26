@@ -1,0 +1,64 @@
+﻿body
+{
+	background-color: #e9edf9;
+}
+
+.Message
+{
+	margin-bottom: 1em;
+	padding: 1em 1em 1em 1em;
+}
+
+.Message.Public
+{
+	background-color: #f6f8fe;
+}
+
+.Message.Private
+{
+	background-color: #eeeeee;
+}
+
+.Avatar
+{
+	float: left;
+	background-image: url(Shadow.gif);
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 58px;
+	margin-right: 0.7em;
+	margin-bottom: 0.7em;
+}
+
+.AvatarImage
+{
+	width: 48px;
+	height: 48px;
+	padding-left: 2px;
+	padding-top: 2px;
+}
+
+.UserName
+{
+	margin: 0em 0em 0em 0em;
+	font-family: Lucida Sans Unicode;
+	font-size: 1em;
+	color: #3a6bd9;
+	text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+.Time
+{
+	margin: 0em 0em 0em 0em;
+	font-family: Lucida Sans Unicode;
+	font-size: 0.7em;
+	color: #3a6bd9;	
+}
+
+.Text
+{
+	clear: both;	
+	font-family: Verdana;
+	font-size: 1em;
+	color: #343538;
+}

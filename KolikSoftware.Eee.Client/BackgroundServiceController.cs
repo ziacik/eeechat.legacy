@@ -26,6 +26,9 @@ namespace KolikSoftware.Eee.Client
         Dictionary<BackgroundWorker, InvokeInfo> Workers { get; set; }
         #endregion
 
+        public IList<User> Users { get; set; }
+        public IDictionary<string, User> UsersByName { get; set; }
+
         public IServiceConfiguration Configuration
         {
             get
@@ -42,7 +45,7 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        public void CommitMessage(Message message)
+        public void CommitMessage(Post message)
         {
             this.Service.CommitMessage(message);
         }
@@ -221,9 +224,9 @@ namespace KolikSoftware.Eee.Client
 
         public class GetMessagesFinishedEventArgs : EventArgs
         {
-            public IList<Message> Messages { get; private set; }
+            public IList<Post> Messages { get; private set; }
 
-            public GetMessagesFinishedEventArgs(IList<Message> messages)
+            public GetMessagesFinishedEventArgs(IList<Post> messages)
             {
                 this.Messages = messages;
             }
@@ -466,7 +469,6 @@ namespace KolikSoftware.Eee.Client
         public BackgroundServiceController()
         {
             InitializeComponent();
-            this.MessagesToCommit = new List<int>();
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
 
@@ -474,7 +476,6 @@ namespace KolikSoftware.Eee.Client
         {
             container.Add(this);
             InitializeComponent();
-            this.MessagesToCommit = new List<int>();
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
 
@@ -618,13 +619,27 @@ namespace KolikSoftware.Eee.Client
             QueryInBackground(
                 sleepSecs,
                 () => this.Service.GetUsers(),
-                r => OnGetUsersFinished(new GetUsersFinishedEventArgs((IList<User>)r)),
+                r =>
+                {
+                    this.Users = (IList<User>)r;
+                    CreateUsersByName();
+                    OnGetUsersFinished(new GetUsersFinishedEventArgs(this.Users));
+                },
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
                     DoGetUsers(3);
                 }
             );
+        }
+
+        void CreateUsersByName()
+        {
+            this.UsersByName = new Dictionary<string, User>();
+            foreach (User user in this.Users)
+            {
+                this.UsersByName.Add(user.Login, user);
+            }
         }
 
         public IList<Room> GetRooms()
@@ -647,7 +662,7 @@ namespace KolikSoftware.Eee.Client
             );
         }
 
-        public IList<Message> GetMessages()
+        public IList<Post> GetMessages()
         {
             DoGetMessages(0, 0);
             return null;
@@ -660,7 +675,9 @@ namespace KolikSoftware.Eee.Client
                 () => this.Service.GetMessages(),
                 r => 
                 {
-                    OnGetMessagesFinished(new GetMessagesFinishedEventArgs((IList<Message>)r));
+                    IList<Post> posts = (IList<Post>)r;
+                    SetUsersToPosts(posts);
+                    OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
                     DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
                 },
                 e =>
@@ -677,6 +694,17 @@ namespace KolikSoftware.Eee.Client
                     DoGetMessages(delay, retryNo + 1);
                 }
             );
+        }
+
+        void SetUsersToPosts(IList<Post> posts)
+        {
+            foreach (Post post in posts)
+            {
+                User from;
+
+                if (this.UsersByName.TryGetValue(post.From.Login, out from))
+                    post.From = from;
+            }
         }
 
         public void RegisterUser(string login, SecureString password, int color)
@@ -1174,11 +1202,15 @@ namespace KolikSoftware.Eee.Client
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.Service == null || this.Service.Configuration == null)
+                    return null;
+                else
+                    return this.Service.Configuration.ServiceUrl;
             }
             set
             {
-                throw new NotImplementedException();
+                if (this.Service != null && this.Service.Configuration != null)
+                    this.Service.Configuration.ServiceUrl = value;
             }
         }
 
@@ -1186,17 +1218,21 @@ namespace KolikSoftware.Eee.Client
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.Service == null)
+                    return null;
+                else
+                    return this.Service.ProxySettings;
             }
             set
             {
-                throw new NotImplementedException();
+                if (this.Service != null)
+                    this.Service.ProxySettings = value;
             }
         }
 
-        public KolikSoftware.Eee.Service.Domain.AuthenticationData GetAuthenticationData(string login)
+        public AuthenticationData GetAuthenticationData(string login)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void Disconnect()

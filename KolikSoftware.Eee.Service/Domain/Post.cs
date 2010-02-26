@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KolikSoftware.Eee.Service.Domain
 {
-    public class Message
+    public class Post
     {
         public int Id { get; set; }
         public string GlobalId { get; set; }

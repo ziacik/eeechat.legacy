@@ -115,6 +115,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Components\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Skybound.Gecko, Version=1.9.1.0, Culture=neutral, PublicKeyToken=3209ac31600d1857, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\Gecko\Skybound.Gecko.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -215,6 +219,8 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainFormPlugins\BrowserPlugin.cs" />
+    <Compile Include="MainFormPlugins\IMainFormPlugin.cs" />
     <Compile Include="Media\MediaPlayer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -573,6 +579,9 @@
     <Content Include="Smilies\yo.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\ChatTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\MessageTemplate7.xslt" />
     <Content Include="Templates\MessageTemplate5.xslt" />
     <Content Include="Templates\MessageTemplate6.xslt" />
@@ -580,6 +589,15 @@
     <Content Include="Templates\MessageTemplate1.xslt" />
     <Content Include="Templates\MessageTemplate2.xslt" />
     <Content Include="Templates\MessageTemplate3.xslt" />
+    <Content Include="Templates\MessageTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\NewStyle.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Shadow.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

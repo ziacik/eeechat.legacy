@@ -143,11 +143,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\KolikSoftware.Eee.Processor\KolikSoftware.Eee.Processor.csproj">
-      <Name>KolikSoftware.Eee.Processor</Name>
-      <Project>{DB273059-FA70-481D-9F29-14692DDEC6C2}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
       <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
       <Name>KolikSoftware.Eee.Service</Name>
@@ -220,7 +215,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFormPlugins\BrowserPlugin.cs" />
+    <Compile Include="MainFormPlugins\CommandPostPlugin.cs" />
+    <Compile Include="MainFormPlugins\EditorPlugin.cs" />
     <Compile Include="MainFormPlugins\IMainFormPlugin.cs" />
+    <Compile Include="MainFormPlugins\LinkFinder.cs" />
+    <Compile Include="MainFormPlugins\UserStatePlugin.cs" />
     <Compile Include="Media\MediaPlayer.cs">
       <SubType>Component</SubType>
     </Compile>

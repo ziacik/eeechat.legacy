@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Client", "KolikSoftware.Eee.Client\KolikSoftware.Eee.Client.csproj", "{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Processor", "KolikSoftware.Eee.Processor\KolikSoftware.Eee.Processor.csproj", "{DB273059-FA70-481D-9F29-14692DDEC6C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Service", "KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj", "{F41504E2-DCA4-4559-A84E-C393CB951C83}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KolikSoftware.Eee.Setup", "KolikSoftware.Eee.Setup\KolikSoftware.Eee.Setup.vdproj", "{AB2E9C55-69F7-4616-92DB-6C88D1BA6405}"
@@ -14,12 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{B612E2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json", "Json", "{D34250B0-C07B-4BA8-8FD7-BB8972A206B6}"
 	ProjectSection(SolutionItems) = preProject
-		Server\JsonBind\addmessage.php = Server\JsonBind\addmessage.php
 		Server\JsonBind\autologoff.php = Server\JsonBind\autologoff.php
 		Server\JsonBind\Common.php = Server\JsonBind\Common.php
 		Server\JsonBind\getupdates.php = Server\JsonBind\getupdates.php
 		Server\JsonBind\getuser.php = Server\JsonBind\getuser.php
-		Server\JsonBind\Messages.php = Server\JsonBind\Messages.php
+		Server\JsonBind\Post.php = Server\JsonBind\Post.php
 		Server\JsonBind\register.php = Server\JsonBind\register.php
 		Server\JsonBind\Rooms.php = Server\JsonBind\Rooms.php
 		Server\JsonBind\test.php = Server\JsonBind\test.php
@@ -39,10 +36,6 @@ Global
 		{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB273059-FA70-481D-9F29-14692DDEC6C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB273059-FA70-481D-9F29-14692DDEC6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB273059-FA70-481D-9F29-14692DDEC6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB273059-FA70-481D-9F29-14692DDEC6C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F41504E2-DCA4-4559-A84E-C393CB951C83}.Release|Any CPU.ActiveCfg = Release|Any CPU

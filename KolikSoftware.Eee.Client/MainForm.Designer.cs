@@ -165,7 +165,8 @@ namespace KolikSoftware.Eee.Client
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.mediaLabel = new System.Windows.Forms.ToolStripLabel();
             this.mainBottomPanel = new System.Windows.Forms.Panel();
-            this.text = new System.Windows.Forms.RichTextBox();
+            this.testButton = new System.Windows.Forms.Button();
+            this.Editor = new System.Windows.Forms.RichTextBox();
             this.actionsToolStrip = new System.Windows.Forms.ToolStrip();
             this.replyToolItem = new System.Windows.Forms.ToolStripButton();
             this.followToolItem = new System.Windows.Forms.ToolStripButton();
@@ -184,7 +185,7 @@ namespace KolikSoftware.Eee.Client
             this.playToolItem = new System.Windows.Forms.ToolStripButton();
             this.pauseToolItem = new System.Windows.Forms.ToolStripButton();
             this.stopToolItem = new System.Windows.Forms.ToolStripButton();
-            this.usersToolStrip = new System.Windows.Forms.ToolStrip();
+            this.UsersToolStrip = new System.Windows.Forms.ToolStrip();
             this.browserMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
@@ -204,7 +205,7 @@ namespace KolikSoftware.Eee.Client
             this.ignoreAllRoomsButThisItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopIgnoringAllRoomsItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userInfoToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.eeeServiceController = new KolikSoftware.Eee.Client.BackgroundServiceController(this.components);
+            this.Service = new KolikSoftware.Eee.Client.BackgroundServiceController(this.components);
             this.activatingHotkey = new KolikSoftware.Eee.Client.Helpers.GlobalHotKey(this.components);
             this.notificationManager = new KolikSoftware.Eee.Client.Notifications.NotificationManager(this.components);
             this.historyManager = new KolikSoftware.Eee.Client.History.HistoryManager(this.components);
@@ -214,7 +215,6 @@ namespace KolikSoftware.Eee.Client
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
             this.linkResolver = new KolikSoftware.Eee.Client.LinkResolver(this.components);
             this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
-            this.testButton = new System.Windows.Forms.Button();
             this.notifyMenu.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.toolbarContainer.BottomToolStripPanel.SuspendLayout();
@@ -583,7 +583,7 @@ namespace KolikSoftware.Eee.Client
             // toolbarContainer.TopToolStripPanel
             // 
             this.toolbarContainer.TopToolStripPanel.Controls.Add(this.actionsToolStrip);
-            this.toolbarContainer.TopToolStripPanel.Controls.Add(this.usersToolStrip);
+            this.toolbarContainer.TopToolStripPanel.Controls.Add(this.UsersToolStrip);
             // 
             // roomsToolStrip
             // 
@@ -914,26 +914,34 @@ namespace KolikSoftware.Eee.Client
             // mainBottomPanel
             // 
             this.mainBottomPanel.Controls.Add(this.testButton);
-            this.mainBottomPanel.Controls.Add(this.text);
+            this.mainBottomPanel.Controls.Add(this.Editor);
             this.mainBottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainBottomPanel.Location = new System.Drawing.Point(4, 4);
             this.mainBottomPanel.Name = "mainBottomPanel";
             this.mainBottomPanel.Size = new System.Drawing.Size(582, 66);
             this.mainBottomPanel.TabIndex = 60;
             // 
-            // text
+            // testButton
             // 
-            this.text.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.text.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.text.Location = new System.Drawing.Point(0, 0);
-            this.text.Name = "text";
-            this.text.Size = new System.Drawing.Size(582, 66);
-            this.text.TabIndex = 0;
-            this.text.Text = "";
-            this.text.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
-            this.text.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
-            this.text.DragEnter += new System.Windows.Forms.DragEventHandler(this.text_DragEnter);
-            this.text.TextChanged += new System.EventHandler(this.text_TextChanged);
+            this.testButton.Location = new System.Drawing.Point(495, 4);
+            this.testButton.Name = "testButton";
+            this.testButton.Size = new System.Drawing.Size(75, 23);
+            this.testButton.TabIndex = 1;
+            this.testButton.Text = "Test";
+            this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Click += new System.EventHandler(this.testButton_Click);
+            // 
+            // Editor
+            // 
+            this.Editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Editor.Location = new System.Drawing.Point(0, 0);
+            this.Editor.Name = "Editor";
+            this.Editor.Size = new System.Drawing.Size(582, 66);
+            this.Editor.TabIndex = 0;
+            this.Editor.Text = "";
+            this.Editor.DragDrop += new System.Windows.Forms.DragEventHandler(this.text_DragDrop);
+            this.Editor.DragEnter += new System.Windows.Forms.DragEventHandler(this.text_DragEnter);
             // 
             // actionsToolStrip
             // 
@@ -1131,17 +1139,17 @@ namespace KolikSoftware.Eee.Client
             this.stopToolItem.Text = "Stop";
             this.stopToolItem.Click += new System.EventHandler(this.stopToolItem_Click);
             // 
-            // usersToolStrip
+            // UsersToolStrip
             // 
-            this.usersToolStrip.ContextMenuStrip = this.toolbarCustomizeMenu;
-            this.usersToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.usersToolStrip.Location = new System.Drawing.Point(0, 25);
-            this.usersToolStrip.Name = "usersToolStrip";
-            this.usersToolStrip.ShowItemToolTips = false;
-            this.usersToolStrip.Size = new System.Drawing.Size(592, 25);
-            this.usersToolStrip.Stretch = true;
-            this.usersToolStrip.TabIndex = 2;
-            this.usersToolStrip.Resize += new System.EventHandler(this.usersToolStrip_Resize);
+            this.UsersToolStrip.ContextMenuStrip = this.toolbarCustomizeMenu;
+            this.UsersToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.UsersToolStrip.Location = new System.Drawing.Point(0, 25);
+            this.UsersToolStrip.Name = "UsersToolStrip";
+            this.UsersToolStrip.ShowItemToolTips = false;
+            this.UsersToolStrip.Size = new System.Drawing.Size(592, 25);
+            this.UsersToolStrip.Stretch = true;
+            this.UsersToolStrip.TabIndex = 2;
+            this.UsersToolStrip.Resize += new System.EventHandler(this.usersToolStrip_Resize);
             // 
             // browserMenu
             // 
@@ -1278,21 +1286,21 @@ namespace KolikSoftware.Eee.Client
             this.stopIgnoringAllRoomsItem.Text = "Stop Ignoring &All";
             this.stopIgnoringAllRoomsItem.Click += new System.EventHandler(this.stopIgnoringAllRoomsItem_Click);
             // 
-            // eeeServiceController
+            // Service
             // 
-            this.eeeServiceController.ProxySettings = null;
-            this.eeeServiceController.Service = null;
-            this.eeeServiceController.ServiceUrl = null;
-            this.eeeServiceController.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
-            this.eeeServiceController.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
-            this.eeeServiceController.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
-            this.eeeServiceController.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
-            this.eeeServiceController.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
-            this.eeeServiceController.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
-            this.eeeServiceController.DownloadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFinishedEventArgs>(this.eeeServiceController_DownloadFinished);
-            this.eeeServiceController.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
-            this.eeeServiceController.GetUsersFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetUsersFinishedEventArgs>(this.eeeServiceController_GetUsersFinished);
-            this.eeeServiceController.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
+            this.Service.Form = null;
+            this.Service.ProxySettings = null;
+            this.Service.Service = null;
+            this.Service.ServiceUrl = null;
+            this.Service.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
+            this.Service.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
+            this.Service.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
+            this.Service.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
+            this.Service.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
+            this.Service.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
+            this.Service.DownloadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFinishedEventArgs>(this.eeeServiceController_DownloadFinished);
+            this.Service.UploadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFailedEventArgs>(this.eeeServiceController_UploadFailed);
+            this.Service.DownloadFailed += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.DownloadFailedEventArgs>(this.eeeServiceController_DownloadFailed);
             // 
             // activatingHotkey
             // 
@@ -1307,11 +1315,11 @@ namespace KolikSoftware.Eee.Client
             // 
             // historyManager
             // 
-            this.historyManager.ServiceController = this.eeeServiceController;
+            this.historyManager.ServiceController = this.Service;
             // 
             // loginManager
             // 
-            this.loginManager.ServiceController = this.eeeServiceController;
+            this.loginManager.ServiceController = this.Service;
             this.loginManager.Disconnected += new System.EventHandler<KolikSoftware.Eee.Client.LoginProcess.LoginManager.DisconnectedEventArgs>(this.loginManager_Disconnected);
             this.loginManager.BeforeLogin += new System.EventHandler<KolikSoftware.Eee.Client.LoginProcess.LoginManager.BeforeLoginEventArgs>(this.loginManager_BeforeLogin);
             this.loginManager.InvalidPassword += new System.EventHandler<KolikSoftware.Eee.Client.LoginProcess.LoginManager.InvalidPasswordEventArgs>(this.loginManager_InvalidPassword);
@@ -1339,16 +1347,6 @@ namespace KolikSoftware.Eee.Client
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.Size = new System.Drawing.Size(590, 399);
             this.webBrowser.TabIndex = 8;
-            // 
-            // testButton
-            // 
-            this.testButton.Location = new System.Drawing.Point(495, 4);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(75, 23);
-            this.testButton.TabIndex = 1;
-            this.testButton.Text = "Test";
-            this.testButton.UseVisualStyleBackColor = true;
-            this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // MainForm
             // 
@@ -1420,9 +1418,6 @@ namespace KolikSoftware.Eee.Client
         private ToolStripMenuItem exitNotifyItem;
         private ToolStripMenuItem helpNotifyItem;
         private ToolStripSeparator toolStripSeparator6;
-        private BackgroundServiceController eeeServiceController;
-        private ToolStrip usersToolStrip;
-        private ToolStrip roomsToolStrip;
         private Timer messageCheckerTimer;
         private KolikSoftware.Eee.Client.Helpers.GlobalHotKey activatingHotkey;
         private ToolStripSeparator toolStripSeparator7;
@@ -1495,11 +1490,14 @@ namespace KolikSoftware.Eee.Client
         private ToolStripSeparator toolStripSeparator17;
         private ToolStripMenuItem uploadMediaMenuItem;
         private ToolStrip externalUsersToolStrip;
-        private RichTextBox text;
         private LinkResolver linkResolver;
         private GeckoWebBrowser webBrowser;
         public GeckoWebBrowser Browser;
         private Button testButton;
+        public BackgroundServiceController Service;
+        public ToolStrip UsersToolStrip;
+        public ToolStrip roomsToolStrip;
+        public RichTextBox Editor;
 
 
     }

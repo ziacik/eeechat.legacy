@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using KolikSoftware.Eee.Service.Domain;
+using System.Diagnostics;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
@@ -28,8 +29,18 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form = mainForm;
             this.Browser = this.Form.Browser;            
             this.Browser.DocumentCompleted += new EventHandler(Browser_DocumentCompleted);
+            this.Browser.Navigating += new GeckoNavigatingEventHandler(Browser_Navigating);
 
             this.MessageTemplate = File.ReadAllText(Path.Combine(Application.StartupPath, @"Templates/MessageTemplate.html"));
+        }
+
+        void Browser_Navigating(object sender, GeckoNavigatingEventArgs e)
+        {
+            if (!e.Uri.IsLoopback & e.Uri.AbsolutePath != "blank")
+            {
+                e.Cancel = true;
+                Process.Start(e.Uri.ToString()); //TODO: vulnerability? also, catch exceptions
+            }
         }
 
         public void ScrollDown()
@@ -81,7 +92,10 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             if (this.AllPosts.Count > 0)
             {
                 appendToPost = this.AllPosts[this.AllPosts.Count - 1];
-                if (appendToPost.From.Login != post.From.Login || appendToPost.Private != post.Private)
+
+                if (appendToPost.From.Login != post.From.Login 
+                    || appendToPost.Private != post.Private
+                    || appendToPost.Room.Name != post.Room.Name)
                     appendToPost = null;
             }
 

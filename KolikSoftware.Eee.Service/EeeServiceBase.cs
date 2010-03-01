@@ -105,6 +105,18 @@ namespace KolikSoftware.Eee.Service
             return Deserialize<List<T>>(response);
         }
 
+        protected T Action<T>(string method, params Expression<Func<object>>[] arguments)
+        {
+            string response = CallRequest(CallType.POST, method, arguments);
+            return Deserialize<T>(response);
+        }
+
+        protected ActionResult Action(string method, params Expression<Func<object>>[] arguments)
+        {
+            string response = CallRequest(CallType.POST, method, arguments);
+            return Deserialize<ActionResult>(response);
+        }
+
         protected T Action<T>(string method, params object[] paramsAndValues)
         {
             string response = CallRequest(CallType.POST, method, paramsAndValues);

@@ -297,7 +297,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
                 DoLogin();
         }
 
-        void serviceController_GetUsersFinished(object sender, BackgroundServiceController.GetUsersFinishedEventArgs e)
+        void serviceController_GetUsersFinished(object sender, EventArgs e)
         {
             IncreaseLoginPhase();
         }

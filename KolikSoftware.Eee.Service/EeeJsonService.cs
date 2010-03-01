@@ -29,6 +29,21 @@ namespace KolikSoftware.Eee.Service
             }
         }
 
+        class PostArguments
+        {
+            public string Room { get; set; }
+            public string Recipient { get; set; }
+            public string Text { get; set; }
+
+            public PostArguments(Room room, User recipient, string text)
+            {
+                this.Room = room.Name;
+                if (recipient != null)
+                    this.Recipient = recipient.Login;
+                this.Text = text;
+            }
+        }
+
         public DynamicArgumentsHelper ArgumentsHelper { get; set; }
 
         public EeeJsonService()
@@ -78,12 +93,27 @@ namespace KolikSoftware.Eee.Service
             return QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
         }
 
+        public void SendMessage(Room room, User recipient, string message)
+        {
+            PostArguments args = new PostArguments(room, recipient, message);
+            ActionResult result;
+
+            if (recipient != null)
+                result = Action("Post", () => this.CurrentUser.Login, () => this.PasswordHash, () => args.Room, () => args.Recipient, () => args.Text);
+            else
+                result = Action("Post", () => this.CurrentUser.Login, () => this.PasswordHash, () => args.Room, () => args.Text);
+
+            if (result.Result != "OK")
+                throw new Exception(result.Result);
+        }
+
         public void CommitMessage(Post message)
         {
             if (message.Id >= this.ArgumentsHelper.FromId)
                 this.ArgumentsHelper.FromId = message.Id + 1;
 
-            this.ArgumentsHelper.MessagesToCommit.Add(message.Id.ToString());
+            if (message.Private)
+                this.ArgumentsHelper.MessagesToCommit.Add(message.Id.ToString());
         }
     }
 }

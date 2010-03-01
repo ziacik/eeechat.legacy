@@ -60,6 +60,12 @@ namespace KolikSoftware.Eee.Service
         /// </summary>
         User CurrentUser { get; }
 
+        /// <summary>
+        /// Sends a new message to the server.
+        /// </summary>
+        void SendMessage(Room room, User recipient, string message);
+
+
         /*
         bool IsBound { get; }
         int RequestsMade { get; }

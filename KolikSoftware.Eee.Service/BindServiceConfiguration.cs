@@ -11,6 +11,7 @@ namespace KolikSoftware.Eee.Service
         {
             this.MessageGetInstantRetryCount = 4;
             this.MessageGetRetryDelay = 30;
+            this.MessageGetSafeInterval = 60;
         }
 
         public string ServiceUrl { get; set; }
@@ -37,6 +38,7 @@ namespace KolikSoftware.Eee.Service
             }
         }
 
+        public int MessageGetSafeInterval { get; set; }
         public int MessageGetInstantRetryCount { get; set; }
         public int MessageGetRetryDelay { get; set; }
     }

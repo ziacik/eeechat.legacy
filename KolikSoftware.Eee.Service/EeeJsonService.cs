@@ -27,6 +27,17 @@ namespace KolikSoftware.Eee.Service
                     return String.Join(",", this.MessagesToCommit.ToArray());
                 }
             }
+
+            /// <summary>
+            /// Timeout for safe get.
+            /// </summary>
+            public int Timeout
+            {
+                get
+                {
+                    return 0;
+                }
+            }
         }
 
         class PostArguments
@@ -90,7 +101,38 @@ namespace KolikSoftware.Eee.Service
 
         public IList<Post> GetMessages()
         {
-            return QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
+            //TODO: prerobit nejako genericky?
+            try
+            {
+                IList<Post> posts = QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
+                this.ArgumentsHelper.MessagesToCommit.Clear();
+                return posts;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "NOMESSAGES")
+                    return new List<Post>();
+                else
+                    throw;
+            }
+        }
+
+        public IList<Post> GetMessagesSafe()
+        {
+            //TODO: prerobit nejako genericky?
+            try
+            {
+                IList<Post> posts = QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit, () => this.ArgumentsHelper.Timeout);
+                this.ArgumentsHelper.MessagesToCommit.Clear();
+                return posts;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "NOMESSAGES")
+                    return new List<Post>();
+                else
+                    throw;
+            }
         }
 
         public void SendMessage(Room room, User recipient, string message)
@@ -112,7 +154,7 @@ namespace KolikSoftware.Eee.Service
             if (message.Id >= this.ArgumentsHelper.FromId)
                 this.ArgumentsHelper.FromId = message.Id + 1;
 
-            if (message.Private)
+            if (message.Private && message.From.Login != this.CurrentUser.Login)
                 this.ArgumentsHelper.MessagesToCommit.Add(message.Id.ToString());
         }
     }

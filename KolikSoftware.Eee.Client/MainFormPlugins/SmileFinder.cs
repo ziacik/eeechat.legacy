@@ -1,54 +1,39 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using KolikSoftware.Eee.Service.Domain;
 using System.IO;
-using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
-namespace KolikSoftware.Eee.Client.Helpers
+namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
-    class Smilies
+    public class SmileFinder : IMainFormPlugin
     {
-        #region Construction and Members
-        static readonly Smilies instance = new Smilies();
+        public MainForm Form { get; set; }
+        public readonly string SmiliesPath = Path.Combine(Application.StartupPath, @"Smilies");
 
-        public static Smilies Instance
+        public void Init(MainForm mainForm)
         {
-            get
-            {
-                return Smilies.instance;
-            }
-        }
-
-        Regex smilieRegex;
-        Dictionary<string, string> smilieToFileDict;
-
-        private Smilies()
-        {
+            this.Form = mainForm;
             ConstructSmilieStructures();
         }
 
-        Dictionary<string, string> smilieFiles = new Dictionary<string, string>();
+        Regex SmilieRegex { get; set; }
+        Dictionary<string, string> SmilieToFileDict { get; set; }
+        public Dictionary<string, string> SmilieFiles { get; private set; }
 
-        public Dictionary<string, string> SmilieFiles
+        public void FindSmilesInPost(Post post)
         {
-            get
-            {
-                return this.smilieFiles;
-            }
+            post.Text = ConvertSmiles(post.Text);
         }
-        #endregion
 
-        #region Public Interface
-        public static string SmiliesPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Smilies");
-
-        public string ConvertSmilies(string messageText)
+        string ConvertSmiles(string text)
         {
-            return this.smilieRegex.Replace(messageText, EvaluateSmilieMatch);
+            return this.SmilieRegex.Replace(text, EvaluateSmilieMatch);
         }
-        #endregion
 
-        #region Private Methods
         void ConstructSmilieStructures()
         {
             string[] smilies = new string[]
@@ -121,18 +106,19 @@ namespace KolikSoftware.Eee.Client.Helpers
                 ":yo:", "yo.gif"
             };
 
-            this.smilieToFileDict = new Dictionary<string, string>();
+            this.SmilieToFileDict = new Dictionary<string, string>();
+            this.SmilieFiles = new Dictionary<string, string>();
 
             SortedList<string, string> sortedSmilies = new SortedList<string, string>();
 
             int index = 0;
             while (index < smilies.Length)
             {
-                this.smilieToFileDict.Add(smilies[index], smilies[index + 1]);
+                this.SmilieToFileDict.Add(smilies[index], smilies[index + 1]);
                 sortedSmilies.Add(smilies[index], smilies[index]);
 
-                if (this.smilieFiles.ContainsKey(smilies[index + 1]) == false)
-                    this.smilieFiles.Add(smilies[index + 1], smilies[index]);
+                if (this.SmilieFiles.ContainsKey(smilies[index + 1]) == false)
+                    this.SmilieFiles.Add(smilies[index + 1], smilies[index]);
 
                 index += 2;
             }
@@ -160,13 +146,12 @@ namespace KolikSoftware.Eee.Client.Helpers
 
             smilieRegexString.Append(@")(?![^\s~?,.'""()\n\r])");
 
-            this.smilieRegex = new Regex(smilieRegexString.ToString(), RegexOptions.Compiled | RegexOptions.Singleline);
+            this.SmilieRegex = new Regex(smilieRegexString.ToString(), RegexOptions.Compiled | RegexOptions.Singleline);
         }
 
         string EvaluateSmilieMatch(Match match)
         {
-            return @"<img border=""0"" src=""file://" + Path.Combine(Smilies.SmiliesPath, this.smilieToFileDict[match.Value]) + @""" />";
+            return @"<img border=""0"" src=""file://" + Path.Combine(this.SmiliesPath, this.SmilieToFileDict[match.Value]) + @""" />";
         }
-        #endregion
     }
 }

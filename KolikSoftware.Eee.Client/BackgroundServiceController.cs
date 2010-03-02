@@ -182,26 +182,14 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        public class GetRoomsFinishedEventArgs : EventArgs
-        {
-            public IList<Room> Rooms { get; private set; }
+        public event EventHandler<EventArgs> GetRoomsFinished;
 
-            public GetRoomsFinishedEventArgs(IList<Room> rooms)
-            {
-                this.Rooms = rooms;
-            }
+        protected virtual void OnGetRoomsFinished(EventArgs e)
+        {
+            EventHandler<EventArgs> handler = this.GetRoomsFinished;
+            if (handler != null) handler(this, e);
         }
 
-        public event EventHandler<GetRoomsFinishedEventArgs> GetRoomsFinished;
-
-        protected virtual void OnGetRoomsFinished(GetRoomsFinishedEventArgs e)
-        {
-            EventHandler<GetRoomsFinishedEventArgs> handler = GetRoomsFinished;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
 
         public class GetMessagesFinishedEventArgs : EventArgs
         {
@@ -466,6 +454,7 @@ namespace KolikSoftware.Eee.Client
 
 
         #region Public
+        #region Invoke Core
         class InvokeInfo
         {
             public int SleepSecs { get; set; }
@@ -541,6 +530,7 @@ namespace KolikSoftware.Eee.Client
             if (info.Query != null)
                 e.Result = info.Query();
         }
+        #endregion
 
         public void Connect(string login, SecureString password)
         {
@@ -634,7 +624,12 @@ namespace KolikSoftware.Eee.Client
             QueryInBackground(
                 sleepSecs,
                 () => this.Service.GetRooms(),
-                r => OnGetRoomsFinished(new GetRoomsFinishedEventArgs((IList<Room>)r)),
+                r => 
+                {
+                    IList<Room> rooms = (IList<Room>)r;
+                    this.Form.GetPlugin<RoomStatePlugin>().SetRooms(rooms);
+                    OnGetRoomsFinished(EventArgs.Empty);
+                },
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
@@ -643,9 +638,28 @@ namespace KolikSoftware.Eee.Client
             );
         }
 
+        bool IsConnectionProblem(Exception error)
+        {
+            while (error != null)
+            {
+                if (error is System.Net.WebException || error is System.Net.Sockets.SocketException)
+                    return true;
+
+                error = error.InnerException;
+            }
+
+            return false;
+        }
+
         public IList<Post> GetMessages()
         {
             DoGetMessages(0, 0);
+            return null;
+        }
+
+        public IList<Post> GetMessagesSafe()
+        {
+            DoGetMessagesSafe(0, false);
             return null;
         }
 
@@ -653,26 +667,67 @@ namespace KolikSoftware.Eee.Client
         {
             QueryInBackground(
                 sleepSecs,
-                () => this.Service.GetMessages(),
+                () => 
+                {
+                    return this.Service.GetMessages();
+                },
                 r => 
                 {
                     IList<Post> posts = (IList<Post>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
+                    OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
                     DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
                 },
                 e =>
                 {
-                    OnErrorOccured(new ErrorOccuredEventArgs(e));
-
-                    int delay;
-
-                    if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
-                        delay = this.Service.Configuration.MessageGetInstantRetryDelay;
+                    if (IsConnectionProblem(e))
+                    {
+                        /// In case this is a "Connection Problem", switch to safe mode.
+                        /// If success, return to normal mode.
+                        DoGetMessagesSafe(this.Service.Configuration.MessageGetInterval, true);
+                    }
                     else
-                        delay = this.Service.Configuration.MessageGetRetryDelay;
+                    {
+                        OnErrorOccured(new ErrorOccuredEventArgs(e));
 
-                    DoGetMessages(delay, retryNo + 1);
+                        int delay;
+
+                        if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
+                            delay = this.Service.Configuration.MessageGetInstantRetryDelay;
+                        else
+                            delay = this.Service.Configuration.MessageGetRetryDelay;
+
+                        DoGetMessages(delay, retryNo + 1);
+                    }
+                }
+            );
+        }
+
+        void DoGetMessagesSafe(int sleepSecs, bool returnToNormalModeOnSuccess)
+        {
+            QueryInBackground(
+                sleepSecs,
+                () =>
+                {
+                    return this.Service.GetMessagesSafe();
+                },
+                r =>
+                {
+                    IList<Post> posts = (IList<Post>)r;
+                    this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
+                    OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
+                    OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
+
+                    if (returnToNormalModeOnSuccess)
+                        DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
+                    else
+                        DoGetMessagesSafe(this.Service.Configuration.MessageGetSafeInterval, false);
+                },
+                e =>
+                {
+                    OnErrorOccured(new ErrorOccuredEventArgs(e));
+                    DoGetMessagesSafe(this.Service.Configuration.MessageGetSafeInterval, returnToNormalModeOnSuccess);
                 }
             );
         }

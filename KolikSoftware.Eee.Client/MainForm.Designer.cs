@@ -136,7 +136,7 @@ namespace KolikSoftware.Eee.Client
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolbarContainer = new System.Windows.Forms.ToolStripContainer();
-            this.roomsToolStrip = new System.Windows.Forms.ToolStrip();
+            this.RoomsToolStrip = new System.Windows.Forms.ToolStrip();
             this.toolbarCustomizeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toggleStretchItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -165,7 +165,6 @@ namespace KolikSoftware.Eee.Client
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.mediaLabel = new System.Windows.Forms.ToolStripLabel();
             this.mainBottomPanel = new System.Windows.Forms.Panel();
-            this.testButton = new System.Windows.Forms.Button();
             this.Editor = new System.Windows.Forms.RichTextBox();
             this.actionsToolStrip = new System.Windows.Forms.ToolStrip();
             this.replyToolItem = new System.Windows.Forms.ToolStripButton();
@@ -215,6 +214,7 @@ namespace KolikSoftware.Eee.Client
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
             this.linkResolver = new KolikSoftware.Eee.Client.LinkResolver(this.components);
             this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
+            this.ReplyUsersMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyMenu.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.toolbarContainer.BottomToolStripPanel.SuspendLayout();
@@ -565,7 +565,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // toolbarContainer.BottomToolStripPanel
             // 
-            this.toolbarContainer.BottomToolStripPanel.Controls.Add(this.roomsToolStrip);
+            this.toolbarContainer.BottomToolStripPanel.Controls.Add(this.RoomsToolStrip);
             this.toolbarContainer.BottomToolStripPanel.Controls.Add(this.statusStrip);
             // 
             // toolbarContainer.ContentPanel
@@ -585,17 +585,17 @@ namespace KolikSoftware.Eee.Client
             this.toolbarContainer.TopToolStripPanel.Controls.Add(this.actionsToolStrip);
             this.toolbarContainer.TopToolStripPanel.Controls.Add(this.UsersToolStrip);
             // 
-            // roomsToolStrip
+            // RoomsToolStrip
             // 
-            this.roomsToolStrip.ContextMenuStrip = this.toolbarCustomizeMenu;
-            this.roomsToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.roomsToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.roomsToolStrip.Name = "roomsToolStrip";
-            this.roomsToolStrip.ShowItemToolTips = false;
-            this.roomsToolStrip.Size = new System.Drawing.Size(592, 25);
-            this.roomsToolStrip.Stretch = true;
-            this.roomsToolStrip.TabIndex = 0;
-            this.roomsToolStrip.Resize += new System.EventHandler(this.roomsToolStrip_Resize);
+            this.RoomsToolStrip.ContextMenuStrip = this.toolbarCustomizeMenu;
+            this.RoomsToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.RoomsToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.RoomsToolStrip.Name = "RoomsToolStrip";
+            this.RoomsToolStrip.ShowItemToolTips = false;
+            this.RoomsToolStrip.Size = new System.Drawing.Size(592, 25);
+            this.RoomsToolStrip.Stretch = true;
+            this.RoomsToolStrip.TabIndex = 0;
+            this.RoomsToolStrip.Resize += new System.EventHandler(this.roomsToolStrip_Resize);
             // 
             // toolbarCustomizeMenu
             // 
@@ -913,23 +913,12 @@ namespace KolikSoftware.Eee.Client
             // 
             // mainBottomPanel
             // 
-            this.mainBottomPanel.Controls.Add(this.testButton);
             this.mainBottomPanel.Controls.Add(this.Editor);
             this.mainBottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainBottomPanel.Location = new System.Drawing.Point(4, 4);
             this.mainBottomPanel.Name = "mainBottomPanel";
             this.mainBottomPanel.Size = new System.Drawing.Size(582, 66);
             this.mainBottomPanel.TabIndex = 60;
-            // 
-            // testButton
-            // 
-            this.testButton.Location = new System.Drawing.Point(495, 4);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(75, 23);
-            this.testButton.TabIndex = 1;
-            this.testButton.Text = "Test";
-            this.testButton.UseVisualStyleBackColor = true;
-            this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // Editor
             // 
@@ -1294,7 +1283,6 @@ namespace KolikSoftware.Eee.Client
             this.Service.ServiceUrl = null;
             this.Service.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
             this.Service.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);
-            this.Service.GetRoomsFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetRoomsFinishedEventArgs>(this.eeeServiceController_GetRoomsFinished);
             this.Service.UploadFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UploadFinishedEventArgs>(this.eeeServiceController_UploadFinished);
             this.Service.UpdatesAvailable += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.UpdatesAvailableEventArgs>(this.eeeServiceController_UpdatesAvailable);
             this.Service.GetMessagesFinished += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.GetMessagesFinishedEventArgs>(this.eeeServiceController_GetMessagesFinished);
@@ -1347,6 +1335,11 @@ namespace KolikSoftware.Eee.Client
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.Size = new System.Drawing.Size(590, 399);
             this.webBrowser.TabIndex = 8;
+            // 
+            // ReplyUsersMenuStrip
+            // 
+            this.ReplyUsersMenuStrip.Name = "ReplyUsersMenuStrip";
+            this.ReplyUsersMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // MainForm
             // 
@@ -1493,11 +1486,11 @@ namespace KolikSoftware.Eee.Client
         private LinkResolver linkResolver;
         private GeckoWebBrowser webBrowser;
         public GeckoWebBrowser Browser;
-        private Button testButton;
         public BackgroundServiceController Service;
         public ToolStrip UsersToolStrip;
-        public ToolStrip roomsToolStrip;
+        public ToolStrip RoomsToolStrip;
         public RichTextBox Editor;
+        public ContextMenuStrip ReplyUsersMenuStrip;
 
 
     }

@@ -98,8 +98,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             foreach (ToolStripItem item in this.Form.UsersToolStrip.Items)
             {
                 if (index >= 10) return;
-                if (item.Tag != null)
-                    item.ImageIndex = index++;
+                item.ImageIndex = index++;
             }
         }
 
@@ -120,7 +119,6 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             button.ImageAlign = ContentAlignment.MiddleLeft;
             button.TextAlign = ContentAlignment.MiddleLeft;
             button.CheckOnClick = true;
-            button.Tag = user;
             button.CheckedChanged += new EventHandler(button_CheckedChanged);
             button.MouseUp += new MouseEventHandler(button_MouseUp);
 
@@ -180,7 +178,9 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
             post.From.State = (UserState)int.Parse(paramList[1]);
             post.From.Comment = paramList[2];
-            post.From.Client = paramList[3];
+
+            if (paramList.Length > 3)
+                post.From.Client = paramList[3];
 
             SetUser(post.From);
         }

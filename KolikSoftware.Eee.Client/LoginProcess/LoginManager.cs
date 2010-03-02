@@ -302,7 +302,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
             IncreaseLoginPhase();
         }
 
-        void serviceController_GetRoomsFinished(object sender, BackgroundServiceController.GetRoomsFinishedEventArgs e)
+        void serviceController_GetRoomsFinished(object sender, EventArgs e)
         {
             IncreaseLoginPhase();
         }

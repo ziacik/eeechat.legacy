@@ -4,24 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using KolikSoftware.Eee.Service.Domain;
+using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
     public class EditorPlugin : IMainFormPlugin
     {
         public MainForm Form { get; set; }
+        public int LastPostCount { get; set; }
 
         public void Init(MainForm mainForm)
         {
             this.Form = mainForm;
             this.Form.Editor.KeyDown += new KeyEventHandler(Editor_KeyDown);
             this.Form.Editor.TextChanged += new EventHandler(Editor_TextChanged);
+            
+            this.ReplyList = new List<Post>();
+            this.CurrentReplyIndex = -1;
+
+            this.Form.ReplyUsersMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(ReplyUsersMenuStrip_ItemClicked);
+        }
+  
+        void ReplyUsersMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            this.Form.Editor.Text = e.ClickedItem.Text + ": ";
+            this.Form.Editor.SelectionStart = this.Form.Editor.Text.Length;
+            ContextMenuStrip strip = (ContextMenuStrip)sender;
+            this.CurrentReplyIndex = strip.Items.IndexOf(e.ClickedItem);
         }
 
         void Editor_TextChanged(object sender, EventArgs e)
         {
             
         }
+
+        static readonly Regex ReplyCheckRegex = new Regex(@"^/?[a-zA-Z]+:\s*$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         void Editor_KeyDown(object sender, KeyEventArgs e)
         {
@@ -35,6 +53,11 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             else
                 control = e.Control;
 
+            string text = this.Form.Editor.Text;
+            bool empty = string.IsNullOrEmpty(text);
+
+            bool noShifts = !e.Control && !e.Alt && !e.Shift;
+
             if ((control && e.KeyCode == Keys.Enter) || (e.Alt && e.KeyCode == Keys.S))
             {
                 string textToSend = this.Form.Editor.Text.Trim();
@@ -46,19 +69,27 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                     if (textToSend != null && textToSend.Length > 0)
                     {
-                        //TODO:
-                        Room room = new Room();
-                        room.Name = "Pokec";
-
                         User recipient = this.Form.GetPlugin<UserStatePlugin>().GetUser(recipientName);
+                        Room room = this.Form.GetPlugin<RoomStatePlugin>().SelectedRoom;
 
                         this.Form.Service.SendMessage(room, recipient, textToSend);
+                        this.CurrentReplyIndex = -1;
                     }
                 }
             }
-            else if (e.Control && e.KeyCode == Keys.R)
+            else if (noShifts && e.KeyCode == Keys.Space)
             {
-                //Reply();
+                CheckMacro();
+                e.SuppressKeyPress = false;
+                e.Handled = false;
+            }
+            else if (noShifts && e.KeyCode == Keys.Up && (empty || ReplyCheckRegex.IsMatch(text)))
+            {
+                ReplyUp();
+            }
+            else if (noShifts && e.KeyCode == Keys.Down && (empty || ReplyCheckRegex.IsMatch(text)))
+            {
+                ReplyDown();
             }
             else if (e.Control && e.KeyCode == Keys.F)
             {
@@ -66,20 +97,20 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             }
             else if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F24)
             {
-               /* int index = (int)e.KeyCode - (int)Keys.F1;
+                /* int index = (int)e.KeyCode - (int)Keys.F1;
 
-                switch (e.Modifiers)
-                {
-                    case Keys.None:
-                        AddUserToText(index);
-                        break;
-                    case Keys.Control:
-                        SelectRoomNo(index);
-                        break;
-                    case Keys.Alt:
-                        SelectUserNo(index);
-                        break;
-                }*/
+                 switch (e.Modifiers)
+                 {
+                     case Keys.None:
+                         AddUserToText(index);
+                         break;
+                     case Keys.Control:
+                         SelectRoomNo(index);
+                         break;
+                     case Keys.Alt:
+                         SelectUserNo(index);
+                         break;
+                 }*/
             }
             else
             {
@@ -90,6 +121,110 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             //if (e.Control == false && e.Alt == false && (e.KeyCode & Keys.KeyCode) != Keys.None)
                 //this.replyUserIndex = 0;
             
+        }
+
+        int CurrentReplyIndex { get; set; }
+
+        void ReplyDown()
+        {
+            CheckReplyList();
+
+            this.CurrentReplyIndex++;
+
+            if (this.CurrentReplyIndex >= this.ReplyList.Count)
+                this.CurrentReplyIndex = 0;
+
+            this.Form.ReplyUsersMenuStrip.Show(this.Form.Editor, new System.Drawing.Point(0, 0), ToolStripDropDownDirection.AboveRight);
+            this.Form.ReplyUsersMenuStrip.Items[this.CurrentReplyIndex].Select();
+        }
+
+        void ReplyUp()
+        {
+            CheckReplyList();
+
+            this.CurrentReplyIndex--;
+
+            if (this.CurrentReplyIndex < 0)
+                this.CurrentReplyIndex = this.ReplyList.Count - 1;
+
+            this.Form.ReplyUsersMenuStrip.Show(this.Form.Editor, new Point(0, 0), ToolStripDropDownDirection.AboveRight);
+            this.Form.ReplyUsersMenuStrip.Items[this.CurrentReplyIndex].Select();
+        }
+
+        List<Post> ReplyList { get; set; }
+
+        void CheckReplyList()
+        {
+            int currentPostCount = this.Form.GetPlugin<BrowserPlugin>().AllPosts.Count;
+
+            if (currentPostCount > this.LastPostCount)
+            {
+                this.LastPostCount = currentPostCount;
+                BuildReplyList();
+            }
+        }
+
+        void BuildReplyList()
+        {
+            this.Form.ReplyUsersMenuStrip.Items.Clear();
+
+            HashSet<string> nameSet = new HashSet<string>();
+            this.ReplyList.Clear();
+
+            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+            IList<Post> allPosts = browserPlugin.AllPosts;
+            string currentLogin = this.Form.Service.CurrentUser.Login;
+
+            for (int i = allPosts.Count - 1; i >= 0; i--)
+            {
+                Post replyPost = allPosts[i];
+
+                if (replyPost.From.Login != currentLogin)
+                {
+                    string id = (replyPost.Private ? "/" : "") + replyPost.From.Login;
+
+                    if (!nameSet.Contains(id))
+                    {
+                        this.ReplyList.Insert(0, replyPost);
+                        nameSet.Add(id);
+                    }
+                }
+            }
+
+            foreach (Post post in this.ReplyList)
+            {
+                this.Form.ReplyUsersMenuStrip.Items.Add((post.Private ? "/" : "") + post.From.Login);
+            }
+        }
+
+        void CheckMacro()
+        {
+            if (this.Form.Editor.Text == "r")
+                Reply();
+        }
+
+        void Reply()
+        {
+            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+            IList<Post> allPosts = browserPlugin.AllPosts;
+            string currentLogin = this.Form.Service.CurrentUser.Login;
+
+            for (int i = allPosts.Count - 1; i >= 0; i--)
+            {
+                Post replyPost = allPosts[i];
+                
+                if (replyPost.From.Login != currentLogin)
+                {
+                    if (replyPost.Private)
+                        this.Form.Editor.Text = "/" + replyPost.From.Login + ":";
+                    else
+                        this.Form.Editor.Text = replyPost.From.Login + ":";
+
+                    this.Form.Editor.SelectionStart = this.Form.Editor.Text.Length;
+
+                    break;
+                }
+            }
         }
 
         string GetRecipient(ref string messageToSend)

@@ -113,7 +113,7 @@ namespace KolikSoftware.Eee.Client.Helpers
                             toolStripContainer.TopToolStripPanel.Join(remainingStrip, 0);
                         else if (remainingStrip.Name == "UsersToolStrip")
                             toolStripContainer.TopToolStripPanel.Join(remainingStrip, 1);
-                        else if (remainingStrip.Name == "roomsToolStrip")
+                        else if (remainingStrip.Name == "RoomsToolStrip")
                             toolStripContainer.BottomToolStripPanel.Join(remainingStrip, 0);
                         else if (remainingStrip.Name == "statusStrip")
                             toolStripContainer.BottomToolStripPanel.Join(remainingStrip, 1);

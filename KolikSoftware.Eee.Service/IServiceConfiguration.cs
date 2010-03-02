@@ -8,6 +8,7 @@ namespace KolikSoftware.Eee.Service
     public interface IServiceConfiguration
     {
         string ServiceUrl { get; set; }
+        int MessageGetSafeInterval { get; set; }
         int MessageGetInterval { get; set; }
         int MessageGetInstantRetryCount { get; set; }
         int MessageGetInstantRetryDelay { get; set; }

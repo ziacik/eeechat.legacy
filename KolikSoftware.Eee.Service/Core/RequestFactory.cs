@@ -5,7 +5,7 @@ using System.Net;
 
 namespace KolikSoftware.Eee.Service.Core
 {
-    internal class RequestFactory
+    public class RequestFactory
     {
         static readonly RequestFactory instance = new RequestFactory();
 

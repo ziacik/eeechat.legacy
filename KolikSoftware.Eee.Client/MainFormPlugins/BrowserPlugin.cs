@@ -103,11 +103,14 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             {
                 GeckoElement messageDiv = (GeckoElement)this.Browser.Document.Body.LastChild;
 
-                post.Text = appendToPost.Text + Environment.NewLine + post.Text;
+                post.Text = appendToPost.Text + Environment.NewLine + "-" + Environment.NewLine + post.Text;
 
                 string html = PostToHtml(post);
 
                 messageDiv.InnerHtml = html;
+
+                //TODO: to treba inac, lebo toto urobi viacnasobny resolve pri appende.
+                this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
 
                 this.AllPosts[this.AllPosts.Count - 1] = post;
             }
@@ -125,6 +128,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 messageDiv.InnerHtml = html;
 
                 this.Browser.Document.Body.AppendChild(messageDiv);
+
+                this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
 
                 this.AllPosts.Add(post);
             }

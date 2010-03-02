@@ -182,7 +182,6 @@
     <Compile Include="Helpers\MainFormHelpers.cs" />
     <Compile Include="Helpers\MessageTextProcessor.cs" />
     <Compile Include="Helpers\MessageVisibilityHelper.cs" />
-    <Compile Include="Helpers\Smilies.cs" />
     <Compile Include="Helpers\ToolstripSettingsSerializer.cs" />
     <Compile Include="History\HistoryManager.cs">
       <SubType>Component</SubType>
@@ -216,9 +215,12 @@
     </Compile>
     <Compile Include="MainFormPlugins\BrowserPlugin.cs" />
     <Compile Include="MainFormPlugins\CommandPostPlugin.cs" />
+    <Compile Include="MainFormPlugins\LinkResolver.cs" />
+    <Compile Include="MainFormPlugins\RoomStatePlugin.cs" />
     <Compile Include="MainFormPlugins\EditorPlugin.cs" />
     <Compile Include="MainFormPlugins\IMainFormPlugin.cs" />
     <Compile Include="MainFormPlugins\LinkFinder.cs" />
+    <Compile Include="MainFormPlugins\SmileFinder.cs" />
     <Compile Include="MainFormPlugins\UserStatePlugin.cs" />
     <Compile Include="Media\MediaPlayer.cs">
       <SubType>Component</SubType>

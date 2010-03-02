@@ -51,6 +51,11 @@ namespace KolikSoftware.Eee.Service
         IList<Post> GetMessages();
 
         /// <summary>
+        /// Gets the list of new messages in safe manner by not using stuff like long polling.
+        /// </summary>
+        IList<Post> GetMessagesSafe();
+
+        /// <summary>
         /// Puts private message into commit queue.
         /// </summary>
         void CommitMessage(Post message);

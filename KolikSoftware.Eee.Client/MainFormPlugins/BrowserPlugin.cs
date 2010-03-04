@@ -18,12 +18,15 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public GeckoWebBrowser Browser { get; set; }
         public string MessageTemplate { get; set; }
         public List<Post> AllPosts { get; set; }
+        public Dictionary<Post, GeckoElement> ElementsByPost { get; set; }
 
         public void Init(MainForm mainForm)
         {
             SetupProxy();
 
             this.AllPosts = new List<Post>();
+            this.ElementsByPost = new Dictionary<Post, GeckoElement>();
+
             this.IsFirstRun = true;
 
             this.Form = mainForm;
@@ -87,6 +90,13 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public void AddMessage(Post post)
         {
+            //TODO:
+            if (post.From.Login == this.Form.Service.CurrentUser.Login && post.GlobalId == "TEST")
+                return;
+
+            this.Form.GetPlugin<LinkFinder>().FindLinksInPost(post);
+            this.Form.GetPlugin<SmileFinder>().FindSmilesInPost(post);
+
             Post appendToPost = null;
 
             if (this.AllPosts.Count > 0)
@@ -113,6 +123,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
 
                 this.AllPosts[this.AllPosts.Count - 1] = post;
+                this.ElementsByPost[post] = messageDiv;
             }
             else
             {
@@ -132,13 +143,42 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
 
                 this.AllPosts.Add(post);
+                this.ElementsByPost[post] = messageDiv;
+            }
+        }
+
+        public void SetPostPending(Post post)
+        {
+            GeckoElement element;
+
+            if (this.ElementsByPost.TryGetValue(post, out element))
+            {
+                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                {
+                    if (node.ClassName == "Status")
+                        node.ClassName = "Pending";
+                }
+            }
+        }
+
+        public void SetPostSent(Post post)
+        {
+            GeckoElement element;
+
+            if (this.ElementsByPost.TryGetValue(post, out element))
+            {
+                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                {
+                    if (node.ClassName == "Pending")
+                        node.ClassName = "Sent";
+                }
             }
         }
 
         private string PostToHtml(Post post)
         {
             StringBuilder builder = new StringBuilder(this.MessageTemplate);
-            builder.Replace("[AvatarUrl]", "http://www.glyphlab.com/stock_icons/img/9311.gif");
+            builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login);
             builder.Replace("[UserName]", post.From.Login);
             builder.Replace("[Time]", post.Sent.ToShortTimeString());
             builder.Replace("[Text]", post.Text.Replace("\n", "<br />"));

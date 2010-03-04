@@ -1,53 +1,69 @@
 ﻿body
 {
-	background-color: #e9edf9;
+	background-color: #efedf9;
+	line-height: 1.2em;
+}
+
+.Pending
+{
+	width: 10px;
+	height: 10px;
+	float: right;
+	background-image: url(Pending.gif);
 }
 
 .Message
 {
-	margin-bottom: 1em;
-	padding: 1em 1em 1em 1em;
+	margin: 0em 0em 0.8em 0em;
+	padding: 0.8em 0.8em 0em 0.8em;
+	-moz-border-radius: 0.5em;
+	-moz-box-shadow: 2px 2px 2px #d0d0d9;	
 }
 
 .Message.Public
 {
-	background-color: #f6f8fe;
+	background-color: #fbfeff;
 }
 
 .Message.Private
 {
-	background-color: #eeeeee;
+	background-color: #d0dddd;
 }
 
 .Avatar
 {
 	float: left;
-	background-image: url(Shadow.gif);
-	background-repeat: no-repeat;
-	width: 55px;
-	height: 58px;
 	margin-right: 0.7em;
 	margin-bottom: 0.7em;
+	width: 48px;
+	height: 48px;
 }
 
 .AvatarImage
 {
 	width: 48px;
 	height: 48px;
-	padding-left: 2px;
-	padding-top: 2px;
+	border: solid 2px White;
+	-moz-box-shadow: 3px 3px 3px #808080;
 }
 
 .UserName
 {
 	margin: 0em 0em 0em 0em;
 	font-family: Lucida Sans Unicode;
-	font-size: 1em;
+	font-size: 0.8em;
 	color: #3a6bd9;
-	text-shadow: 1px 1px 1px #FFFFFF;
+	text-shadow: 1px 1px 2px Grey;
+	letter-spacing: -0.03em;
 }
 
-.Time
+.UserName a
+{
+	text-decoration: none;
+	color: #3a6bd9;
+}
+
+.Info
 {
 	margin: 0em 0em 0em 0em;
 	font-family: Lucida Sans Unicode;
@@ -55,10 +71,21 @@
 	color: #3a6bd9;	
 }
 
+.InfoDelimiter
+{
+	color: Black;
+}
+
+.Time
+{
+}
+
+
 .Text
 {
 	clear: both;	
 	font-family: Verdana;
-	font-size: 1em;
+	font-size: 0.8em;
 	color: #343538;
+	padding-bottom: 1em;
 }

@@ -105,6 +105,12 @@ namespace KolikSoftware.Eee.Service
             return Deserialize<List<T>>(response);
         }
 
+        protected IList<T> LongQueryList<T>(string method, params Expression<Func<object>>[] arguments)
+        {
+            string response = CallRequest(CallType.GETLONG, method, arguments);
+            return Deserialize<List<T>>(response);
+        }
+
         protected T Action<T>(string method, params Expression<Func<object>>[] arguments)
         {
             string response = CallRequest(CallType.POST, method, arguments);
@@ -131,6 +137,7 @@ namespace KolikSoftware.Eee.Service
         enum CallType
         {
             GET,
+            GETLONG,
             POST
         }
 
@@ -147,22 +154,23 @@ namespace KolikSoftware.Eee.Service
 
             method += ".php";
 
-            if (callType == CallType.GET)
+            if (callType != CallType.POST)
                 uri = new Uri(url + method + "?" + query);
             else
                 uri = new Uri(url + method);
 
             HttpWebRequest request = (HttpWebRequest)RequestFactory.Instance.CreateRequest(uri, this.ProxySettings);
-            request.KeepAlive = false;
-            //request.Timeout = 15000;
-            request.Timeout = Timeout.Infinite;
+
+            if (callType == CallType.GETLONG)
+            {
+                request.Timeout = Timeout.Infinite;
+                callType = CallType.GET;
+            }
 
             if (callType == CallType.POST)
                 request.ContentType = "application/x-www-form-urlencoded";
 
             request.Method = callType.ToString();
-            request.AllowAutoRedirect = false;
-            request.ProtocolVersion = HttpVersion.Version11;
 
             byte[] data = null;
 

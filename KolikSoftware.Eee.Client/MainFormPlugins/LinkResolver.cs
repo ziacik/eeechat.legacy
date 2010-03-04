@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Skybound.Gecko;
-using KolikSoftware.Eee.Service.Domain;
-using System.Text.RegularExpressions;
 using System.ComponentModel;
-using System.Net;
-using KolikSoftware.Eee.Service.Core;
 using System.IO;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using KolikSoftware.Eee.Service.Core;
+using KolikSoftware.Eee.Service.Domain;
+using Skybound.Gecko;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
@@ -27,7 +27,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.LinkResolverWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LinkResolverWorker_RunWorkerCompleted);
         }
 
-        static readonly Regex TitleRegex = new Regex("<title>(.*)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        static readonly Regex TitleRegex = new Regex("<title>(.*?)</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         static readonly Regex CharSetRegex = new Regex(@"charset=(.*?)['""]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void ResolveLinksIn(GeckoElement element, Post relatedPost)
@@ -65,7 +65,6 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             try
             {
                 LinkResolverInfo info = (LinkResolverInfo)e.Argument;
-
                 HttpWebRequest request = RequestFactory.Instance.CreateRequest(new Uri(info.Href), this.Form.Service.ProxySettings);
                 
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -146,7 +145,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                     if (match != null && match.Success)
                     {
-                        info.Title = match.Groups[1].Value.Trim().Replace("&nbsp", " ");
+                        info.Title = HttpUtility.HtmlDecode(match.Groups[1].Value.Trim());
                         e.Result = info;
                     }
                 }

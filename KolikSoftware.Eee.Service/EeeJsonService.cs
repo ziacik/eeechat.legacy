@@ -104,7 +104,7 @@ namespace KolikSoftware.Eee.Service
             //TODO: prerobit nejako genericky?
             try
             {
-                IList<Post> posts = QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
+                IList<Post> posts = LongQueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
                 this.ArgumentsHelper.MessagesToCommit.Clear();
                 return posts;
             }

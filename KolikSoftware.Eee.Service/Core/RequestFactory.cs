@@ -35,6 +35,11 @@ namespace KolikSoftware.Eee.Service.Core
                     request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
 
+            request.ProtocolVersion = HttpVersion.Version11;
+            request.AllowAutoRedirect = false;
+            request.ServicePoint.Expect100Continue = false;
+            request.ServicePoint.UseNagleAlgorithm = false;
+
             return request;
         }
 

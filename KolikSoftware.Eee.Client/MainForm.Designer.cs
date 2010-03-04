@@ -212,7 +212,6 @@ namespace KolikSoftware.Eee.Client
             this.autoAwayMonitor = new KolikSoftware.Eee.Client.Notifications.AutoAwayMonitor(this.components);
             this.updateManager = new KolikSoftware.Eee.Client.Updating.UpdateManager(this.components);
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
-            this.linkResolver = new KolikSoftware.Eee.Client.LinkResolver(this.components);
             this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
             this.ReplyUsersMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyMenu.SuspendLayout();
@@ -1323,11 +1322,6 @@ namespace KolikSoftware.Eee.Client
             this.mediaPlayer.ModeChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.ModeChangedEventArgs>(this.mediaPlayer_ModeChanged);
             this.mediaPlayer.MediaChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.MediaChangedEventArgs>(this.mediaPlayer_MediaChanged);
             // 
-            // linkResolver
-            // 
-            this.linkResolver.ProxySettings = null;
-            this.linkResolver.LinkResolved += new System.EventHandler<KolikSoftware.Eee.Client.LinkResolverEventArgs>(this.linkResolver_LinkResolved);
-            // 
             // webBrowser
             // 
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1483,7 +1477,6 @@ namespace KolikSoftware.Eee.Client
         private ToolStripSeparator toolStripSeparator17;
         private ToolStripMenuItem uploadMediaMenuItem;
         private ToolStrip externalUsersToolStrip;
-        private LinkResolver linkResolver;
         private GeckoWebBrowser webBrowser;
         public GeckoWebBrowser Browser;
         public BackgroundServiceController Service;

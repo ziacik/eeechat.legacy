@@ -746,12 +746,28 @@ namespace KolikSoftware.Eee.Client
             else if (retryNo > 0)
                 sleepSecs = 5;
 
+            Post post = new Post()
+            {
+                From = this.Service.CurrentUser,
+                GlobalId = Guid.NewGuid().ToString(),
+                Room = room,
+                Private = recipient != null,
+                Sent = DateTime.Now,
+                Text = HttpUtility.HtmlEncode(message)
+            };
+
+            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+
+            browserPlugin.AddMessage(post);
+            browserPlugin.SetPostPending(post);
+            browserPlugin.ScrollDown();
+
             InvokeInBackground(
                 sleepSecs,
                 () => this.Service.SendMessage(room, recipient, message),
                 r =>
                 {
-                    //TODO: commit or what
+                    browserPlugin.SetPostSent(post);
                 },
                 e =>
                 {

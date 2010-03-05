@@ -754,7 +754,7 @@ namespace KolikSoftware.Eee.Client
                     GlobalId = Guid.NewGuid().ToString(),
                     Room = room,
                     Private = recipient != null,
-                    Sent = DateTime.Now,
+                    Sent = DateTime.Now.AddHours(-1), //TODO: remove -1
                     Text = HttpUtility.HtmlEncode(message)
                 };
             }

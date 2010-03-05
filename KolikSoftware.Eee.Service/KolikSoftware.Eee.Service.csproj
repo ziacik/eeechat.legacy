@@ -127,6 +127,7 @@
     <Compile Include="BindServiceConfiguration.cs" />
     <Compile Include="Domain\ActionResult.cs" />
     <Compile Include="Domain\AuthenticationData.cs" />
+    <Compile Include="Domain\MultiPost.cs" />
     <Compile Include="Domain\Room.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\UserState.cs" />

@@ -574,6 +574,9 @@
     <Content Include="Templates\ChatTemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\DialogTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\MessageTemplate7.xslt" />
     <Content Include="Templates\MessageTemplate5.xslt" />
     <Content Include="Templates\MessageTemplate6.xslt" />

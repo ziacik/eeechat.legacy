@@ -34,10 +34,10 @@ namespace KolikSoftware.Eee.Client.Reporting
             if (this.mode == Mode.ConnectionProblem)
             {
                 this.errorPicture.Visible = false;
-                this.reportButton.Visible = false;
+                //this.reportButton.Visible = false;
                 this.connectionProblemsPicture.Visible = true;
                 this.Text = "Connection Problems";
-                this.errorLabel.Text = "The application is experiencing some connection problems. After the connection is established again, you don't need to login again and no messages will be lost.";
+                this.errorLabel.Text = error.Message;
             }
             else if (this.mode == Mode.Disconnected)
             {

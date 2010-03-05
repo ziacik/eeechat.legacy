@@ -106,7 +106,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         //TODO: naming
         static readonly Regex ReplyCheckRegex = new Regex(@"^/?[a-zA-Z]+:\s*$", RegexOptions.Compiled | RegexOptions.Singleline);
-        static readonly Regex ReplyCheckRegexNoEnd = new Regex(@"^/?([a-zA-Z]+):", RegexOptions.Compiled | RegexOptions.Singleline);
+        static readonly Regex ReplyCheckRegexNoEnd = new Regex(@"^/([a-zA-Z]+):", RegexOptions.Compiled | RegexOptions.Singleline);
         static readonly Regex ReplaceReplyUser = new Regex(@"^([/]?\w+[:]\s*)?(?<text>.*)", RegexOptions.Compiled | RegexOptions.Singleline);
 
         void Editor_KeyDown(object sender, KeyEventArgs e)

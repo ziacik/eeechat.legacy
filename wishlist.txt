@@ -1,1 +1,3 @@
 "Don't use proxy" setting.
+Aby sa ServiceUrl nastavenie mohlo koncit lomitkom a neprestalo fungovat :)
+po AddMessage (iba multi?) sprava dvakrat blikne asi kvoli resolvu linkov alebo co

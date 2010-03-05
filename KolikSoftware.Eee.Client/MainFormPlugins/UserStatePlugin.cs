@@ -138,6 +138,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             UpdateUserButton(user);
         }
 
+        bool FreezeEvents { get; set; }
+
         void button_MouseLeave(object sender, EventArgs e)
         {
         }
@@ -150,8 +152,53 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         {
         }
 
+        public event EventHandler<EventArgs> SelectedUserChanged;
+
+        protected virtual void OnSelectedUserChanged(EventArgs e)
+        {
+            EventHandler<EventArgs> handler = this.SelectedUserChanged;
+            if (handler != null) handler(this, e);
+        }
+
+        public User SelectedUser { get; set; }
+
         void button_CheckedChanged(object sender, EventArgs e)
         {
+            if (this.FreezeEvents) return;
+            this.FreezeEvents = true;
+
+            try
+            {
+                ToolStripButton button = sender as ToolStripButton;
+
+                if (button.Checked)
+                {
+                    foreach (ToolStripItem userItem in this.Form.UsersToolStrip.Items)
+                    {
+                        if (userItem is ToolStripButton)
+                        {
+                            ToolStripButton userButton = userItem as ToolStripButton;
+
+                            if (userButton != button)
+                                userButton.Checked = false;
+                        }
+                    }
+
+                    this.SelectedUser = this.UsersByButton[button];
+                }
+                else
+                {
+                    this.SelectedUser = null;
+                }
+
+                OnSelectedUserChanged(EventArgs.Empty);
+                //TODO: RearrangeMessages();
+
+            }
+            finally
+            {
+                this.FreezeEvents = false;
+            }
         }
 
         void RemoveUserButton(User user)

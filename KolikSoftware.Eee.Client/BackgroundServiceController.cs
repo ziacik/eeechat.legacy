@@ -734,10 +734,10 @@ namespace KolikSoftware.Eee.Client
 
         public void SendMessage(Room room, User recipient, string message)
         {
-            DoSendMessage(0, room, recipient, message);
+            DoSendMessage(0, room, recipient, message, null);
         }
 
-        void DoSendMessage(int retryNo, Room room, User recipient, string message)
+        void DoSendMessage(int retryNo, Room room, User recipient, string message, Post post)
         {
             int sleepSecs = 0;
 
@@ -746,15 +746,18 @@ namespace KolikSoftware.Eee.Client
             else if (retryNo > 0)
                 sleepSecs = 5;
 
-            Post post = new Post()
+            if (post == null)
             {
-                From = this.Service.CurrentUser,
-                GlobalId = Guid.NewGuid().ToString(),
-                Room = room,
-                Private = recipient != null,
-                Sent = DateTime.Now,
-                Text = HttpUtility.HtmlEncode(message)
-            };
+                post = new Post()
+                {
+                    From = this.Service.CurrentUser,
+                    GlobalId = Guid.NewGuid().ToString(),
+                    Room = room,
+                    Private = recipient != null,
+                    Sent = DateTime.Now,
+                    Text = HttpUtility.HtmlEncode(message)
+                };
+            }
 
             BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
 
@@ -772,7 +775,7 @@ namespace KolikSoftware.Eee.Client
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
-                    DoSendMessage(retryNo + 1, room, recipient, message);
+                    DoSendMessage(retryNo + 1, room, recipient, message, post);
                 }
             );
         }

@@ -207,9 +207,15 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         void SetupProxy()
         {
-            GeckoPreferences.User["network.proxy.type"] = 1;
-            GeckoPreferences.User["network.proxy.http"] = "127.0.0.1";
-            GeckoPreferences.User["network.proxy.http_port"] = 3128;
+            GeckoPreferences.User["network.proxy.type"] = 5;
+/*            if (!string.IsNullOrEmpty(this.Form.Service.ProxySettings.Server))
+            {
+                string[] server = this.Form.Service.ProxySettings.Server.Split(':');
+                GeckoPreferences.User["network.proxy.http"] = server[0];
+                GeckoPreferences.User["network.proxy.http_port"] = int.Parse(server[1]);
+
+
+            }*/
         }
 
         void Browser_VisibleChanged(object sender, EventArgs e)

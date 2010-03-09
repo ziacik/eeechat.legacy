@@ -1409,7 +1409,7 @@ namespace KolikSoftware.Eee.Client
         private KolikSoftware.Eee.Client.Helpers.GlobalHotKey activatingHotkey;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripStatusLabel errorLabel;
-        private KolikSoftware.Eee.Client.Notifications.NotificationManager notificationManager;
+        public KolikSoftware.Eee.Client.Notifications.NotificationManager notificationManager;
         private KolikSoftware.Eee.Client.History.HistoryManager historyManager;
         private KolikSoftware.Eee.Client.LoginProcess.LoginManager loginManager;
         private ToolStripStatusLabel connectionProblemsLabel;

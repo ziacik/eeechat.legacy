@@ -50,7 +50,11 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public void ScrollDown()
         {
-            ((GeckoElement)this.Browser.Document.Body.LastChild).ScrollIntoView(false);
+            if (this.AllPosts.Count > 0)
+            {
+                GeckoElement lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
+                lastElement.ScrollIntoView(false);
+            }
         }
 
         void Browser_DocumentCompleted(object sender, EventArgs e)
@@ -67,7 +71,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                 foreach (Post post in allPosts)
                 {
-                    AddMessage(post);
+                    AddMessage(post, true, true);
                 }
 
                 ScrollDown();
@@ -83,23 +87,28 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public bool IsRefresh { get; set; }
         public bool IsFirstRun { get; set; }
 
-        public void Test()
+#if DEBUG
+        public void Reload()
         {
             this.IsRefresh = true;
             this.Browser.Reload();
 
         }
+#endif
 
         public bool HadRef { get; set; }
 
-        public void AddMessage(Post post)
+        public void AddMessage(Post post, bool initial, bool noResolve)
         {
             //TODO:
-            if (post.From.Login == this.Form.Service.CurrentUser.Login && post.GlobalId == "TEST")
+            if (!initial && post.From.Login == this.Form.Service.CurrentUser.Login && post.GlobalId == "TEST")
                 return;
 
-            this.Form.GetPlugin<LinkFinder>().FindLinksInPost(post);
-            this.Form.GetPlugin<SmileFinder>().FindSmilesInPost(post);
+            if (!noResolve)
+            {
+                this.Form.GetPlugin<LinkFinder>().FindLinksInPost(post);
+                this.Form.GetPlugin<SmileFinder>().FindSmilesInPost(post);
+            }
 
             int postIndex = this.AllPosts.Count - 1;
             DateTime timeThreshold = post.Sent.AddMinutes(-5);

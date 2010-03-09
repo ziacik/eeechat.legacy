@@ -10,6 +10,7 @@ using KolikSoftware.Eee.Service.Domain;
 using System.Security;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using KolikSoftware.Eee.Service.Exceptions;
 
 namespace KolikSoftware.Eee.Service
 {
@@ -295,7 +296,7 @@ namespace KolikSoftware.Eee.Service
             if (typeof(T) != typeof(ActionResult) && json.StartsWith("{\"Result\":"))
             {
                 ActionResult result = Deserialize<ActionResult>(json);
-                throw new Exception(result.Result);
+                throw new ServiceException(result.Result);
             }
             else
             {

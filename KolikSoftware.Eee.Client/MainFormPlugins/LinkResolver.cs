@@ -98,7 +98,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 }
                 else if (!string.IsNullOrEmpty(info.ImageUrl))
                 {
-                    info.Element.InnerHtml = "<img src=\"" + info.ImageUrl + "\" />";
+                    info.Element.InnerHtml = @"<img class=""FitSize"" src=""" + info.ImageUrl + @""" />";
                 }
 
                 //info.RelatedPost.Text = 

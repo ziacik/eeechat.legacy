@@ -131,6 +131,14 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 string textToSend = this.Form.Editor.Text.Trim();
                 this.Form.Editor.Text = "";
 
+#if DEBUG
+                if (textToSend == "reload")
+                {
+                    this.Form.GetPlugin<BrowserPlugin>().Reload();
+                    return;
+                }
+#endif
+
                 if (textToSend != "")
                 {
                     string recipientName = GetRecipient(ref textToSend);

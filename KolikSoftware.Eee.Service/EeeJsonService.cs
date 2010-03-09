@@ -5,6 +5,7 @@ using System.Text;
 using KolikSoftware.Eee.Service.Domain;
 using KolikSoftware.Eee.Service.Core;
 using System.Security;
+using KolikSoftware.Eee.Service.Exceptions;
 
 namespace KolikSoftware.Eee.Service
 {
@@ -108,9 +109,9 @@ namespace KolikSoftware.Eee.Service
                 this.ArgumentsHelper.MessagesToCommit.Clear();
                 return posts;
             }
-            catch (Exception ex)
+            catch (ServiceException ex)
             {
-                if (ex.Message == "NOMESSAGES")
+                if (ex.Type == ServiceException.ExceptionType.NoMessages)
                     return new List<Post>();
                 else
                     throw;
@@ -126,9 +127,9 @@ namespace KolikSoftware.Eee.Service
                 this.ArgumentsHelper.MessagesToCommit.Clear();
                 return posts;
             }
-            catch (Exception ex)
+            catch (ServiceException ex)
             {
-                if (ex.Message == "NOMESSAGES")
+                if (ex.Type == ServiceException.ExceptionType.NoMessages)
                     return new List<Post>();
                 else
                     throw;

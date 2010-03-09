@@ -13,6 +13,7 @@ using System.Threading;
 using KolikSoftware.Eee.Service.Exceptions;
 using KolikSoftware.Eee.Service.Domain;
 using KolikSoftware.Eee.Client.MainFormPlugins;
+using KolikSoftware.Eee.Client.Notifications;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -30,6 +31,7 @@ namespace KolikSoftware.Eee.Client
             if (handler != null) handler(this, e);
         }
 
+        public bool FirstGetMessages { get; set; }
 
         public IServiceConfiguration Configuration
         {
@@ -440,12 +442,14 @@ namespace KolikSoftware.Eee.Client
         public BackgroundServiceController()
         {
             InitializeComponent();
+            this.FirstGetMessages = true;
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
 
         public BackgroundServiceController(IContainer container)
         {
             container.Add(this);
+            this.FirstGetMessages = true;
             InitializeComponent();
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
         }
@@ -675,6 +679,8 @@ namespace KolikSoftware.Eee.Client
                 {
                     IList<Post> posts = (IList<Post>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
+                    AddPostsToBrowser(posts);
+                    this.FirstGetMessages = false;
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
                     DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
@@ -702,6 +708,45 @@ namespace KolikSoftware.Eee.Client
                     }
                 }
             );
+        }
+
+        void AddPostsToBrowser(IList<Post> posts)
+        {
+            if (posts.Count > 0)
+            {
+                bool canScroll = true; //TODO:
+                bool willScroll = false;
+
+                foreach (Post post in posts)
+                {
+                    /// The notification is added when the post is not from me, and the room is not ignored, and the user is not ignored.
+                    /// If the NotifyAboutIgnoredPersonalMessages is set, also show the notification if the room or user is ignored, but it is for me personally.
+                    bool fromMe = post.From.Login == this.Service.CurrentUser.Login;
+                    //bool roomIgnored = IsRoomIgnored(post.Room.);
+                    //bool userIgnored = IsUserIgnored(post.FromUserID);
+                    //bool ignored = roomIgnored || userIgnored;
+
+                    bool forMe = post.Private;
+                    bool showForMe = forMe && Properties.Settings.Default.NotifyAboutIgnoredPersonalMessages;
+
+                    this.Service.CommitMessage(post);
+
+                    if (!this.Form.GetPlugin<CommandPostPlugin>().ProcessCommandPost(post))
+                    {
+                        if (!fromMe /*&& (ignored == false || showForMe)*/)
+                        {
+                            MessageType postType = forMe ? MessageType.Private : MessageType.Public;
+                            this.Form.notificationManager.AddNotification(post.From.Login, post.From.Color, post.Text, postType);
+                        }
+
+                        this.Form.GetPlugin<BrowserPlugin>().AddMessage(post, this.FirstGetMessages, false);
+                        willScroll = canScroll;
+                    }
+                }
+
+                if (willScroll)
+                    this.Form.GetPlugin<BrowserPlugin>().ScrollDown();
+            }
         }
 
         void DoGetMessagesSafe(int sleepSecs, bool returnToNormalModeOnSuccess)
@@ -761,7 +806,7 @@ namespace KolikSoftware.Eee.Client
 
             BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
 
-            browserPlugin.AddMessage(post);
+            browserPlugin.AddMessage(post, false, false);
             browserPlugin.SetPostPending(post);
             browserPlugin.ScrollDown();
 

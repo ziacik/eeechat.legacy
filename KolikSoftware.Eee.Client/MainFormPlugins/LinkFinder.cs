@@ -6,6 +6,7 @@ using KolikSoftware.Eee.Service.Domain;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows.Forms;
+using System.Web;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
@@ -49,7 +50,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             if (text.IndexOf('.') >= 0)
             {
                 text = LinkFinder.HttpUrls.Replace(text, EvaluateHyperlinkMatch);
-                text = LinkFinder.MailUrls.Replace(text, @"<a style=""text-decoration:none;"" xmlns="""" href=""mailto:${mail}"">[<img border=""0"" src=""" + LinkFinder.MailPicPath + @""" /> ${mail}]</a>");
+                text = LinkFinder.MailUrls.Replace(text, @"<a href=""mailto:${mail}"">${mail}</a>");
             }
             return text;
         }
@@ -57,6 +58,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         static string UrlPicPath = "file://" + Path.Combine(Application.StartupPath, @"Resources\Url.gif");
         static string MailPicPath = "file://" + Path.Combine(Application.StartupPath, @"Resources\Mail.gif");
         static string MediaPicPath = "file://" + Path.Combine(Application.StartupPath, @"Resources\Media.gif");
+        static string PlayerPath = "file://" + Path.Combine(Application.StartupPath, @"Templates\MusicPlayer.swf");
 
         string EvaluateHyperlinkMatch(Match match)
         {
@@ -82,7 +84,24 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             if (ext == ".mp3" || ext == ".wma" || ext == ".m4a")
             {
                 string title = Path.GetFileName(link);
-                return string.Format(@"<a id=""Media.{0}"" href=""{1}"">{2}</a>", Guid.NewGuid(), link, title) + extraEnd;
+
+                string template =
+                @"
+                    <object type=""application/x-shockwave-flash"" data=""{0}/MusicPlayer.swf"" width=""300"" height=""20"">
+                        <param name=""movie"" value=""{0}/MusicPlayer.swf"" />
+                        <param name=""bgcolor"" value=""#ffffff"" />
+                        <param name=""FlashVars"" value=""mp3={1}&amp;width=300&amp;showstop=1&amp;showinfo=1&amp;showvolume=1"" />
+                    </object>
+                ";
+
+//                string template = @"
+//                    <embed type=""application/x-shockwave-flash"" src=""Templates/MusicPlayer.swf"" width=""200"" height=""20"">
+//                         <param name=""movie"" value=""Templates/MusicPlayer.swf"" />
+//                         <param name=""FlashVars"" value=""{0}"" />
+//                    </embed>";
+
+                return string.Format(template, this.Form.Service.ServiceUrl, HttpUtility.UrlEncode(link)) + extraEnd;
+                //return string.Format(@"<a id=""Media.{0}"" href=""{1}"">{2}</a>", Guid.NewGuid(), link, title) + extraEnd;
             }
             else
             {
@@ -91,7 +110,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 if (youTubeMatch.Success)
                 {
                     string videoId = youTubeMatch.Groups[1].Value;
-                    return string.Format(@"<embed width=""100%"" src=""http://www.youtube.com/v/{0}"" type=""application/x-shockwave-flash"" allowscriptaccess=""always"" allowfullscreen=""true""></embed>", videoId);
+                    return string.Format(@"<embed class=""FitSize"" src=""http://www.youtube.com/v/{0}"" type=""application/x-shockwave-flash"" allowscriptaccess=""always"" allowfullscreen=""true""></embed>", videoId);
                 }
                 else
                 {

@@ -4,6 +4,24 @@
 	line-height: 1.2em;
 }
 
+img
+{
+	border: none;
+	vertical-align: middle;
+}
+
+embed
+{
+	width: 425px;
+	height: 344px;
+}
+
+.FitSize
+{
+	max-width: 100%;
+	vertical-align: middle;
+}
+
 .Pending
 {
 	width: 10px;

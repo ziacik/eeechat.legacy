@@ -137,6 +137,7 @@
     <Compile Include="Exceptions\DisconnectedException.cs" />
     <None Include="EeeEncService.cs" />
     <Compile Include="Domain\Post.cs" />
+    <Compile Include="Exceptions\ServiceException.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

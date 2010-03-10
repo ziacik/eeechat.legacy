@@ -125,7 +125,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                     break;
                 }
 
-                if (referencePost is MultiPost)
+                /*if (referencePost is MultiPost)
                 {
                     MultiPost multiPost = (MultiPost)referencePost;
 
@@ -141,16 +141,33 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                         }
                     }
                 }
-                else
+                else */
+                if (post.Room.Name == referencePost.Room.Name)
                 {
-                    string referencePostRecipient = referencePost.To != null ? referencePost.To.Login : null;
-                    string postRecipient = post.To != null ? post.To.Login : null;
+                    string referenceFrom;
+                    string referenceTo;
 
-                    if (post.Text.StartsWith(referencePost.From.Login + ":")
-                        && referencePost.Text.StartsWith(post.From.Login + ":")
-                        && post.From.Login != referencePost.From.Login
-                        && postRecipient == referencePostRecipient
-                        && post.Room.Name == referencePost.Room.Name)
+                    if (referencePost.From.Login == post.From.Login)
+                    {
+                        referenceFrom = referencePost.ToLogin;
+                        referenceTo = referencePost.From.Login;
+                    }
+                    else
+                    {
+                        referenceFrom = referencePost.From.Login;
+                        referenceTo = referencePost.ToLogin;
+                    }
+
+                    bool privateDialog = post.ToLogin == referenceFrom;
+
+                    if (!privateDialog)
+                    {
+
+                    }
+
+                    bool publicDialog = !privateDialog && (post.Text.StartsWith(referencePost.From.Login + ":") || referencePost.Text.StartsWith(post.From.Login + ":"));
+
+                    if (privateDialog || publicDialog)
                         break;
                 }
 

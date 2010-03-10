@@ -2556,6 +2556,22 @@
     <StartTime>2010-03-10T18:00:00+01:00</StartTime>
     <EndTime>2010-03-10T18:03:00+01:00</EndTime>
   </Activity>
+  <Activity>
+    <ActivityId>35bde756-436b-4d7b-9d78-e2656c496059</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>BackgroundServiceController.cs</ItemName>
+    <StartTime>2010-03-10T18:12:00+01:00</StartTime>
+    <EndTime>2010-03-10T18:13:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>886d3394-ea1c-405f-850f-875b09a67ab2</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-10T18:13:00+01:00</StartTime>
+    <EndTime>2010-03-10T18:31:00+01:00</EndTime>
+  </Activity>
   <Solution>
     <SolutionName>EeeClient</SolutionName>
   </Solution>

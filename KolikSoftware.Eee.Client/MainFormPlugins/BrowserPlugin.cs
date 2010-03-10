@@ -129,7 +129,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 {
                     MultiPost multiPost = (MultiPost)referencePost;
 
-                    if (post.Private == multiPost.Private && post.Room.Name == multiPost.Room.Name)
+                    if (post.ToLogin == multiPost.ToLogin && post.Room.Name == multiPost.Room.Name)
                     {
                         if (post.Text.StartsWith(multiPost.Posts[0].From.Login + ":")
                             || post.Text.StartsWith(multiPost.Posts[1].From.Login + ":"))
@@ -143,10 +143,13 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 }
                 else
                 {
+                    string referencePostRecipient = referencePost.To != null ? referencePost.To.Login : null;
+                    string postRecipient = post.To != null ? post.To.Login : null;
+
                     if (post.Text.StartsWith(referencePost.From.Login + ":")
                         && referencePost.Text.StartsWith(post.From.Login + ":")
                         && post.From.Login != referencePost.From.Login
-                        && post.Private == referencePost.Private
+                        && postRecipient == referencePostRecipient
                         && post.Room.Name == referencePost.Room.Name)
                         break;
                 }
@@ -172,7 +175,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                     multiPost.From = referencePost.From;
                     multiPost.Room = referencePost.Room;
                     multiPost.Text = "<b>" + referencePost.From.Login + "</b>: " + referencePost.Text;
-                    multiPost.Private = referencePost.Private;
+                    multiPost.To = referencePost.To;
                 }
 
                 multiPost.Posts.Add(post);
@@ -181,7 +184,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                 GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
 
-                if (multiPost.Private)
+                if (multiPost.To != null)
                     messageDiv.ClassName = "Message Private";
                 else
                     messageDiv.ClassName = "Message Public";
@@ -208,8 +211,11 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             {
                 appendToPost = this.AllPosts[this.AllPosts.Count - 1];
 
+                string appendToPostRecipient = appendToPost.To != null ? appendToPost.To.Login : null;
+                string postRecipient = post.To != null ? post.To.Login : null;
+
                 if (appendToPost.From.Login != post.From.Login
-                    || appendToPost.Private != post.Private
+                    || appendToPostRecipient != postRecipient
                     || appendToPost.Room.Name != post.Room.Name
                     || appendToPost is MultiPost)
                     appendToPost = null;
@@ -235,7 +241,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             {
                 GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
 
-                if (post.Private)
+                if (post.To != null)
                     messageDiv.ClassName = "Message Private";
                 else
                     messageDiv.ClassName = "Message Public";
@@ -279,6 +285,16 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                         node.ClassName = "Sent";
                 }
             }
+        }
+
+        public void UpdatePost(Post post)
+        {
+            GeckoElement postDiv = this.ElementsByPost[post];
+            string html = PostToHtml(post);
+            postDiv.InnerHtml = html;
+
+            //TODO: to treba inac, lebo toto urobi viacnasobny resolve pri appende.
+            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
         }
 
         string MultiPostToHtml(MultiPost multiPost)

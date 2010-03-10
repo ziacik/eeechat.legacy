@@ -128,33 +128,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
             if ((control && e.KeyCode == Keys.Enter) || (e.Alt && e.KeyCode == Keys.S))
             {
-                string textToSend = this.Form.Editor.Text.Trim();
-                this.Form.Editor.Text = "";
-
-#if DEBUG
-                if (textToSend == "reload")
-                {
-                    this.Form.GetPlugin<BrowserPlugin>().Reload();
-                    return;
-                }
-#endif
-
-                if (textToSend != "")
-                {
-                    string recipientName = GetRecipient(ref textToSend);
-
-                    if (textToSend != null && textToSend.Length > 0)
-                    {
-                        User recipient = this.Form.GetPlugin<UserStatePlugin>().GetUser(recipientName);
-                        if (recipient == null)
-                            recipient = this.Form.GetPlugin<UserStatePlugin>().SelectedUser;
-
-                        Room room = this.Form.GetPlugin<RoomStatePlugin>().SelectedRoom;
-
-                        this.Form.Service.SendMessage(room, recipient, textToSend);
-                        this.CurrentReplyIndex = -1;
-                    }
-                }
+                Send();
             }
             else if (noShifts && e.KeyCode == Keys.Space)
             {
@@ -200,6 +174,50 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             //if (e.Control == false && e.Alt == false && (e.KeyCode & Keys.KeyCode) != Keys.None)
                 //this.replyUserIndex = 0;
             
+        }
+
+        void Send()
+        {
+            string textToSend = this.Form.Editor.Text.Trim();
+            this.Form.Editor.Text = "";
+
+#if DEBUG
+            if (textToSend == "reload")
+            {
+                this.Form.GetPlugin<BrowserPlugin>().Reload();
+                //return;
+            }
+#endif
+
+            if (!string.IsNullOrEmpty(textToSend))
+            {
+                string recipientName = ParseRecipient(ref textToSend);
+                
+                User recipient = GetRecipient(recipientName);
+                Room room = this.Form.GetPlugin<RoomStatePlugin>().SelectedRoom;
+
+                this.Form.Service.SendMessage(room, recipient, textToSend);
+                this.CurrentReplyIndex = -1;
+            }
+        }
+
+        User GetRecipient(string recipientName)
+        {
+            User recipient;
+
+            if (string.IsNullOrEmpty(recipientName))
+            {
+                recipient = this.Form.GetPlugin<UserStatePlugin>().SelectedUser;
+            }
+            else
+            {
+                recipient = this.Form.GetPlugin<UserStatePlugin>().GetUser(recipientName);
+
+                if (recipient == null)
+                    recipient = new User() { Login = recipientName };
+            }
+
+            return recipient;
         }
 
         void SelectUserNo(int index)
@@ -301,7 +319,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                 if (replyPost.From.Login != currentLogin)
                 {
-                    string id = (replyPost.Private ? "/" : "") + replyPost.From.Login;
+                    string id = (replyPost.To != null ? "/" : "") + replyPost.From.Login;
 
                     if (!nameSet.Contains(id))
                     {
@@ -313,7 +331,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
             foreach (Post post in this.ReplyList)
             {
-                this.Form.ReplyUsersMenuStrip.Items.Add((post.Private ? "/" : "") + post.From.Login);
+                this.Form.ReplyUsersMenuStrip.Items.Add((post.To != null ? "/" : "") + post.From.Login);
             }
         }
 
@@ -335,7 +353,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 
                 if (replyPost.From.Login != currentLogin)
                 {
-                    if (replyPost.Private)
+                    if (replyPost.To != null)
                         this.Form.Editor.Text = "/" + replyPost.From.Login + ":";
                     else
                         this.Form.Editor.Text = replyPost.From.Login + ":";
@@ -347,7 +365,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             }
         }
 
-        string GetRecipient(ref string messageToSend)
+        string ParseRecipient(ref string messageToSend)
         {
             if (messageToSend == null || messageToSend.Length == 0)
                 return null;
@@ -386,24 +404,5 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 return null;
             }
         }
-
-        string GetRecipient(string messageToSend)
-        {
-            if (!string.IsNullOrEmpty(messageToSend) && messageToSend[0] == '/' && messageToSend.IndexOf(":") > 0)
-            {
-                int idx = messageToSend.IndexOf(":");
-                string recipient = messageToSend.Substring(1, idx - 1);
-                return recipient;
-            }
-            //else if (this.SelectedUserId != 0)
-            //{
-            //    return this.SelectedUserLogin;
-            //}
-            else
-            {
-                return null;
-            }
-        }
-
     }
 }

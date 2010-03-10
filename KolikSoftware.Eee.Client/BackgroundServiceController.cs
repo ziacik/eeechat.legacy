@@ -549,7 +549,7 @@ namespace KolikSoftware.Eee.Client
                 r => OnConnected(ConnectedEventArgs.Empty),
                 e =>
                 {
-                    if (e.Message == "BADLOGIN")
+                    if (e is ServiceException && ((ServiceException)e).Type == ServiceException.ExceptionType.BadLogin)
                     {
                         OnLoginFailed(LoginFailedEventArgs.Empty);
                     }
@@ -726,7 +726,8 @@ namespace KolikSoftware.Eee.Client
                     //bool userIgnored = IsUserIgnored(post.FromUserID);
                     //bool ignored = roomIgnored || userIgnored;
 
-                    bool forMe = post.Private;
+                    bool isPrivate = post.To != null;
+                    bool forMe = isPrivate && post.To.Login == this.Service.CurrentUser.Login;
                     bool showForMe = forMe && Properties.Settings.Default.NotifyAboutIgnoredPersonalMessages;
 
                     this.Service.CommitMessage(post);
@@ -761,6 +762,8 @@ namespace KolikSoftware.Eee.Client
                 {
                     IList<Post> posts = (IList<Post>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
+                    AddPostsToBrowser(posts);
+                    this.FirstGetMessages = false;
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
 
@@ -791,6 +794,8 @@ namespace KolikSoftware.Eee.Client
             else if (retryNo > 0)
                 sleepSecs = 5;
 
+            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+
             if (post == null)
             {
                 post = new Post()
@@ -798,17 +803,15 @@ namespace KolikSoftware.Eee.Client
                     From = this.Service.CurrentUser,
                     GlobalId = Guid.NewGuid().ToString(),
                     Room = room,
-                    Private = recipient != null,
+                    To = recipient,
                     Sent = DateTime.Now.AddHours(-1), //TODO: remove -1
                     Text = HttpUtility.HtmlEncode(message)
                 };
+
+                browserPlugin.AddMessage(post, false, false);
+                browserPlugin.SetPostPending(post);
+                browserPlugin.ScrollDown();
             }
-
-            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
-
-            browserPlugin.AddMessage(post, false, false);
-            browserPlugin.SetPostPending(post);
-            browserPlugin.ScrollDown();
 
             InvokeInBackground(
                 sleepSecs,
@@ -819,8 +822,16 @@ namespace KolikSoftware.Eee.Client
                 },
                 e =>
                 {
-                    OnErrorOccured(new ErrorOccuredEventArgs(e));
-                    DoSendMessage(retryNo + 1, room, recipient, message, post);
+                    if (e is ServiceException && ((ServiceException)e).Type == ServiceException.ExceptionType.UnknownRecipient)
+                    {
+                        post.Text = "<i>Message undeliverable - recipient unknown</i><br />" + post.Text;
+                        browserPlugin.UpdatePost(post);
+                    }
+                    else
+                    {
+                        OnErrorOccured(new ErrorOccuredEventArgs(e));
+                        DoSendMessage(retryNo + 1, room, recipient, message, post);
+                    }
                 }
             );
         }

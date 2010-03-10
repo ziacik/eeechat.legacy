@@ -10,6 +10,8 @@ namespace KolikSoftware.Eee.Service.Exceptions
         public enum ExceptionType
         {
             NoMessages,
+            BadLogin,
+            UnknownRecipient,
             Other
         }
 

@@ -147,7 +147,7 @@ namespace KolikSoftware.Eee.Service
                 result = Action("Post", () => this.CurrentUser.Login, () => this.PasswordHash, () => args.Room, () => args.Text);
 
             if (result.Result != "OK")
-                throw new Exception(result.Result);
+                throw new ServiceException(result.Result);
         }
 
         public void CommitMessage(Post message)
@@ -155,7 +155,7 @@ namespace KolikSoftware.Eee.Service
             if (message.Id >= this.ArgumentsHelper.FromId)
                 this.ArgumentsHelper.FromId = message.Id + 1;
 
-            if (message.Private && message.From.Login != this.CurrentUser.Login)
+            if (message.To != null && message.To.Login == this.CurrentUser.Login)
                 this.ArgumentsHelper.MessagesToCommit.Add(message.Id.ToString());
         }
     }

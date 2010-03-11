@@ -38,6 +38,7 @@ embed
 
 .Message
 {
+	overflow: hidden;
 	margin: 0em 0em 0.8em 0em;
 	padding: 0.8em 0.8em 0em 0.8em;
 	-moz-border-radius: 0.5em;

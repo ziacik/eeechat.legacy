@@ -452,10 +452,11 @@ namespace KolikSoftware.Eee.Client
             this.FirstGetMessages = true;
             InitializeComponent();
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
+            this.OutlookService = new OutlookService();
         }
 
         public IEeeService Service { get; set; }
-
+        public IEeeService OutlookService { get; set; } //TODO: Remove
 
         #region Public
         #region Invoke Core
@@ -539,6 +540,7 @@ namespace KolikSoftware.Eee.Client
         public void Connect(string login, SecureString password)
         {
             DoConnect(0, login, password);
+            this.OutlookService.Connect(login, password); //TODO: Remove
         }
 
         void DoConnect(int sleepSecs, string login, SecureString password)
@@ -566,6 +568,7 @@ namespace KolikSoftware.Eee.Client
         public void Disconnect(bool force)
         {
             DoDisconnect(0, force);
+            this.OutlookService.Disconnect(); //TODO: Remove
         }
 
         void DoDisconnect(int sleepSecs, bool force)
@@ -658,12 +661,14 @@ namespace KolikSoftware.Eee.Client
         public IList<Post> GetMessages()
         {
             DoGetMessages(0, 0);
+            DoGetMessagesOutlook(0, 0);
             return null;
         }
 
         public IList<Post> GetMessagesSafe()
         {
             DoGetMessagesSafe(0, false);
+            //DoGetMessagesOutlookSafe(0, 0);
             return null;
         }
 
@@ -709,6 +714,48 @@ namespace KolikSoftware.Eee.Client
                 }
             );
         }
+
+        void DoGetMessagesOutlook(int sleepSecs, int retryNo)
+        {
+            QueryInBackground(
+                sleepSecs,
+                () =>
+                {
+                    return this.OutlookService.GetMessages();
+                },
+                r =>
+                {
+                    IList<Post> posts = (IList<Post>)r;
+                    this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
+                    AddPostsToBrowser(posts);
+                    //TODO:DoGetMessagesOutlook(this.Service.Configuration.MessageGetInterval, 0);
+                    DoGetMessagesOutlook(0, 0);
+                },
+                e =>
+                {
+                    /*if (IsConnectionProblem(e))
+                    {
+                        /// In case this is a "Connection Problem", switch to safe mode.
+                        /// If success, return to normal mode.
+                        //DoGetMessagesOutlookSafe(this.Service.Configuration.MessageGetInterval, true);
+                    }
+                    else
+                    {*/
+                        OnErrorOccured(new ErrorOccuredEventArgs(e));
+
+                        int delay;
+
+                        if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
+                            delay = this.Service.Configuration.MessageGetInstantRetryDelay;
+                        else
+                            delay = this.Service.Configuration.MessageGetRetryDelay;
+
+                        DoGetMessagesOutlook(delay, retryNo + 1);
+                    //}
+                }
+            );
+        }
+
 
         void AddPostsToBrowser(IList<Post> posts)
         {
@@ -815,7 +862,13 @@ namespace KolikSoftware.Eee.Client
 
             InvokeInBackground(
                 sleepSecs,
-                () => this.Service.SendMessage(room, recipient, message),
+                () => 
+                {
+                    if (recipient != null && recipient.Login.Contains("@"))
+                        this.OutlookService.SendMessage(room, recipient, message);
+                    else
+                        this.Service.SendMessage(room, recipient, message);
+                },
                 r =>
                 {
                     browserPlugin.SetPostSent(post);

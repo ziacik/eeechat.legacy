@@ -185,14 +185,14 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             if (textToSend == "reload")
             {
                 this.Form.GetPlugin<BrowserPlugin>().Reload();
-                //return;
+                return;
             }
 #endif
 
             if (!string.IsNullOrEmpty(textToSend))
             {
                 string recipientName = ParseRecipient(ref textToSend);
-                
+
                 User recipient = GetRecipient(recipientName);
                 Room room = this.Form.GetPlugin<RoomStatePlugin>().SelectedRoom;
 

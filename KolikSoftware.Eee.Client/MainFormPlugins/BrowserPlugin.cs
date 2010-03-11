@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using KolikSoftware.Eee.Service.Domain;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
@@ -98,11 +99,15 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public bool HadRef { get; set; }
 
+        static readonly Regex TextRecipientRegex = new Regex(@"^(\w+):", RegexOptions.Compiled | RegexOptions.Singleline);
+
         public void AddMessage(Post post, bool initial, bool noResolve)
         {
             //TODO:
             if (!initial && post.From.Login == this.Form.Service.CurrentUser.Login && post.GlobalId == "TEST")
                 return;
+
+            Post postToAdd = post;
 
             if (!noResolve)
             {
@@ -110,170 +115,156 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 this.Form.GetPlugin<SmileFinder>().FindSmilesInPost(post);
             }
 
-            int postIndex = this.AllPosts.Count - 1;
-            DateTime timeThreshold = post.Sent.AddMinutes(-5);
+            string conversationRecipient = null;
 
-            Post referencePost = null;
-
-            while (postIndex >= 0)
+            if (post.To != null)
             {
-                referencePost = this.AllPosts[postIndex];
+                conversationRecipient = post.To.Login;
+            }
+            else
+            {
+                Match match = TextRecipientRegex.Match(post.Text);
 
-                if (referencePost.Sent < timeThreshold)
+                if (match.Success)
+                    conversationRecipient = match.Groups[1].Value;
+            }
+
+            if (conversationRecipient != null)
+            {
+                /*User recipient = post.To;
+
+                if (recipient == null)
+                    recipient = this.Form.GetPlugin<UserStatePlugin>().GetUser(conversationRecipient);
+
+                if (recipient == null)
+                    recipient = new User { Login = conversationRecipient };*/
+
+                Conversation conversation = new Conversation
                 {
-                    referencePost = null;
-                    break;
-                }
+                    From = post.From,
+                    GlobalId = post.GlobalId,
+                    Id = post.Id,
+                    Room = post.Room,
+                    Sent = post.Sent,
+                    Text = post.Text,
+                    To = post.To
+                };
 
-                /*if (referencePost is MultiPost)
+                conversation.Participants.Add(post.From.Login);
+                conversation.Participants.Add(conversationRecipient);
+                conversation.Posts.Add(post);
+
+                postToAdd = conversation;
+            }
+
+            int postIndex = this.AllPosts.Count - 1;
+            DateTime timeThreshold = postToAdd.Sent.AddMinutes(-5);
+
+            Conversation referenceConversation = null;
+
+            if (postToAdd is Conversation)
+            {
+                while (postIndex >= 0)
                 {
-                    MultiPost multiPost = (MultiPost)referencePost;
+                    Post referencePost = this.AllPosts[postIndex];
+                    postIndex--;
 
-                    if (post.ToLogin == multiPost.ToLogin && post.Room.Name == multiPost.Room.Name)
+                    if (referencePost.Sent < timeThreshold)
+                        break;
+
+                    Conversation conversation = referencePost as Conversation;
+
+                    if (conversation == null)
+                        continue;
+
+                    bool isReferencePrivate = conversation.To != null;
+                    bool isPostPrivate = postToAdd.To != null;
+
+                    if (isReferencePrivate == isPostPrivate && conversation.Room.Name == postToAdd.Room.Name)
                     {
-                        if (post.Text.StartsWith(multiPost.Posts[0].From.Login + ":")
-                            || post.Text.StartsWith(multiPost.Posts[1].From.Login + ":"))
+                        if (conversation.Participants.Contains(conversationRecipient))
                         {
-                            if (multiPost.Posts.Count == 8) //TODO: Max configurable
-                                referencePost = null;
+                            if (conversation.Posts.Count < 8) //TODO: make configurable
+                                referenceConversation = conversation;
 
                             break;
                         }
                     }
                 }
-                else */
-                if (post.Room.Name == referencePost.Room.Name)
-                {
-                    string referenceFrom;
-                    string referenceTo;
-
-                    if (referencePost.From.Login == post.From.Login)
-                    {
-                        referenceFrom = referencePost.ToLogin;
-                        referenceTo = referencePost.From.Login;
-                    }
-                    else
-                    {
-                        referenceFrom = referencePost.From.Login;
-                        referenceTo = referencePost.ToLogin;
-                    }
-
-                    bool privateDialog = post.ToLogin == referenceFrom;
-
-                    if (!privateDialog)
-                    {
-
-                    }
-
-                    bool publicDialog = !privateDialog && (post.Text.StartsWith(referencePost.From.Login + ":") || referencePost.Text.StartsWith(post.From.Login + ":"));
-
-                    if (privateDialog || publicDialog)
-                        break;
-                }
-
-                postIndex--;
             }
 
-            if (referencePost != null)
+            if (referenceConversation != null)
             {
                 this.HadRef = true;
 
-                GeckoElement referenceElement = this.ElementsByPost[referencePost];
+                GeckoElement referenceElement = this.ElementsByPost[referenceConversation];
                 referenceElement.Parent.RemoveChild(referenceElement);
-                this.ElementsByPost.Remove(referencePost);
-                this.AllPosts.Remove(referencePost);
 
-                MultiPost multiPost = referencePost as MultiPost;
+                Conversation conversation = (Conversation)postToAdd;
+                referenceConversation.Posts.AddRange(conversation.Posts);
 
-                if (multiPost == null)
-                {
-                    multiPost = new MultiPost();
-                    multiPost.Posts.Add(referencePost);
-                    multiPost.From = referencePost.From;
-                    multiPost.Room = referencePost.Room;
-                    multiPost.Text = "<b>" + referencePost.From.Login + "</b>: " + referencePost.Text;
-                    multiPost.To = referencePost.To;
-                }
+                referenceConversation.Participants.Add(conversation.From.Login);
+                referenceConversation.Sent = conversation.Sent;
+                referenceConversation.Text += Environment.NewLine + "-" + Environment.NewLine + "<b>" + conversation.From.Login + "</b>: " + conversation.Text;
 
-                multiPost.Posts.Add(post);
-                multiPost.Sent = post.Sent;
-                multiPost.Text = multiPost.Text + Environment.NewLine + "-" + Environment.NewLine + "<b>" + post.From.Login + "</b>: " + post.Text;
-
-                GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
-
-                if (multiPost.To != null)
-                    messageDiv.ClassName = "Message Private";
-                else
-                    messageDiv.ClassName = "Message Public";
-
-                string html = MultiPostToHtml(multiPost);
-
-                messageDiv.InnerHtml = html;
-
-                this.Browser.Document.Body.AppendChild(messageDiv);
-
-                this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
-
-                this.AllPosts.Add(multiPost);
-                this.ElementsByPost[multiPost] = messageDiv;
-                this.ElementsByPost[referencePost] = messageDiv;
-                this.ElementsByPost[post] = messageDiv;
-
-                return;
-            }
-
-            Post appendToPost = null;
-
-            if (this.AllPosts.Count > 0)
-            {
-                appendToPost = this.AllPosts[this.AllPosts.Count - 1];
-
-                string appendToPostRecipient = appendToPost.To != null ? appendToPost.To.Login : null;
-                string postRecipient = post.To != null ? post.To.Login : null;
-
-                if (appendToPost.From.Login != post.From.Login
-                    || appendToPostRecipient != postRecipient
-                    || appendToPost.Room.Name != post.Room.Name
-                    || appendToPost is MultiPost)
-                    appendToPost = null;
-            }
-
-            if (appendToPost != null)
-            {
-                GeckoElement messageDiv = (GeckoElement)this.Browser.Document.Body.LastChild;
-
-                post.Text = appendToPost.Text + Environment.NewLine + "-" + Environment.NewLine + post.Text;
-
-                string html = PostToHtml(post);
-
-                messageDiv.InnerHtml = html;
-
-                //TODO: to treba inac, lebo toto urobi viacnasobny resolve pri appende.
-                this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
-
-                this.AllPosts[this.AllPosts.Count - 1] = post;
-                this.ElementsByPost[post] = messageDiv;
+                postToAdd = referenceConversation;
             }
             else
             {
-                GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
+                Post appendToPost = null;
 
-                if (post.To != null)
-                    messageDiv.ClassName = "Message Private";
-                else
-                    messageDiv.ClassName = "Message Public";
+                if (this.AllPosts.Count > 0)
+                {
+                    appendToPost = this.AllPosts[this.AllPosts.Count - 1];
 
-                string html = PostToHtml(post);
+                    string appendToPostRecipient = appendToPost.To != null ? appendToPost.To.Login : null;
+                    string postRecipient = postToAdd.ToLogin;
 
-                messageDiv.InnerHtml = html;
+                    if (appendToPost.From.Login != postToAdd.From.Login
+                        || appendToPostRecipient != postRecipient
+                        || appendToPost.Room.Name != postToAdd.Room.Name
+                        || appendToPost is Conversation)
+                        appendToPost = null;
+                }
 
-                this.Browser.Document.Body.AppendChild(messageDiv);
+                if (appendToPost != null)
+                {
+                    GeckoElement referenceElement = this.ElementsByPost[appendToPost];
+                    referenceElement.Parent.RemoveChild(referenceElement);
 
-                this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, post);
-
-                this.AllPosts.Add(post);
-                this.ElementsByPost[post] = messageDiv;
+                    appendToPost.Text = appendToPost.Text + Environment.NewLine + "-" + Environment.NewLine + postToAdd.Text;
+                    postToAdd = appendToPost;
+                }
             }
+
+            GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
+
+            if (postToAdd.To != null)
+                messageDiv.ClassName = "Message Private";
+            else
+                messageDiv.ClassName = "Message Public";
+
+            string html = PostToHtml(postToAdd);
+
+            messageDiv.InnerHtml = html;
+
+            this.Browser.Document.Body.AppendChild(messageDiv);
+
+            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, postToAdd);
+
+            if (postToAdd == post)
+            {
+                this.AllPosts.Add(post);
+            }
+            else
+            {
+                this.AllPosts.Remove(postToAdd);
+                this.AllPosts.Add(postToAdd);
+            }
+
+            /// Must use original so that we are able to use SetPostSent.
+            this.ElementsByPost[post] = messageDiv;
+            this.ElementsByPost[postToAdd] = messageDiv;
         }
 
         public void SetPostPending(Post post)
@@ -314,28 +305,32 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
         }
 
-        string MultiPostToHtml(MultiPost multiPost)
+        string ConversationToHtml(Conversation conversation)
         {
-            Post post1 = multiPost.Posts[0];
-            Post post2 = multiPost.Posts[1];
+            string participant1 = conversation.Participants.ElementAt<string>(0);
+            string participant2 = conversation.Participants.ElementAt<string>(1);
+            User user1 = this.Form.GetPlugin<UserStatePlugin>().GetUser(participant1);
+            User user2 = this.Form.GetPlugin<UserStatePlugin>().GetUser(participant2);
+            int color1 = user1 != null ? user1.Color : 0;
+            int color2 = user2 != null ? user2.Color : 0;
 
             StringBuilder builder = new StringBuilder(this.DialogTemplate);
-            builder.Replace("[AvatarUrl1]", "http://www.eeechat.net/Avatars/" + post1.From.Login);
-            builder.Replace("[AvatarUrl2]", "http://www.eeechat.net/Avatars/" + post2.From.Login);
-            builder.Replace("[UserName1]", post1.From.Login);
-            builder.Replace("[UserName2]", post2.From.Login);
-            builder.Replace("[Time]", multiPost.Sent.ToShortTimeString());
-            builder.Replace("[Text]", multiPost.Text.Replace("\n", "<br />"));
-            builder.Replace("[UserColorHex1]", "#" + post1.From.Color.ToString("x6"));
-            builder.Replace("[UserColorHex2]", "#" + post2.From.Color.ToString("x6"));
+            builder.Replace("[AvatarUrl1]", "http://www.eeechat.net/Avatars/" + participant1);
+            builder.Replace("[AvatarUrl2]", "http://www.eeechat.net/Avatars/" + participant2);
+            builder.Replace("[UserName1]", participant1);
+            builder.Replace("[UserName2]", participant2);
+            builder.Replace("[Time]", conversation.Sent.ToShortTimeString());
+            builder.Replace("[Text]", conversation.Text.Replace("\n", "<br />"));
+            builder.Replace("[UserColorHex1]", "#" + color1.ToString("x6"));
+            builder.Replace("[UserColorHex2]", "#" + color2.ToString("x6"));
 
             string roomDelimiter;
             string room;
 
-            if (multiPost.Room.Name != "Pokec")
+            if (conversation.Room.Name != "Pokec")
             {
                 roomDelimiter = "in";
-                room = multiPost.Room.Name;
+                room = conversation.Room.Name;
             }
             else
             {
@@ -352,32 +347,39 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         string PostToHtml(Post post)
         {
-            StringBuilder builder = new StringBuilder(this.MessageTemplate);
-            builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login);
-            builder.Replace("[UserName]", post.From.Login);
-            builder.Replace("[Time]", post.Sent.ToShortTimeString());
-            builder.Replace("[Text]", post.Text.Replace("\n", "<br />"));
-            builder.Replace("[UserColorHex]", "#" + post.From.Color.ToString("x6"));
-
-            string roomDelimiter;
-            string room;
-
-            if (post.Room.Name != "Pokec")
+            if (post is Conversation)
             {
-                roomDelimiter = "in";
-                room = post.Room.Name;
+                return ConversationToHtml((Conversation)post);
             }
             else
             {
-                roomDelimiter = "";
-                room = "";
+                StringBuilder builder = new StringBuilder(this.MessageTemplate);
+                builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login);
+                builder.Replace("[UserName]", post.From.Login);
+                builder.Replace("[Time]", post.Sent.ToShortTimeString());
+                builder.Replace("[Text]", post.Text.Replace("\n", "<br />"));
+                builder.Replace("[UserColorHex]", "#" + post.From.Color.ToString("x6"));
+
+                string roomDelimiter;
+                string room;
+
+                if (post.Room.Name != "Pokec")
+                {
+                    roomDelimiter = "in";
+                    room = post.Room.Name;
+                }
+                else
+                {
+                    roomDelimiter = "";
+                    room = "";
+                }
+
+                builder.Replace("[RoomInfoDelimiter]", roomDelimiter);
+                builder.Replace("[Room]", room);
+
+                string html = builder.ToString();
+                return html;
             }
-
-            builder.Replace("[RoomInfoDelimiter]", roomDelimiter);
-            builder.Replace("[Room]", room);
-
-            string html = builder.ToString();
-            return html;
         }
 
         void SetupProxy()

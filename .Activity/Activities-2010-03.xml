@@ -2700,7 +2700,99 @@
     <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
     <ItemName>OutlookService.cs</ItemName>
     <StartTime>2010-03-11T12:47:00+01:00</StartTime>
-    <EndTime>2010-03-11T13:01:00+01:00</EndTime>
+    <EndTime>2010-03-11T13:09:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>42499537-f136-4465-81a4-466642e76bc2</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <StartTime>2010-03-11T14:00:00+01:00</StartTime>
+    <EndTime>2010-03-11T14:01:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>b23ab2ca-b571-4cfe-95e5-0a6e6fa6e487</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Service</ProjectName>
+    <ItemName>Domain\Conversation.cs</ItemName>
+    <StartTime>2010-03-11T14:01:00+01:00</StartTime>
+    <EndTime>2010-03-11T14:03:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>b090105e-e111-4d50-bc53-0147d7723a3d</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-11T14:03:00+01:00</StartTime>
+    <EndTime>2010-03-11T14:27:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>f2222938-b173-4e66-bd07-49176b43c590</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
+    <ItemName>OutlookService.cs</ItemName>
+    <StartTime>2010-03-11T14:27:00+01:00</StartTime>
+    <EndTime>2010-03-11T14:32:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>036291ff-4192-4531-be9c-efbf8f68c9c5</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>BackgroundServiceController.cs</ItemName>
+    <StartTime>2010-03-11T15:35:00+01:00</StartTime>
+    <EndTime>2010-03-11T15:37:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>818ce0c9-0caf-444b-b020-6c055e3558cd</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
+    <ItemName>OutlookService.cs</ItemName>
+    <StartTime>2010-03-11T15:37:00+01:00</StartTime>
+    <EndTime>2010-03-11T15:38:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>9ee77699-e7d3-4169-acfc-f7f19906e3f9</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>BackgroundServiceController.cs</ItemName>
+    <StartTime>2010-03-11T15:38:00+01:00</StartTime>
+    <EndTime>2010-03-11T15:45:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>363f1da4-2f54-4019-9d6a-ef5e19244af2</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-11T15:45:00+01:00</StartTime>
+    <EndTime>2010-03-11T16:34:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>d0d7265e-a55b-499f-bc91-9ec41d8d7eb4</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-11T16:35:00+01:00</StartTime>
+    <EndTime>2010-03-11T16:58:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>f0a99fd8-edcd-4411-96d4-92a17c540b09</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <StartTime>2010-03-11T16:58:00+01:00</StartTime>
+    <EndTime>2010-03-11T16:59:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>fce0c6b8-d647-4b49-8fb3-5785dd1613d2</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-11T16:59:00+01:00</StartTime>
+    <EndTime>2010-03-11T17:00:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>924e7646-fd76-444b-ab33-795f18368173</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
+    <ItemName>OutlookService.cs</ItemName>
+    <StartTime>2010-03-11T17:00:00+01:00</StartTime>
+    <EndTime>2010-03-11T17:03:00+01:00</EndTime>
   </Activity>
   <Solution>
     <SolutionName>EeeClient</SolutionName>
@@ -2872,5 +2964,9 @@
   <Item>
     <ItemName>MainForm.Designer.cs</ItemName>
     <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+  </Item>
+  <Item>
+    <ItemName>Domain\Conversation.cs</ItemName>
+    <ProjectName>KolikSoftware.Eee.Service</ProjectName>
   </Item>
 </ActivityDataSet>

@@ -5,13 +5,15 @@ using System.Text;
 
 namespace KolikSoftware.Eee.Service.Domain
 {
-    public class MultiPost : Post
+    public class Conversation : Post
     {
+        public HashSet<string> Participants { get; set; }
         public List<Post> Posts { get; private set; }
 
-        public MultiPost()
+        public Conversation()
         {
             this.Posts = new List<Post>();
+            this.Participants = new HashSet<string>();
         }
     }
 }

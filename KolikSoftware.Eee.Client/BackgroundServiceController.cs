@@ -766,6 +766,8 @@ namespace KolikSoftware.Eee.Client
 
                 foreach (Post post in posts)
                 {
+                    post.Sent = post.Sent.ToLocalTime();
+
                     /// The notification is added when the post is not from me, and the room is not ignored, and the user is not ignored.
                     /// If the NotifyAboutIgnoredPersonalMessages is set, also show the notification if the room or user is ignored, but it is for me personally.
                     bool fromMe = post.From.Login == this.Service.CurrentUser.Login;
@@ -845,13 +847,17 @@ namespace KolikSoftware.Eee.Client
 
             if (post == null)
             {
+                //TODO: Review
+                if (recipient != null && message.StartsWith(recipient.Login + ":"))
+                    message = message.Substring(recipient.Login.Length + 1).Trim();
+
                 post = new Post()
                 {
                     From = this.Service.CurrentUser,
                     GlobalId = Guid.NewGuid().ToString(),
                     Room = room,
                     To = recipient,
-                    Sent = DateTime.Now.AddHours(-1), //TODO: remove -1
+                    Sent = DateTime.Now,
                     Text = HttpUtility.HtmlEncode(message)
                 };
 

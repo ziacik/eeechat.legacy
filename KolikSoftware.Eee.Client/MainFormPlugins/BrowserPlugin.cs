@@ -116,6 +116,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             }
 
             string conversationRecipient = null;
+            string conversationSender = post.From.Login;
 
             if (post.To != null)
             {
@@ -182,7 +183,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                     if (isReferencePrivate == isPostPrivate && conversation.Room.Name == postToAdd.Room.Name)
                     {
-                        if (conversation.Participants.Contains(conversationRecipient))
+                        if (conversation.Participants.Contains(conversationRecipient) && conversation.Participants.Contains(conversationSender))
                         {
                             if (conversation.Posts.Count < 8) //TODO: make configurable
                                 referenceConversation = conversation;
@@ -209,7 +210,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                 postToAdd = referenceConversation;
             }
-            else
+            else if (!(postToAdd is Conversation))
             {
                 Post appendToPost = null;
 

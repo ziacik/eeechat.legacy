@@ -2794,6 +2794,30 @@
     <StartTime>2010-03-11T17:00:00+01:00</StartTime>
     <EndTime>2010-03-11T17:03:00+01:00</EndTime>
   </Activity>
+  <Activity>
+    <ActivityId>d3fbe042-dd04-4e4b-ae23-2f0eedd4d920</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
+    <ItemName>OutlookService.cs</ItemName>
+    <StartTime>2010-03-12T10:38:00+01:00</StartTime>
+    <EndTime>2010-03-12T10:43:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>d0a48b74-6b2c-47e8-85d5-8d61a08a21cc</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.OutlookService</ProjectName>
+    <ItemName>OutlookService.cs</ItemName>
+    <StartTime>2010-03-12T10:50:00+01:00</StartTime>
+    <EndTime>2010-03-12T11:42:00+01:00</EndTime>
+  </Activity>
+  <Activity>
+    <ActivityId>bda9921b-adeb-4510-b4fc-8e0938aa6df9</ActivityId>
+    <SolutionName>EeeClient</SolutionName>
+    <ProjectName>KolikSoftware.Eee.Client</ProjectName>
+    <ItemName>MainFormPlugins\BrowserPlugin.cs</ItemName>
+    <StartTime>2010-03-12T11:42:00+01:00</StartTime>
+    <EndTime>2010-03-12T11:51:00+01:00</EndTime>
+  </Activity>
   <Solution>
     <SolutionName>EeeClient</SolutionName>
   </Solution>

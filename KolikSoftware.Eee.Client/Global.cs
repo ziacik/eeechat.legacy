@@ -6,6 +6,7 @@ using System.Timers;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.Win32;
+using KolikSoftware.Eee.Client.PluginCore;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -25,8 +26,8 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        public IEeeService CreateService()
-        {
+        public void InitServices()
+        {            
             ProxySettings proxySettings = new ProxySettings();
             proxySettings.Server = Properties.Settings.Default.ProxyServer;
             proxySettings.Domain = Properties.Settings.Default.ProxyDomain;
@@ -34,10 +35,13 @@ namespace KolikSoftware.Eee.Client
             proxySettings.Password = Properties.Settings.Default.ProxyPassword;
             proxySettings.NoCredentials = Properties.Settings.Default.ProxyUser.Trim().Length == 0;
 
-            IEeeService service = new EeeJsonService();
-            service.Configuration.ServiceUrl = Properties.Settings.Default.ServiceUrl;
-            service.ProxySettings = proxySettings;
-            return service;
+            foreach (IEeeService service in PluginHelper.Services)
+            {
+                if (service.Configuration != null)
+                    service.Configuration.ServiceUrl = Properties.Settings.Default.NewServiceUrl;
+
+                service.ProxySettings = proxySettings;
+            }
 
             /*
             if (Properties.Settings.Default.ServiceUrl.ToLower().Contains("bind"))

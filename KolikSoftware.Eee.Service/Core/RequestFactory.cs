@@ -37,8 +37,8 @@ namespace KolikSoftware.Eee.Service.Core
 
             request.ProtocolVersion = HttpVersion.Version11;
             request.AllowAutoRedirect = false;
-            request.ServicePoint.Expect100Continue = false;
-            request.ServicePoint.UseNagleAlgorithm = false;
+            //request.ServicePoint.Expect100Continue = false;
+            //request.ServicePoint.UseNagleAlgorithm = false;
 
             return request;
         }

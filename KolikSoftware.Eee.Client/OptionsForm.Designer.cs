@@ -229,7 +229,7 @@ namespace KolikSoftware.Eee.Client
             this.serviceAddressText.Name = "serviceAddressText";
             this.serviceAddressText.Size = new System.Drawing.Size(284, 20);
             this.serviceAddressText.TabIndex = 0;
-            this.serviceAddressText.Text = global::KolikSoftware.Eee.Client.Properties.Settings.Default.ServiceUrl;
+            this.serviceAddressText.Text = global::KolikSoftware.Eee.Client.Properties.Settings.Default.NewServiceUrl;
             // 
             // notificationsGroupBox
             // 

@@ -145,6 +145,9 @@ namespace KolikSoftware.Eee.Service
 
         public void SendMessage(Room room, User recipient, string message)
         {
+            if (recipient != null && recipient.Login.IndexOf('@') < 0)
+                return;
+
             if (message.StartsWith(recipient.Login + ":"))
                 message = message.Substring(recipient.Login.Length + 1).Trim();
 

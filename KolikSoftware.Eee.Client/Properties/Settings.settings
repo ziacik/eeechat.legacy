@@ -65,9 +65,6 @@
     <Setting Name="LatestUpdateNo" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ServiceUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://www.koliksoftware.net/Service/Json</Value>
-    </Setting>
     <Setting Name="ToolStripSettings" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -85,6 +82,9 @@
     </Setting>
     <Setting Name="JabberPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NewServiceUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://comet.service.eeechat.net</Value>
     </Setting>
   </Settings>
 </SettingsFile>

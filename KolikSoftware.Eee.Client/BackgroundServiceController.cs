@@ -14,6 +14,7 @@ using KolikSoftware.Eee.Service.Exceptions;
 using KolikSoftware.Eee.Service.Domain;
 using KolikSoftware.Eee.Client.MainFormPlugins;
 using KolikSoftware.Eee.Client.Notifications;
+using KolikSoftware.Eee.Client.PluginCore;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -37,7 +38,7 @@ namespace KolikSoftware.Eee.Client
         {
             get
             {
-                return this.Service.Configuration;
+                return PluginHelper.Services[0].Configuration;
             }
         }
 
@@ -45,13 +46,21 @@ namespace KolikSoftware.Eee.Client
         {
             get
             {
-                return this.Service.CurrentUser;
+                return PluginHelper.Services[0].CurrentUser;
+            }
+        }
+
+        void DoForAllServices(Action<IEeeService> a)
+        {
+            foreach (IEeeService service in PluginHelper.Services)
+            {
+                a(service);
             }
         }
 
         public void CommitMessage(Post message)
         {
-            this.Service.CommitMessage(message);
+            DoForAllServices(s => s.CommitMessage(message));
         }
 
         #region Events
@@ -452,11 +461,7 @@ namespace KolikSoftware.Eee.Client
             this.FirstGetMessages = true;
             InitializeComponent();
             this.Workers = new Dictionary<BackgroundWorker, InvokeInfo>();
-            this.OutlookService = new OutlookService();
         }
-
-        public IEeeService Service { get; set; }
-        public IEeeService OutlookService { get; set; } //TODO: Remove
 
         #region Public
         #region Invoke Core
@@ -539,15 +544,14 @@ namespace KolikSoftware.Eee.Client
 
         public void Connect(string login, SecureString password)
         {
-            DoConnect(0, login, password);
-            this.OutlookService.Connect(login, password); //TODO: Remove
+            DoForAllServices(s => DoConnect(s, 0, login, password));
         }
 
-        void DoConnect(int sleepSecs, string login, SecureString password)
+        void DoConnect(IEeeService service, int sleepSecs, string login, SecureString password)
         {
             InvokeInBackground(
                 sleepSecs,
-                () => this.Service.Connect(login, password),
+                () => service.Connect(login, password),
                 r => OnConnected(ConnectedEventArgs.Empty),
                 e =>
                 {
@@ -559,7 +563,7 @@ namespace KolikSoftware.Eee.Client
                     {
                         OnErrorOccured(new ErrorOccuredEventArgs(e));
                         /// Try reconnecting in 30 secs.
-                        DoConnect(30, login, password);
+                        DoConnect(service, 30, login, password);
                     }
                 }
             );
@@ -567,18 +571,16 @@ namespace KolikSoftware.Eee.Client
 
         public void Disconnect(bool force)
         {
-            DoDisconnect(0, force);
-            this.OutlookService.Disconnect(); //TODO: Remove
+            DoForAllServices(s => DoDisconnect(s, 0, force));
         }
 
-        void DoDisconnect(int sleepSecs, bool force)
+        void DoDisconnect(IEeeService service, int sleepSecs, bool force)
         {
-            CheckUser();
             //RemoveInvocations();
 
             InvokeInBackground(
                 sleepSecs,
-                () => this.Service.Disconnect(),
+                () => service.Disconnect(),
                 r => OnDisconnected(DisconnectedEventArgs.Empty),
                 e =>
                 {
@@ -589,7 +591,7 @@ namespace KolikSoftware.Eee.Client
                     else
                     {
                         OnErrorOccured(new ErrorOccuredEventArgs(e));
-                        DoDisconnect(3, force);
+                        DoDisconnect(service, 3, force);
                     }
                 }
             );
@@ -597,15 +599,15 @@ namespace KolikSoftware.Eee.Client
 
         public IList<User> GetUsers()
         {
-            DoGetUsers(0);
+            DoForAllServices(s => DoGetUsers(s, 0));
             return null;
         }
 
-        void DoGetUsers(int sleepSecs)
+        void DoGetUsers(IEeeService service, int sleepSecs)
         {
             QueryInBackground(
                 sleepSecs,
-                () => this.Service.GetUsers(),
+                () => service.GetUsers(),
                 r =>
                 {
                     IList<User> users = (IList<User>)r;
@@ -615,22 +617,22 @@ namespace KolikSoftware.Eee.Client
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
-                    DoGetUsers(3);
+                    DoGetUsers(service, 3);
                 }
             );
         }
 
         public IList<Room> GetRooms()
         {
-            DoGetRooms(0);
+            DoForAllServices(s => DoGetRooms(s, 0));
             return null;
         }
 
-        void DoGetRooms(int sleepSecs)
+        void DoGetRooms(IEeeService service, int sleepSecs)
         {
             QueryInBackground(
                 sleepSecs,
-                () => this.Service.GetRooms(),
+                () => service.GetRooms(),
                 r => 
                 {
                     IList<Room> rooms = (IList<Room>)r;
@@ -640,7 +642,7 @@ namespace KolikSoftware.Eee.Client
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
-                    DoGetRooms(3);
+                    DoGetRooms(service, 3);
                 }
             );
         }
@@ -660,35 +662,33 @@ namespace KolikSoftware.Eee.Client
 
         public IList<Post> GetMessages()
         {
-            DoGetMessages(0, 0);
-            DoGetMessagesOutlook(0, 0);
+            DoForAllServices(s => DoGetMessages(s, 0, 0));
             return null;
         }
 
         public IList<Post> GetMessagesSafe()
         {
-            DoGetMessagesSafe(0, false);
-            //DoGetMessagesOutlookSafe(0, 0);
+            DoForAllServices(s => DoGetMessagesSafe(s, 0, false));
             return null;
         }
 
-        void DoGetMessages(int sleepSecs, int retryNo)
+        void DoGetMessages(IEeeService service, int sleepSecs, int retryNo)
         {
             QueryInBackground(
                 sleepSecs,
                 () => 
                 {
-                    return this.Service.GetMessages();
+                    return service.GetMessages();
                 },
                 r => 
                 {
                     IList<Post> posts = (IList<Post>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
-                    AddPostsToBrowser(posts);
+                    AddPostsToBrowser(service, posts);
                     this.FirstGetMessages = false;
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
-                    DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
+                    DoGetMessages(service, service.Configuration.MessageGetInterval, 0);
                 },
                 e =>
                 {
@@ -696,7 +696,7 @@ namespace KolikSoftware.Eee.Client
                     {
                         /// In case this is a "Connection Problem", switch to safe mode.
                         /// If success, return to normal mode.
-                        DoGetMessagesSafe(this.Service.Configuration.MessageGetInterval, true);
+                        DoGetMessagesSafe(service, service.Configuration.MessageGetInterval, true);
                     }
                     else
                     {
@@ -704,60 +704,18 @@ namespace KolikSoftware.Eee.Client
 
                         int delay;
 
-                        if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
-                            delay = this.Service.Configuration.MessageGetInstantRetryDelay;
+                        if (service.Configuration.MessageGetInstantRetryCount > retryNo)
+                            delay = service.Configuration.MessageGetInstantRetryDelay;
                         else
-                            delay = this.Service.Configuration.MessageGetRetryDelay;
+                            delay = service.Configuration.MessageGetRetryDelay;
 
-                        DoGetMessages(delay, retryNo + 1);
+                        DoGetMessages(service, delay, retryNo + 1);
                     }
                 }
             );
         }
 
-        void DoGetMessagesOutlook(int sleepSecs, int retryNo)
-        {
-            QueryInBackground(
-                sleepSecs,
-                () =>
-                {
-                    return this.OutlookService.GetMessages();
-                },
-                r =>
-                {
-                    IList<Post> posts = (IList<Post>)r;
-                    this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
-                    AddPostsToBrowser(posts);
-                    //TODO:DoGetMessagesOutlook(this.Service.Configuration.MessageGetInterval, 0);
-                    DoGetMessagesOutlook(0, 0);
-                },
-                e =>
-                {
-                    /*if (IsConnectionProblem(e))
-                    {
-                        /// In case this is a "Connection Problem", switch to safe mode.
-                        /// If success, return to normal mode.
-                        //DoGetMessagesOutlookSafe(this.Service.Configuration.MessageGetInterval, true);
-                    }
-                    else
-                    {*/
-                        OnErrorOccured(new ErrorOccuredEventArgs(e));
-
-                        int delay;
-
-                        if (this.Service.Configuration.MessageGetInstantRetryCount > retryNo)
-                            delay = this.Service.Configuration.MessageGetInstantRetryDelay;
-                        else
-                            delay = this.Service.Configuration.MessageGetRetryDelay;
-
-                        DoGetMessagesOutlook(delay, retryNo + 1);
-                    //}
-                }
-            );
-        }
-
-
-        void AddPostsToBrowser(IList<Post> posts)
+        void AddPostsToBrowser(IEeeService service, IList<Post> posts)
         {
             if (posts.Count > 0)
             {
@@ -770,16 +728,16 @@ namespace KolikSoftware.Eee.Client
 
                     /// The notification is added when the post is not from me, and the room is not ignored, and the user is not ignored.
                     /// If the NotifyAboutIgnoredPersonalMessages is set, also show the notification if the room or user is ignored, but it is for me personally.
-                    bool fromMe = post.From.Login == this.Service.CurrentUser.Login;
+                    bool fromMe = post.From.Login == service.CurrentUser.Login;
                     //bool roomIgnored = IsRoomIgnored(post.Room.);
                     //bool userIgnored = IsUserIgnored(post.FromUserID);
                     //bool ignored = roomIgnored || userIgnored;
 
                     bool isPrivate = post.To != null;
-                    bool forMe = isPrivate && post.To.Login == this.Service.CurrentUser.Login;
+                    bool forMe = isPrivate && post.To.Login == service.CurrentUser.Login;
                     bool showForMe = forMe && Properties.Settings.Default.NotifyAboutIgnoredPersonalMessages;
 
-                    this.Service.CommitMessage(post);
+                    service.CommitMessage(post);
 
                     if (!this.Form.GetPlugin<CommandPostPlugin>().ProcessCommandPost(post))
                     {
@@ -799,42 +757,42 @@ namespace KolikSoftware.Eee.Client
             }
         }
 
-        void DoGetMessagesSafe(int sleepSecs, bool returnToNormalModeOnSuccess)
+        void DoGetMessagesSafe(IEeeService service, int sleepSecs, bool returnToNormalModeOnSuccess)
         {
             QueryInBackground(
                 sleepSecs,
                 () =>
                 {
-                    return this.Service.GetMessagesSafe();
+                    return service.GetMessagesSafe();
                 },
                 r =>
                 {
                     IList<Post> posts = (IList<Post>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsersToPosts(posts);
-                    AddPostsToBrowser(posts);
+                    AddPostsToBrowser(service, posts);
                     this.FirstGetMessages = false;
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
 
                     if (returnToNormalModeOnSuccess)
-                        DoGetMessages(this.Service.Configuration.MessageGetInterval, 0);
+                        DoGetMessages(service, service.Configuration.MessageGetInterval, 0);
                     else
-                        DoGetMessagesSafe(this.Service.Configuration.MessageGetSafeInterval, false);
+                        DoGetMessagesSafe(service, service.Configuration.MessageGetSafeInterval, false);
                 },
                 e =>
                 {
                     OnErrorOccured(new ErrorOccuredEventArgs(e));
-                    DoGetMessagesSafe(this.Service.Configuration.MessageGetSafeInterval, returnToNormalModeOnSuccess);
+                    DoGetMessagesSafe(service, service.Configuration.MessageGetSafeInterval, returnToNormalModeOnSuccess);
                 }
             );
         }
 
         public void SendMessage(Room room, User recipient, string message)
         {
-            DoSendMessage(0, room, recipient, message, null);
+            DoForAllServices(s => DoSendMessage(s, 0, room, recipient, message, null));
         }
 
-        void DoSendMessage(int retryNo, Room room, User recipient, string message, Post post)
+        void DoSendMessage(IEeeService service, int retryNo, Room room, User recipient, string message, Post post)
         {
             int sleepSecs = 0;
 
@@ -853,7 +811,7 @@ namespace KolikSoftware.Eee.Client
 
                 post = new Post()
                 {
-                    From = this.Service.CurrentUser,
+                    From = service.CurrentUser,
                     GlobalId = Guid.NewGuid().ToString(),
                     Room = room,
                     To = recipient,
@@ -870,10 +828,7 @@ namespace KolikSoftware.Eee.Client
                 sleepSecs,
                 () => 
                 {
-                    if (recipient != null && recipient.Login.Contains("@"))
-                        this.OutlookService.SendMessage(room, recipient, message);
-                    else
-                        this.Service.SendMessage(room, recipient, message);
+                    service.SendMessage(room, recipient, message);
                 },
                 r =>
                 {
@@ -889,7 +844,7 @@ namespace KolikSoftware.Eee.Client
                     else
                     {
                         OnErrorOccured(new ErrorOccuredEventArgs(e));
-                        DoSendMessage(retryNo + 1, room, recipient, message, post);
+                        DoSendMessage(service, retryNo + 1, room, recipient, message, post);
                     }
                 }
             );
@@ -897,41 +852,31 @@ namespace KolikSoftware.Eee.Client
 
         public void RegisterUser(string login, SecureString password, int color)
         {
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "RegisterUser", login, password, color);
         }
 
         public void SetAwayMode(string comment)
         {
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "SetAwayMode", comment);
         }
 
         public void ResetAwayMode()
         {
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "ResetAwayMode");
         }
 
 
         public void GetUpdates()
         {
-            CheckUser();
-            AddInvocation(InvocationScope.Receiver, InvocationType.Method, null, "GetUpdates", Properties.Settings.Default.LatestUpdateNo);
         }
 
         public void AddMessage(int roomId, string recipientLogin, string message)
         {
-            CheckUser();
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "AddMessage", roomId, recipientLogin, message, "");
         }
 
         public void SendFeedback(string from, string mail, string feedbackType, string description)
         {
-            AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "SendFeedback", from, mail, feedbackType, description);
         }
 
         public void DownloadFile(string link, string destinationDir)
         {
-            CheckUser();
-
             string fileName = link;
             int lastSlashIdx = fileName.LastIndexOf('/');
             fileName = fileName.Substring(lastSlashIdx + 1);
@@ -943,13 +888,10 @@ namespace KolikSoftware.Eee.Client
             //        return;
             //}
 
-            AddInvocation(InvocationScope.Download, InvocationType.Method, null, "DownloadFile", link, filePath);
         }
 
         public void UploadFile(string filePath, object parameter)
         {
-            CheckUser();
-            AddInvocation(InvocationScope.Upload, InvocationType.Method, null, "UploadFile", filePath, parameter);
         }
 
         public void AddReport(string name, string value)
@@ -958,436 +900,21 @@ namespace KolikSoftware.Eee.Client
         }
         #endregion
 
-        #region Public Helpers
-        //string basePath = Path.GetDirectoryName(Application.UserAppDataPath);
-
-        /// <summary>
-        /// Gets a path to save user data according to current user and context. User must be logged in.
-        /// </summary>
-        public string GetPathToSave(string context)
-        {
-            //if (this.CurrentUser == null)
-            //    throw new Exception("Current User not set.");
-            
-            //return Path.Combine(this.basePath, this.CurrentUser.Login + @"\" + context);
-            return null;
-        }
-        #endregion
-
-        #region Properties
-        //public int UploadInvocationsCount
-        //{
-        //    get
-        //    {
-        //        int pending = this.uploadInvocations.Count;
-                
-        //        if (this.uploadingWorker.IsBusy)
-        //            return pending + 1;
-        //        else
-        //            return pending;
-        //    }
-        //}
-
-        //public int DownloadInvocationsCount
-        //{
-        //    get
-        //    {
-        //        int pending = this.downloadInvocations.Count;
-
-        //        if (this.downloadingWorker.IsBusy)
-        //            return pending + 1;
-        //        else
-        //            return pending;
-        //    }
-        //}
-        #endregion
-
-        #region Private
-        private void CheckUser()
-        {
-            //if (this.CurrentUser == null)
-            //    throw new InvalidOperationException("The user is not logged.");
-        }
-
-        private object Invoke(InvocationParameters invocationParameters)
-        {
-            object result = null;
-
-            if (invocationParameters.InvocationType == InvocationType.Method)
-                result = typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.InvokeMethod, null, this.Service, invocationParameters.Arguments);
-            else
-                typeof(IEeeService).InvokeMember(invocationParameters.Name, BindingFlags.SetProperty, null, this.Service, invocationParameters.Arguments);
-
-            return result;
-        }
-
-        private void ProcessResult(InvocationParameters invocationParameters)
-        {
-            switch (invocationParameters.Name)
-            {
-                case "RegisterUser":
-                    ProcessRegisterUser(invocationParameters);
-                    break;
-                case "GetRooms":
-                    ProcessGetRooms(invocationParameters);
-                    break;
-                case "GetUsers":
-                    ProcessGetUsers(invocationParameters);
-                    break;
-                case "GetMessages":
-                    ProcessGetMessages(invocationParameters);
-                    break;
-                case "GetUpdates":
-                    ProcessGetUpdates(invocationParameters);
-                    break;
-                case "DownloadFile":
-                    ProcessDownloadFile(invocationParameters);
-                    break;
-                case "UploadFile":
-                    ProcessUploadFile(invocationParameters);
-                    break;
-            }
-        }
-
-        void ProcessRegisterUser(InvocationParameters invocationParameters)
-        {
-            if (invocationParameters.Result.Equals(true))
-                OnRegistered(RegisteredEventArgs.Empty);
-            else
-                OnRegisterFailed(RegisterFailedEventArgs.Empty);
-        }
-
-        void ProcessDownloadFile(InvocationParameters invocationParameters)
-        {
-            string link = (string)invocationParameters.Arguments[0];
-            string filePath = (string)invocationParameters.Arguments[1];
-
-            OnDownloadFinished(new DownloadFinishedEventArgs(filePath, link));
-        }
-
-        void ProcessDownloadFile(InvocationParameters invocationParameters, Exception error)
-        {
-            string link = (string)invocationParameters.Arguments[0];
-
-            OnDownloadFailed(new DownloadFailedEventArgs(link, error));
-        }
-
-        void ProcessUploadFile(InvocationParameters invocationParameters)
-        {
-            if (invocationParameters.Result != null)
-                OnUploadFinished(new UploadFinishedEventArgs((string)invocationParameters.Arguments[0], (string)invocationParameters.Result, invocationParameters.Arguments[1]));
-            else
-                OnUploadFailed(new UploadFailedEventArgs((string)invocationParameters.Arguments[0], new Exception("Internal Error at ProcessUploadFile.")));
-        }
-
-        void ProcessUploadFile(InvocationParameters invocationParameters, Exception error)
-        {
-            OnUploadFailed(new UploadFailedEventArgs((string)invocationParameters.Arguments[0], error));
-        }
-
-        void ProcessGetUpdates(InvocationParameters invocationParameters)
-        {
-            //using (EeeDataSet.UpdateDataTable updates = invocationParameters.Result as EeeDataSet.UpdateDataTable)
-            //{
-            //    if (updates.Count > 0)
-            //        OnUpdatesAvailable(new UpdatesAvailableEventArgs(updates));
-            //}
-        }
-
-        void ProcessGetMessages(InvocationParameters invocationParameters)
-        {
-            //using (EeeDataSet.MessageDataTable messages = invocationParameters.Result as EeeDataSet.MessageDataTable)
-            //{
-            //    if (messages.Count > 0)
-            //    {
-            //        for (int i = 0; i < messages.Count; i++)
-            //        {
-            //            EeeDataSet.MessageRow message = messages[i];
-
-            //            bool continueProcessing;
-            //            this.processor.ProcessMessage(message, out continueProcessing);
-
-            //            if (continueProcessing == false)
-            //            {
-            //                message.Delete();
-            //                i--;
-            //            }
-            //        }
-
-            //        messages.AcceptChanges();
-            //    }
-
-            //    OnGetMessagesFinished(new GetMessagesFinishedEventArgs(messages));
-            //}
-        }
-
-        void ProcessGetUsers(InvocationParameters invocationParameters)
-        {
-            //using (EeeDataSet.UserDataTable users = invocationParameters.Result as EeeDataSet.UserDataTable)
-            //{
-            //    if (users.Count > 0)
-            //    {
-            //        OnGetUsersFinished(new GetUsersFinishedEventArgs(users));
-            //    }
-            //}
-        }
-
-        void ProcessGetRooms(InvocationParameters invocationParameters)
-        {
-            //using (EeeDataSet.RoomDataTable rooms = invocationParameters.Result as EeeDataSet.RoomDataTable)
-            //{
-            //    if (rooms.Count > 0)
-            //    {
-            //        OnGetRoomsFinished(new GetRoomsFinishedEventArgs(rooms));
-            //    }
-            //}
-        }
-
-
-        private void ProcessConnectUser(InvocationParameters invocationParameters)
-        {
-            if (invocationParameters.Result.Equals(true))
-            {
-                InitProcessor();
-                OnConnected(ConnectedEventArgs.Empty);
-            }
-            else
-            {
-                OnLoginFailed(LoginFailedEventArgs.Empty);
-            }
-        }
-
-        private void InitProcessor()
-        {
-            //this.processor = new CommandProcessor(this.notificator, this.CurrentUser.UserID, this.CurrentUser.Login);
-            //this.processor.IdentifyRequested += new EventHandler<CommandProcessor.IdentifyRequestedEventArgs>(processor_IdentifyRequested);
-            //this.processor.UserStateChanged += new EventHandler<CommandProcessor.UserStateChangedEventArgs>(processor_UserStateChanged);
-            //this.processor.ExternalUserStateChanged += new EventHandler<CommandProcessor.ExternalUserStateChangedEventArgs>(processor_ExternalUserStateChanged);
-        }
-
-        private void DisposeProcessor()
-        {
-            //this.processor = null;
-        }
-
-        //void processor_UserStateChanged(object sender, CommandProcessor.UserStateChangedEventArgs e)
-        //{
-        //    OnUserStateChanged(e);
-        //}
-
-        //void processor_ExternalUserStateChanged(object sender, CommandProcessor.ExternalUserStateChangedEventArgs e)
-        //{
-        //    OnExternalUserStateChanged(e);
-        //}
-
-        //void processor_IdentifyRequested(object sender, CommandProcessor.IdentifyRequestedEventArgs e)
-        //{
-        //    //TODO: implement
-        //}
-
-        void AddInvocation(InvocationScope invocationScope, InvocationType invocationType, DateTime? invocationTime, string name, params object[] arguments)
-        {
-            //if (this.disconnecting) return;
-
-            //List<InvocationParameters> invocationList = null;
-
-            //switch (invocationScope)
-            //{
-            //    case InvocationScope.Receiver:
-            //        invocationList = this.receiverInvocations;
-            //        break;
-            //    case InvocationScope.Sender:
-            //        invocationList = this.senderInvocations;
-            //        break;
-            //    case InvocationScope.Download:
-            //        invocationList = this.downloadInvocations;
-            //        break;
-            //    case InvocationScope.Upload:
-            //        invocationList = this.uploadInvocations;
-            //        break;
-            //}
-
-            //InvocationParameters parameters = new InvocationParameters();
-            //parameters.InvocationScope = invocationScope;
-            //parameters.InvocationType = invocationType;
-            //parameters.InvocationTime = invocationTime;
-            //parameters.Name = name;
-            //parameters.Arguments = arguments;
-
-            //int index = 0;
-
-            //if (invocationList.Count > 0)
-            //{
-            //    while (index < invocationList.Count && (invocationList[index].InvocationTime == null || invocationTime >= invocationList[index].InvocationTime))
-            //    {
-            //        index++;
-            //    }
-            //}
-
-            //invocationList.Insert(index, parameters);
-        }
-
-        #endregion
-
-        void invocationTimer_Tick(object sender, EventArgs e)
-        {
-            return;            
-        }
-
-        void CheckNextInvocation(List<InvocationParameters> invocationList, BackgroundWorker invocationWorker)
-        {
-            if (invocationWorker.IsBusy == false && invocationList.Count > 0)
-            {
-                InvocationParameters invocationParameters = invocationList[0];
-                if (invocationParameters.InvocationTime == null || DateTime.Now >= invocationParameters.InvocationTime)
-                {
-                    invocationList.RemoveAt(0);
-                    invocationWorker.RunWorkerAsync(invocationParameters);
-                }
-            }
-        }
-
-        void invocationWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            InvocationParameters invocationParameters = (InvocationParameters)e.Argument;
-
-            try
-            {
-                invocationParameters.Result = Invoke(invocationParameters);
-                e.Result = invocationParameters;
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw new InvocationException(ex.InnerException, invocationParameters);
-            }
-            catch (Exception ex)
-            {
-                throw new InvocationException(ex, invocationParameters);
-            }
-        }
-
-        void invocationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
-                ProcessResult((InvocationParameters)e.Result);
-            }
-            else
-            {
-                if (e.Error is InvocationException)
-                {
-                    InvocationException error = e.Error as InvocationException;
-
-                    /*if (this.disconnecting && this.forceDisconnect)
-                    {
-                        ProcessResult(error.InvocationParameters);
-                    }
-                    else */if (error.InnerException is DisconnectedException)
-                    {
-                        //RemoveInvocations();
-                        //ProcessDisconnectUser(error.InvocationParameters, true);
-                        OnErrorOccured(new ErrorOccuredEventArgs(error.InnerException));
-                    }
-                    else if (error.InvocationParameters.Name == "UploadFile")
-                    {
-                        ProcessUploadFile(error.InvocationParameters, error.InnerException);
-                    }
-                    else if (error.InvocationParameters.Name == "DownloadFile")
-                    {
-                        ProcessDownloadFile(error.InvocationParameters, error.InnerException);
-                    }
-                    else
-                    {
-                        OnErrorOccured(new ErrorOccuredEventArgs(error.InnerException));
-                        AddInvocation(error.InvocationParameters.InvocationScope, error.InvocationParameters.InvocationType, DateTime.Now.AddSeconds(1), error.InvocationParameters.Name, error.InvocationParameters.Arguments); //TODO: seconds
-                    }
-                }
-                else
-                {
-                    OnErrorOccured(new ErrorOccuredEventArgs(e.Error));
-                }
-            }
-        }
-
-        public void ConnectJabber()
-        {
-            if (!this.externalServicesWorker.IsBusy)
-                this.externalServicesWorker.RunWorkerAsync();
-        }
-
-        public void RenewJabber()
-        {
-            if (!this.externalServicesWorker2.IsBusy)
-                this.externalServicesWorker2.RunWorkerAsync();
-        }
-
-        void externalServicesWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            //try
-            //{
-            //    if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-            //        this.service.JabberConnect(Properties.Settings.Default.JabberID, Security.Decrypt(Properties.Settings.Default.JabberPassword, true));
-            //}
-            //finally
-            //{
-            //    Thread.Sleep(30000);
-            //}
-        }
-
-        void externalServicesWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //TODO:
-            //if (e.Error != null)
-              //  throw e.Error;
-            //else
-                ConnectJabber();
-        }
-
-        void externalServicesWorker2_DoWork(object sender, DoWorkEventArgs e)
-        {
-            //if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-            //    this.service.JabberRenew(Properties.Settings.Default.JabberID);
-        }
-
-        internal void SendJabber(string externalUser, string text, string externalNick)
-        {
-            CheckUser();
-            
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-                AddInvocation(InvocationScope.Sender, InvocationType.Method, null, "JabberSend", Properties.Settings.Default.JabberID, externalUser, text, externalNick);
-        }
-
-        internal void DisconnectJabber()
-        {
-        //    if (!string.IsNullOrEmpty(Properties.Settings.Default.JabberID))
-        //    {
-        //        try
-        //        {
-        //            this.service.JabberDisconnect(Properties.Settings.Default.JabberID);
-        //        }
-        //        catch
-        //        {
-        //            //TODO: Log?
-        //        }
-        //    }
-        }
-
         #region IEeeService Members
 
         public string ServiceUrl
         {
             get
             {
-                if (this.Service == null || this.Service.Configuration == null)
+                if (PluginHelper.Services.Count == 0 || PluginHelper.Services[0].Configuration == null)
                     return null;
                 else
-                    return this.Service.Configuration.ServiceUrl;
+                    return PluginHelper.Services[0].Configuration.ServiceUrl;
             }
             set
             {
-                if (this.Service != null && this.Service.Configuration != null)
-                    this.Service.Configuration.ServiceUrl = value;
+                if (PluginHelper.Services.Count > 0 && PluginHelper.Services[0].Configuration != null)
+                    PluginHelper.Services[0].Configuration.ServiceUrl = value;
             }
         }
 
@@ -1395,15 +922,15 @@ namespace KolikSoftware.Eee.Client
         {
             get
             {
-                if (this.Service == null)
+                if (PluginHelper.Services.Count == 0)
                     return null;
                 else
-                    return this.Service.ProxySettings;
+                    return PluginHelper.Services[0].ProxySettings;
             }
             set
             {
-                if (this.Service != null)
-                    this.Service.ProxySettings = value;
+                if (PluginHelper.Services.Count > 0)
+                    PluginHelper.Services[0].ProxySettings = value;
             }
         }
 

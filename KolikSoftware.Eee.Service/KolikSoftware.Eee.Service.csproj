@@ -131,11 +131,8 @@
     <Compile Include="Domain\Room.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\UserState.cs" />
-    <None Include="EeeBindService.cs" />
-    <Compile Include="EeeJsonService.cs" />
     <Compile Include="EeeServiceBase.cs" />
     <Compile Include="Exceptions\DisconnectedException.cs" />
-    <None Include="EeeEncService.cs" />
     <Compile Include="Domain\Post.cs" />
     <Compile Include="Exceptions\ServiceException.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -144,9 +141,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ProxySettings.cs" />
-    <None Include="EeePhpService.cs">
-      <SubType>Code</SubType>
-    </None>
     <Compile Include="ErrorEvent.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using KolikSoftware.Eee.Service.Domain;
-using KolikSoftware.Eee.Service.Core;
 using System.Security;
+using KolikSoftware.Eee.Service;
+using KolikSoftware.Eee.Service.Domain;
 using KolikSoftware.Eee.Service.Exceptions;
 
-namespace KolikSoftware.Eee.Service
+namespace KolikSoftware.Eee.CometService
 {
-    public class EeeJsonService : EeeServiceBase, IEeeService
-    {        
+    public class CometService : EeeServiceBase, IEeeService
+    {
         public class DynamicArgumentsHelper
         {
             public DynamicArgumentsHelper()
@@ -58,7 +56,7 @@ namespace KolikSoftware.Eee.Service
 
         public DynamicArgumentsHelper ArgumentsHelper { get; set; }
 
-        public EeeJsonService()
+        public CometService()
         {
             this.ArgumentsHelper = new DynamicArgumentsHelper();
             this.Configuration = new BindServiceConfiguration();
@@ -138,6 +136,9 @@ namespace KolikSoftware.Eee.Service
 
         public void SendMessage(Room room, User recipient, string message)
         {
+            if (recipient != null && recipient.Login.IndexOf('@') >= 0)
+                return;
+
             PostArguments args = new PostArguments(room, recipient, message);
             ActionResult result;
 

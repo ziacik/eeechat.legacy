@@ -28,14 +28,17 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public void SetUsers(IList<User> users)
         {
-            this.UsersByName.Clear();
-
-            foreach (User user in users)
+            if (users != null)
             {
-                this.UsersByName.Add(user.Login, user);
-            }
+                this.UsersByName.Clear();
 
-            SynchronizeUsers();
+                foreach (User user in users)
+                {
+                    this.UsersByName.Add(user.Login, user);
+                }
+
+                SynchronizeUsers();
+            }
         }
 
         public void SetUser(User user)

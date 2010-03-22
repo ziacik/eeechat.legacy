@@ -1278,7 +1278,6 @@ namespace KolikSoftware.Eee.Client
             // 
             this.Service.Form = null;
             this.Service.ProxySettings = null;
-            this.Service.Service = null;
             this.Service.ServiceUrl = null;
             this.Service.ErrorOccured += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.ErrorOccuredEventArgs>(this.eeeServiceController_ErrorOccured);
             this.Service.SucessfulRequest += new System.EventHandler<KolikSoftware.Eee.Client.BackgroundServiceController.SucessfulRequestEventArgs>(this.eeeServiceController_SucessfulRequest);

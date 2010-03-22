@@ -143,17 +143,13 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\KolikSoftware.Eee.OutlookService\KolikSoftware.Eee.OutlookService.csproj">
-      <Project>{B2124DCD-A000-4803-9CFE-6A089A0EC7EB}</Project>
-      <Name>KolikSoftware.Eee.OutlookService</Name>
+    <ProjectReference Include="..\KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj">
+      <Project>{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}</Project>
+      <Name>KolikSoftware.Controls.Options</Name>
     </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
       <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
       <Name>KolikSoftware.Eee.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj">
-      <Project>{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}</Project>
-      <Name>KolikSoftware.Controls.Options</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +246,7 @@
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PluginCore\PluginHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

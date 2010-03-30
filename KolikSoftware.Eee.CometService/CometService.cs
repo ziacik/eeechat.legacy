@@ -55,6 +55,7 @@ namespace KolikSoftware.Eee.CometService
         }
 
         public DynamicArgumentsHelper ArgumentsHelper { get; set; }
+        public string ApplicationVersion { get; set; }
 
         public CometService()
         {
@@ -75,7 +76,7 @@ namespace KolikSoftware.Eee.CometService
             AuthenticationData authenticationData = GetAuthenticationData(login);
             CreateHash(authenticationData, password);
 
-            this.CurrentUser = Action<User>("UserState", "Login", login, "PasswordHash", this.PasswordHash, "State", (int)UserState.Connected);
+            this.CurrentUser = Action<User>("UserState", "Login", login, "PasswordHash", this.PasswordHash, "State", (int)UserState.Connected, "Client", this.ApplicationVersion);
         }
 
         public void Disconnect()

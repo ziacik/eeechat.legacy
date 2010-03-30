@@ -11,7 +11,7 @@ using System.Security;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Kolik Software")]
 [assembly: AssemblyProduct("Eee Client")]
-[assembly: AssemblyCopyright("© 2006-7 Kolik Software")]
+[assembly: AssemblyCopyright("© 2006-2010 Kolik Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,5 +33,5 @@ using System.Security;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("10.0.0.0")]
-[assembly: AssemblyFileVersionAttribute("10.0.0.0")]
+[assembly: AssemblyVersion("10.0.0.4")]
+[assembly: AssemblyFileVersionAttribute("10.0.0.4")]

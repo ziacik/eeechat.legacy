@@ -47,11 +47,24 @@ namespace KolikSoftware.Eee.Client
 
         public MainForm()
         {
-            InitializeComponent();
+            var gad = new GeckoAppDiscovery(Path.Combine(Application.StartupPath, "xulrunner"));
+            GeckoAppInfo gai = null;
 
-            Xpcom.Initialize(true);
-            //Xpcom.Initialize(Path.Combine(Application.StartupPath, "xulrunner"));
-            //Xpcom.Initialize(@"c:\Program Files\Mozilla Firefox");
+            foreach (GeckoAppInfo gecko in gad.ValidGeckos)
+            {
+                gai = gecko;
+                break;
+            }
+
+            if (gai == null)
+            {
+                MessageBox.Show("No valid Gecko installations found. Please install Mozilla Firefox 3 or above or download XulRunner-embedded Eee Client.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Xpcom.Initialize(gai);
+
+            InitializeComponent();
 
             this.notificationManager.NormalIcon = this.Icon;
             this.notificationManager.AwayIcon = Properties.Resources.AwayModeIco;
@@ -1376,7 +1389,7 @@ namespace KolikSoftware.Eee.Client
         }
         #endregion
 
-        static readonly MainForm MainFormInstance = new MainForm();
+        public static readonly MainForm MainFormInstance = new MainForm();
 
         /// <summary>
         /// The main entry point for the application.
@@ -1384,9 +1397,11 @@ namespace KolikSoftware.Eee.Client
         [STAThread]
         static void Main()
         {
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-
-            Application.Run(MainFormInstance);
+            if (MainFormInstance.loginManager != null)
+            {
+                Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+                Application.Run(MainFormInstance);
+            }
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)

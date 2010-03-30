@@ -41,6 +41,7 @@ namespace KolikSoftware.Eee.Client
                     service.Configuration.ServiceUrl = Properties.Settings.Default.NewServiceUrl;
 
                 service.ProxySettings = proxySettings;
+                service.ApplicationVersion = Global.Instance.ApplicationAndVersion;
             }
 
             /*
@@ -79,7 +80,7 @@ namespace KolikSoftware.Eee.Client
             get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return version.Major.ToString() + "." + version.Minor.ToString() + " Experimental"; //TODO:
+                return version.Major.ToString() + "." + version.Minor.ToString() + " Gecko"; //TODO:
             }
         }
 

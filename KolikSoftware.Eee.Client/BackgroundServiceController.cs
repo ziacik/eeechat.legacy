@@ -24,6 +24,8 @@ namespace KolikSoftware.Eee.Client
         Dictionary<BackgroundWorker, InvokeInfo> Workers { get; set; }
         #endregion
 
+        public string ApplicationVersion { get; set; }
+
         public event EventHandler<EventArgs> GetUsersFinished;
 
         protected virtual void OnGetUsersFinished(EventArgs e)

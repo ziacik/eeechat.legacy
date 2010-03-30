@@ -12,6 +12,8 @@ namespace KolikSoftware.Eee.Service
     {
         protected Application OutlookApplication { get; private set; }
 
+        public string ApplicationVersion { get; set; }
+
         public OutlookService()
         {
             this.PendingPosts = new List<Post>();

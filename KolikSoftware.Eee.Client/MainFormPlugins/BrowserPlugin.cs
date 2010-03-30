@@ -309,7 +309,9 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         string ConversationToHtml(Conversation conversation)
         {
             string participant1 = conversation.Participants.ElementAt<string>(0);
-            string participant2 = conversation.Participants.ElementAt<string>(1);
+            string participant2 = conversation.Participants.ElementAtOrDefault<string>(1);
+            if (participant2 == null)
+                participant2 = participant1;
             User user1 = this.Form.GetPlugin<UserStatePlugin>().GetUser(participant1);
             User user2 = this.Form.GetPlugin<UserStatePlugin>().GetUser(participant2);
             int color1 = user1 != null ? user1.Color : 0;

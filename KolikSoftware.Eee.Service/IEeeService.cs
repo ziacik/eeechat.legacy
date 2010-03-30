@@ -21,6 +21,11 @@ namespace KolikSoftware.Eee.Service
         ProxySettings ProxySettings { get; set; }
 
         /// <summary>
+        /// Application Version info to be used when logging in.
+        /// </summary>
+        string ApplicationVersion { get; set; }
+
+        /// <summary>
         /// Get data used for authentication of a user specified by login.
         /// </summary>
         AuthenticationData GetAuthenticationData(string login);

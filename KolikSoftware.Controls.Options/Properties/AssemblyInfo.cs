@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("KolikSoftware.Controls.Options")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Gratex International")]
-[assembly: AssemblyProduct("KolikSoftware.Controls.Options")]
-[assembly: AssemblyCopyright("Copyright © Gratex International 2006")]
+[assembly: AssemblyCompany("Kolik Software")]
+[assembly: AssemblyProduct("KolikSoftware Controls Options")]
+[assembly: AssemblyCopyright("Copyright © Kolik Software 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

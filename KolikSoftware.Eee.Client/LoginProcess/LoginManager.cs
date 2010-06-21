@@ -1,11 +1,8 @@
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using Security.Windows.Forms;
-using System.Windows.Forms;
 using System.Security;
+using System.Windows.Forms;
+using Security.Windows.Forms;
 
 namespace KolikSoftware.Eee.Client.LoginProcess
 {
@@ -202,6 +199,7 @@ namespace KolikSoftware.Eee.Client.LoginProcess
                 else
                 {
                     dialog.Password = null;
+                    dialog.Flags = dialog.Flags | UserCredentialsDialogFlags.AlwaysShowUI;
                     dialog.User = Properties.Settings.Default.DefaultUser;
                 }
 

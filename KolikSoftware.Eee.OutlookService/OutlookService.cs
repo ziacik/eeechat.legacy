@@ -19,6 +19,11 @@ namespace KolikSoftware.Eee.Service
             this.PendingPosts = new List<Post>();
         }
 
+        public void UploadFile(UploadInfo info)
+        {
+            //TODO:
+        }
+
         public IServiceConfiguration Configuration
         {
             get 

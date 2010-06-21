@@ -61,6 +61,9 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public void SetUsersToPosts(IList<Post> posts)
         {
+            if (posts == null)
+                return;
+
             foreach (Post post in posts)
             {
                 User from;

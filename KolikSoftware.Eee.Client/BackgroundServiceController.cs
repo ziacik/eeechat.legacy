@@ -599,6 +599,20 @@ namespace KolikSoftware.Eee.Client
             );
         }
 
+        public void UploadFile(UploadInfo info)
+        {
+            DoForAllServices(s => DoUploadFile(s, info));
+        }
+
+        void DoUploadFile(IEeeService service, UploadInfo info)
+        {
+            InvokeInBackground(
+                0,
+                () => service.UploadFile(info),
+                s => OnUploadFinished(new UploadFinishedEventArgs(info.FileName, null, null)),
+                e => OnUploadFailed(new UploadFailedEventArgs(info.FileName, e)));
+        }
+
         public IList<User> GetUsers()
         {
             DoForAllServices(s => DoGetUsers(s, 0));
@@ -674,8 +688,43 @@ namespace KolikSoftware.Eee.Client
             return null;
         }
 
+        bool CheckZeroMessagesTimeThreshold()
+        {
+            if ((DateTime.Now - this.previousGetMessagesTime) < ZeroMessagesLeastTimeThreshold)
+            {
+                this.zeroMessagesLeastTimeThresholdCount++;
+
+                if (this.zeroMessagesLeastTimeThresholdCount > ZeroMessagesLeastTimeThresholdMaxCount)
+                {
+                    ResetZeroMessagesTimeThreshold();
+                    this.previousGetMessagesTime = DateTime.Now;
+                    return true;
+                }
+            }
+            else
+            {
+                ResetZeroMessagesTimeThreshold();
+            }
+
+            this.previousGetMessagesTime = DateTime.Now;
+            return false;
+        }
+
+        void ResetZeroMessagesTimeThreshold()
+        {
+            this.zeroMessagesLeastTimeThresholdCount = 0;
+        }
+
+        DateTime previousGetMessagesTime;
+        int zeroMessagesLeastTimeThresholdCount;
+
+        static readonly TimeSpan ZeroMessagesLeastTimeThreshold = new TimeSpan(0, 0, 30);
+        const int ZeroMessagesLeastTimeThresholdMaxCount = 10;
+
         void DoGetMessages(IEeeService service, int sleepSecs, int retryNo)
         {
+            this.Form.Text = "Eee Client 2010 (Normal)"; //TODO:
+
             QueryInBackground(
                 sleepSecs,
                 () => 
@@ -690,7 +739,15 @@ namespace KolikSoftware.Eee.Client
                     this.FirstGetMessages = false;
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
-                    DoGetMessages(service, service.Configuration.MessageGetInterval, 0);
+
+                    if (CheckZeroMessagesTimeThreshold())
+                    {
+                        DoGetMessagesSafe(service, service.Configuration.MessageGetInterval, false);
+                    }
+                    else
+                    {
+                        DoGetMessages(service, service.Configuration.MessageGetInterval, 0);
+                    }
                 },
                 e =>
                 {
@@ -699,6 +756,10 @@ namespace KolikSoftware.Eee.Client
                         /// In case this is a "Connection Problem", switch to safe mode.
                         /// If success, return to normal mode.
                         DoGetMessagesSafe(service, service.Configuration.MessageGetInterval, true);
+                    }
+                    else if (CheckZeroMessagesTimeThreshold())
+                    {
+                        DoGetMessagesSafe(service, service.Configuration.MessageGetInterval, false);
                     }
                     else
                     {
@@ -719,9 +780,9 @@ namespace KolikSoftware.Eee.Client
 
         void AddPostsToBrowser(IEeeService service, IList<Post> posts)
         {
-            if (posts.Count > 0)
+            if (posts != null && posts.Count > 0)
             {
-                bool canScroll = true; //TODO:
+                bool canScroll = this.Form.GetPlugin<BrowserPlugin>().CanScroll();
                 bool willScroll = false;
 
                 foreach (Post post in posts)
@@ -761,6 +822,8 @@ namespace KolikSoftware.Eee.Client
 
         void DoGetMessagesSafe(IEeeService service, int sleepSecs, bool returnToNormalModeOnSuccess)
         {
+            this.Form.Text = "Eee Client 2010 (Safe)";
+
             QueryInBackground(
                 sleepSecs,
                 () =>

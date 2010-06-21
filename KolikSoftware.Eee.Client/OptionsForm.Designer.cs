@@ -224,7 +224,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // serviceAddressText
             // 
-            this.serviceAddressText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::KolikSoftware.Eee.Client.Properties.Settings.Default, "ServiceUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.serviceAddressText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::KolikSoftware.Eee.Client.Properties.Settings.Default, "NewServiceUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.serviceAddressText.Location = new System.Drawing.Point(80, 19);
             this.serviceAddressText.Name = "serviceAddressText";
             this.serviceAddressText.Size = new System.Drawing.Size(284, 20);

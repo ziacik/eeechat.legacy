@@ -129,6 +129,7 @@
     <Compile Include="Domain\AuthenticationData.cs" />
     <Compile Include="Domain\Conversation.cs" />
     <Compile Include="Domain\Room.cs" />
+    <Compile Include="Domain\UploadInfo.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\UserState.cs" />
     <Compile Include="EeeServiceBase.cs" />

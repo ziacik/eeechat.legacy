@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security;
 using KolikSoftware.Eee.Service;
 using KolikSoftware.Eee.Service.Domain;
@@ -91,11 +92,17 @@ namespace KolikSoftware.Eee.CometService
 
         public IList<User> GetUsers()
         {
+            if (this.CurrentUser == null)
+                return null;
+
             return QueryList<User>("Users", () => this.CurrentUser.Login, () => this.PasswordHash);
         }
 
         public IList<Room> GetRooms()
         {
+            if (this.CurrentUser == null)
+                return null;
+
             return QueryList<Room>("Rooms", () => this.CurrentUser.Login, () => this.PasswordHash);
         }
 
@@ -104,6 +111,9 @@ namespace KolikSoftware.Eee.CometService
             //TODO: prerobit nejako genericky?
             try
             {
+                if (this.CurrentUser == null)
+                    return null;
+
                 IList<Post> posts = LongQueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit);
                 this.ArgumentsHelper.MessagesToCommit.Clear();
                 return posts;
@@ -120,6 +130,10 @@ namespace KolikSoftware.Eee.CometService
         public IList<Post> GetMessagesSafe()
         {
             //TODO: prerobit nejako genericky?
+
+            if (this.CurrentUser == null)
+                return null;
+
             try
             {
                 IList<Post> posts = QueryList<Post>("Messages", () => this.CurrentUser.Login, () => this.PasswordHash, () => this.ArgumentsHelper.FromId, () => this.ArgumentsHelper.Commit, () => this.ArgumentsHelper.Timeout);
@@ -137,6 +151,9 @@ namespace KolikSoftware.Eee.CometService
 
         public void SendMessage(Room room, User recipient, string message)
         {
+            if (this.CurrentUser == null)
+                return;
+
             if (recipient != null && recipient.Login.IndexOf('@') >= 0)
                 return;
 
@@ -150,6 +167,43 @@ namespace KolikSoftware.Eee.CometService
 
             if (result.Result != "OK")
                 throw new ServiceException(result.Result);
+        }
+
+        public void UploadFile(UploadInfo info)
+        {
+            if (this.CurrentUser == null)
+                return;
+
+            info.IsFirst = true;
+
+            byte[] buffer = new byte[100000];
+
+            using (FileStream stream = new FileStream(info.FilePath, FileMode.Open, FileAccess.Read))
+            {
+                int count;
+
+                while ((count = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    if (count == buffer.Length)
+                    {
+                        info.Data = buffer;
+                    }
+                    else
+                    {
+                        info.Data = new byte[count];
+                        Array.Copy(buffer, info.Data, count);
+                    }
+
+                    info.IsLast = stream.Position == stream.Length;
+
+                    ActionResult result = Action("Upload", () => info.FileName, () => info.IsFirst, () => info.IsLast, () => info.Comment, () => info.Data);
+
+                    if (result.Result != "OK")
+                        throw new ServiceException(result.Result);
+
+                    info.IsFirst = false;
+                }
+            }
         }
 
         public void CommitMessage(Post message)

@@ -75,6 +75,10 @@ namespace KolikSoftware.Eee.Service
         /// </summary>
         void SendMessage(Room room, User recipient, string message);
 
+        /// <summary>
+        /// Uploads file. Returns null if fails or link to file if success.
+        /// </summary>
+        void UploadFile(UploadInfo info);
 
         /*
         bool IsBound { get; }

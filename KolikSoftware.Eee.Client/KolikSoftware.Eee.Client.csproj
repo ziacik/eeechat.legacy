@@ -215,6 +215,7 @@
     <Compile Include="MainFormPlugins\IMainFormPlugin.cs" />
     <Compile Include="MainFormPlugins\LinkFinder.cs" />
     <Compile Include="MainFormPlugins\SmileFinder.cs" />
+    <Compile Include="MainFormPlugins\UploadPlugin.cs" />
     <Compile Include="MainFormPlugins\UserStatePlugin.cs" />
     <Compile Include="Media\MediaPlayer.cs">
       <SubType>Component</SubType>

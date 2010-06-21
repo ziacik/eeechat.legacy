@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Skybound.Gecko;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using System.Runtime.InteropServices;
-using KolikSoftware.Eee.Service.Domain;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using KolikSoftware.Eee.Service.Domain;
+using Skybound.Gecko;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {
@@ -47,6 +45,17 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 e.Cancel = true;
                 Process.Start(e.Uri.ToString()); //TODO: vulnerability? also, catch exceptions
             }
+        }
+
+        public bool CanScroll()
+        {
+            if (this.ElementsByPost.Count == 0)
+                return true;
+
+            GeckoElement lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
+            bool isLastInView = lastElement.OffsetTop < (this.Browser.Window.ScrollY + this.Browser.ClientSize.Height);
+
+            return isLastInView;
         }
 
         public void ScrollDown()
@@ -187,10 +196,10 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                         {
                             if (conversation.Posts.Count < 8) //TODO: make configurable
                                 referenceConversation = conversation;
-
-                            break;
                         }
                     }
+
+                    break;
                 }
             }
 

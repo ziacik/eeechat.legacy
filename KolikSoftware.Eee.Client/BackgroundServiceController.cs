@@ -740,8 +740,9 @@ namespace KolikSoftware.Eee.Client
                     OnSucessfulRequest(SucessfulRequestEventArgs.Empty);
                     OnGetMessagesFinished(new GetMessagesFinishedEventArgs(posts));
 
-                    if (CheckZeroMessagesTimeThreshold())
+                    if (posts.Count == 0 && CheckZeroMessagesTimeThreshold())
                     {
+                        this.Form.notificationManager.AddNotification("Safe Mode", 0, "Due to multiple errors while trying to get messages in normal error Eee switched to Safe Mode. Messages will be checked in intervals.", MessageType.System); 
                         DoGetMessagesSafe(service, service.Configuration.MessageGetInterval, false);
                     }
                     else

@@ -75,7 +75,7 @@
 		$startTime = date("Y-m-d H:i:s");
 		SetUserTimestamp($userId, $startTime);		
 
-		for ($cycleNo = 1; $cycleNo < $timeOut; $cycleNo++)
+		for ($cycleNo = 0; $cycleNo <= $timeOut; $cycleNo++)
 		{		
 			if ($any || connection_aborted())
 				break;

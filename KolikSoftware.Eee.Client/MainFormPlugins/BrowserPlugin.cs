@@ -327,8 +327,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             int color2 = user2 != null ? user2.Color : 0;
 
             StringBuilder builder = new StringBuilder(this.DialogTemplate);
-            builder.Replace("[AvatarUrl1]", "http://www.eeechat.net/Avatars/" + participant1);
-            builder.Replace("[AvatarUrl2]", "http://www.eeechat.net/Avatars/" + participant2);
+            builder.Replace("[AvatarUrl1]", "http://www.eeechat.net/Avatars/" + participant1 + "?nocache");
+            builder.Replace("[AvatarUrl2]", "http://www.eeechat.net/Avatars/" + participant2 + "?nocache");
             builder.Replace("[UserName1]", participant1);
             builder.Replace("[UserName2]", participant2);
             builder.Replace("[Time]", conversation.Sent.ToShortTimeString());
@@ -366,7 +366,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             else
             {
                 StringBuilder builder = new StringBuilder(this.MessageTemplate);
-                builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login);
+                builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login + "?nocache");
                 builder.Replace("[UserName]", post.From.Login);
                 builder.Replace("[Time]", post.Sent.ToShortTimeString());
                 builder.Replace("[Text]", post.Text.Replace("\n", "<br />"));

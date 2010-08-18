@@ -14,6 +14,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public MainForm Form { get; set; }
         public int LastPostCount { get; set; }
 
+        List<string> ReplyList { get; set; }
+
         public void Init(MainForm mainForm)
         {
             this.Form = mainForm;
@@ -21,7 +23,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form.Editor.TextChanged += new EventHandler(Editor_TextChanged);
             this.Form.GetPlugin<UserStatePlugin>().SelectedUserChanged += new EventHandler<EventArgs>(EditorPlugin_SelectedUserChanged);
             
-            this.ReplyList = new List<Post>();
+            this.ReplyList = new List<string>();
             this.CurrentReplyIndex = -1;
 
             this.Form.ReplyUsersMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(ReplyUsersMenuStrip_ItemClicked);
@@ -289,8 +291,6 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form.ReplyUsersMenuStrip.Items[this.CurrentReplyIndex].Select();
         }
 
-        List<Post> ReplyList { get; set; }
-
         void CheckReplyList()
         {
             int currentPostCount = this.Form.GetPlugin<BrowserPlugin>().AllPosts.Count;
@@ -316,22 +316,29 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             for (int i = allPosts.Count - 1; i >= 0; i--)
             {
                 Post replyPost = allPosts[i];
+                Conversation conversation = replyPost as Conversation;
+
+                string id = null;
 
                 if (replyPost.From.Login != currentLogin)
                 {
-                    string id = (replyPost.To != null ? "/" : "") + replyPost.From.Login;
+                    id = (replyPost.To != null ? "/" : "") + replyPost.From.Login;
+                }
+                else if (replyPost.To != null)
+                {
+                    id = "/" + replyPost.To.Login;
+                }
 
-                    if (!nameSet.Contains(id))
-                    {
-                        this.ReplyList.Insert(0, replyPost);
-                        nameSet.Add(id);
-                    }
+                if (id != null && !nameSet.Contains(id))
+                {
+                    this.ReplyList.Insert(0, id);
+                    nameSet.Add(id);
                 }
             }
 
-            foreach (Post post in this.ReplyList)
+            foreach (string id in this.ReplyList)
             {
-                this.Form.ReplyUsersMenuStrip.Items.Add((post.To != null ? "/" : "") + post.From.Login);
+                this.Form.ReplyUsersMenuStrip.Items.Add(id);
             }
         }
 

@@ -5,6 +5,7 @@ using System.Security;
 using KolikSoftware.Eee.Service;
 using KolikSoftware.Eee.Service.Domain;
 using KolikSoftware.Eee.Service.Exceptions;
+using KolikSoftware.Eee.Service.Core;
 
 namespace KolikSoftware.Eee.CometService
 {
@@ -95,7 +96,37 @@ namespace KolikSoftware.Eee.CometService
             if (this.CurrentUser == null)
                 return null;
 
-            return QueryList<User>("Users", () => this.CurrentUser.Login, () => this.PasswordHash);
+            var users = QueryList<User>("Users", () => this.CurrentUser.Login, () => this.PasswordHash);
+
+            foreach (var user in users)
+            {
+                DownloadUserImage(user);
+            }
+
+            return users;
+        }
+
+        void DownloadUserImage(User user)
+        {
+            using (var client = RequestFactory.Instance.CreateClient(this.ProxySettings))
+            {
+                //TODO: Hardcoded
+                var imageUrl = "http://www.eeechat.net/Avatars/" + user.Login + "?nocache";
+
+                var userImageDir = Path.GetDirectoryName(user.ImagePath);
+
+                if (!Directory.Exists(userImageDir))
+                    Directory.CreateDirectory(userImageDir);
+
+                try
+                {
+                    client.DownloadFile(imageUrl, user.ImagePath);
+                }
+                catch (Exception ex)
+                {
+                    //TODO:
+                }
+            }
         }
 
         public IList<Room> GetRooms()

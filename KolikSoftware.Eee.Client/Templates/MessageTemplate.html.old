@@ -1,0 +1,13 @@
+﻿<div class="Avatar">
+	<img class="AvatarImage" src="[AvatarUrl]" />
+</div>
+<h1 class="UserName"><a href="Users:[UserName]" style="color:[UserColorHex]">[UserName]</a></h1>
+<br />
+<div class="Info">
+	<span class="InfoDelimiter">At</span>
+	<span class="Time" style="color:[UserColorHex]">[Time]</span>
+	<span class="InfoDelimiter">[RoomInfoDelimiter]</span>
+	<span class="Room" style="color:[UserColorHex]">[Room]</span>
+</div>
+<div class="Status"></div>
+<p class="Text">[Text]</p>

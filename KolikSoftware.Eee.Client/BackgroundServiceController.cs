@@ -626,7 +626,7 @@ namespace KolikSoftware.Eee.Client
                 () => service.GetUsers(),
                 r =>
                 {
-                    IList<User> users = (IList<User>)r;
+                    var users = (IList<User>)r;
                     this.Form.GetPlugin<UserStatePlugin>().SetUsers(users);
                     OnGetUsersFinished(EventArgs.Empty);
                 },

@@ -26,11 +26,11 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SignAssembly>false</SignAssembly>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <ManifestCertificateThumbprint>29AE0ECE95C4C278DDA001E310FC2B98A0095E59</ManifestCertificateThumbprint>
     <ManifestKeyFile>EeeClient_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -40,29 +40,31 @@
     <SccProvider>
     </SccProvider>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>C:\Publish\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
+    <UpdateInterval>1</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <SupportUrl>http://eee.php5.sk</SupportUrl>
-    <ProductName>Eee Client 2006</ProductName>
+    <InstallUrl>http://www.eeechat.net/</InstallUrl>
+    <SupportUrl>http://www.eeechat.net</SupportUrl>
+    <ProductName>Eee Client 2010</ProductName>
     <PublisherName>Kolik%27s</PublisherName>
-    <CreateWebPageOnPublish>false</CreateWebPageOnPublish>
-    <WebPage>eee.html</WebPage>
+    <SuiteName>Eee Chat</SuiteName>
+    <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>15</ApplicationRevision>
-    <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationVersion>10.0.0.8</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -146,6 +148,10 @@
     <ProjectReference Include="..\KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj">
       <Project>{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}</Project>
       <Name>KolikSoftware.Controls.Options</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KolikSoftware.Eee.CometService\KolikSoftware.Eee.CometService.csproj">
+      <Project>{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}</Project>
+      <Name>KolikSoftware.Eee.CometService</Name>
     </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
       <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
@@ -608,7 +614,7 @@
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>true</Install>
+      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
       <Visible>False</Visible>
@@ -618,7 +624,7 @@
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
+      <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>

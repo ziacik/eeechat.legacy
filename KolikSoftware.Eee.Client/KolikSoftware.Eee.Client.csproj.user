@@ -11,8 +11,8 @@
     <CopyProjectOption>0</CopyProjectOption>
     <ProjectView>ProjectFiles</ProjectView>
     <ProjectTrust>0</ProjectTrust>
-    <PublishUrlHistory>C:\.NETProjects2005\EeeClient2006\Publish\|http://localhost/EeeClient/</PublishUrlHistory>
-    <InstallUrlHistory>http://localhost/EeeClient2006/|http://uniusdev16/EeeClient2006/|http://uniusdev16/EeeClient2006/setup.exe/|http://eee.aspweb.cz/EeeClient2006/</InstallUrlHistory>
+    <PublishUrlHistory>C:\Publish\|C:\.NETProjects2005\EeeClient2006\Publish\|http://localhost/EeeClient/</PublishUrlHistory>
+    <InstallUrlHistory>http://www.eeechat.net/|http://www.eeechat.net/EeeClient/|http://www.eeechat.net/EeeClient/index.html/|http://localhost/EeeClient2006/|http://uniusdev16/EeeClient2006/</InstallUrlHistory>
     <SupportUrlHistory>http://eee.php5.sk|http://eee.php5.cz</SupportUrlHistory>
     <UpdateUrlHistory>
     </UpdateUrlHistory>

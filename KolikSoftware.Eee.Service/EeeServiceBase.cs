@@ -217,23 +217,29 @@ namespace KolikSoftware.Eee.Service
             }
         }
 
-        string CallRequest(CallType callType, string method, params object[] paramsAndValues)
+        public string GetMethodUrl(string method)
         {
-            string query = GetQueryString(paramsAndValues);
-
-            string url = this.Configuration.ServiceUrl;
+            var url = this.Configuration.ServiceUrl;
 
             if (url.EndsWith("/") == false)
                 url += "/";
 
+            url += method;
+
+            return url;
+        }
+
+        string CallRequest(CallType callType, string method, params object[] paramsAndValues)
+        {
+            string query = GetQueryString(paramsAndValues);
+            string url = GetMethodUrl(method + ".php");
+
             Uri uri;
 
-            method += ".php";
-
             if (callType == CallType.GET)
-                uri = new Uri(url + method + "?" + query);
+                uri = new Uri(url + "?" + query);
             else
-                uri = new Uri(url + method);
+                uri = new Uri(url);
 
             HttpWebRequest request = (HttpWebRequest)RequestFactory.Instance.CreateRequest(uri, this.ProxySettings);
             request.KeepAlive = false;

@@ -16,15 +16,9 @@ embed
 	height: 344px;
 }
 
-td
-{
-	vertical-align: top;
-}
-
-
 .FitSize
 {
-	max-width: 80px;
+	max-width: 100%;
 	vertical-align: middle;
 }
 
@@ -38,6 +32,8 @@ td
 
 .User
 {
+	float: left;
+	margin-right: 2em;
 }
 
 .Message
@@ -61,7 +57,11 @@ td
 
 .Avatar
 {
-	width: 52px;
+	float: left;
+	margin-right: 0.7em;
+	margin-bottom: 0.7em;
+	width: 48px;
+	height: 48px;
 }
 
 .AvatarImage
@@ -74,7 +74,11 @@ td
 
 .UserName
 {
-	font-family: Georgia;
+	display: block;
+	float: left;
+	margin: 0em 0em 0em 0em;
+	font-family: Lucida Sans Unicode;
+	font-size: 0.8em;
 	color: #3a6bd9;
 	text-shadow: 1px 1px 2px Grey;
 	letter-spacing: -0.03em;
@@ -88,6 +92,7 @@ td
 
 .Info
 {
+	float: left;
 	margin: 0em 0em 0em 0em;
 	font-family: Lucida Sans Unicode;
 	font-size: 0.7em;
@@ -103,13 +108,10 @@ td
 {
 }
 
-.Content
-{
-	padding-left: 1em;
-}
 
 .Text
 {
+	clear: both;	
 	font-family: Verdana;
 	font-size: 0.8em;
 	color: #343538;

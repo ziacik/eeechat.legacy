@@ -325,10 +325,19 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             User user2 = this.Form.GetPlugin<UserStatePlugin>().GetUser(participant2);
             int color1 = user1 != null ? user1.Color : 0;
             int color2 = user2 != null ? user2.Color : 0;
+            string avatarUrl1 = user1 != null ? "file:///" + user1.ImagePath : "";
+            string avatarUrl2 = user2 != null ? "file:///" + user2.ImagePath : "";
+
+            //TODO: should be done some other way. This is for users that are not connected right now.
+            if (user1 != null && !File.Exists(user1.ImagePath))
+                avatarUrl1 = "http://www.eeechat.net/Avatars/" + user1.Login;
+
+            if (user2 != null && !File.Exists(user2.ImagePath))
+                avatarUrl2 = "http://www.eeechat.net/Avatars/" + user2.Login;
 
             StringBuilder builder = new StringBuilder(this.DialogTemplate);
-            builder.Replace("[AvatarUrl1]", "http://www.eeechat.net/Avatars/" + participant1 + "?nocache");
-            builder.Replace("[AvatarUrl2]", "http://www.eeechat.net/Avatars/" + participant2 + "?nocache");
+            builder.Replace("[AvatarUrl1]", avatarUrl1);
+            builder.Replace("[AvatarUrl2]", avatarUrl2);
             builder.Replace("[UserName1]", participant1);
             builder.Replace("[UserName2]", participant2);
             builder.Replace("[Time]", conversation.Sent.ToShortTimeString());
@@ -366,7 +375,14 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             else
             {
                 StringBuilder builder = new StringBuilder(this.MessageTemplate);
-                builder.Replace("[AvatarUrl]", "http://www.eeechat.net/Avatars/" + post.From.Login + "?nocache");
+
+                var avatarUrl = "file:///" + post.From.ImagePath;
+
+                //TODO: should be done some other way. This is for users that are not connected right now.
+                if (!File.Exists(post.From.ImagePath))
+                    avatarUrl = "http://www.eeechat.net/Avatars/" + post.From.Login;
+
+                builder.Replace("[AvatarUrl]", avatarUrl);
                 builder.Replace("[UserName]", post.From.Login);
                 builder.Replace("[Time]", post.Sent.ToShortTimeString());
                 builder.Replace("[Text]", post.Text.Replace("\n", "<br />"));

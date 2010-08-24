@@ -6,6 +6,8 @@ using KolikSoftware.Eee.Service.Domain;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 
 namespace KolikSoftware.Eee.Client.MainFormPlugins
 {

@@ -15,6 +15,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public int LastPostCount { get; set; }
 
         List<string> ReplyList { get; set; }
+        List<Post> ReplyPosts { get; set; }
 
         public void Init(MainForm mainForm)
         {
@@ -24,6 +25,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form.GetPlugin<UserStatePlugin>().SelectedUserChanged += new EventHandler<EventArgs>(EditorPlugin_SelectedUserChanged);
             
             this.ReplyList = new List<string>();
+            this.ReplyPosts = new List<Post>();
+
             this.CurrentReplyIndex = -1;
 
             this.Form.ReplyUsersMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(ReplyUsersMenuStrip_ItemClicked);
@@ -186,7 +189,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 #if DEBUG
             if (textToSend == "reload")
             {
-                this.Form.GetPlugin<BrowserPlugin>().Reload();
+                this.Form.GetPlugin<IBrowserPlugin>().Reload();
                 return;
             }
 #endif
@@ -198,7 +201,15 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 User recipient = GetRecipient(recipientName);
                 Room room = this.Form.GetPlugin<RoomStatePlugin>().SelectedRoom;
 
-                this.Form.Service.SendMessage(room, recipient, textToSend);
+                if (recipient != null && this.CurrentReplyIndex >= 0)
+                {
+                    this.Form.Service.ReplyTo(this.ReplyPosts[this.CurrentReplyIndex], textToSend);
+                }
+                else
+                {
+                    this.Form.Service.SendMessage(room, recipient, textToSend);
+                }
+
                 this.CurrentReplyIndex = -1;
             }
         }
@@ -293,7 +304,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         void CheckReplyList()
         {
-            int currentPostCount = this.Form.GetPlugin<BrowserPlugin>().AllPosts.Count;
+            int currentPostCount = this.Form.GetPlugin<IBrowserPlugin>().AllPosts.Count;
 
             if (currentPostCount > this.LastPostCount)
             {
@@ -307,9 +318,11 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             this.Form.ReplyUsersMenuStrip.Items.Clear();
 
             HashSet<string> nameSet = new HashSet<string>();
+            
             this.ReplyList.Clear();
+            this.ReplyPosts.Clear();
 
-            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+            var browserPlugin = this.Form.GetPlugin<IBrowserPlugin>();
             IList<Post> allPosts = browserPlugin.AllPosts;
             string currentLogin = this.Form.Service.CurrentUser.Login;
 
@@ -332,6 +345,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
                 if (id != null && !nameSet.Contains(id))
                 {
                     this.ReplyList.Insert(0, id);
+                    this.ReplyPosts.Insert(0, replyPost);
                     nameSet.Add(id);
                 }
             }
@@ -350,8 +364,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         void Reply()
         {
-            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
-            IList<Post> allPosts = browserPlugin.AllPosts;
+            var browserPlugin = this.Form.GetPlugin<IBrowserPlugin>();
+            var allPosts = browserPlugin.AllPosts;
             string currentLogin = this.Form.Service.CurrentUser.Login;
 
             for (int i = allPosts.Count - 1; i >= 0; i--)

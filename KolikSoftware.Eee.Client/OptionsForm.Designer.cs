@@ -39,6 +39,7 @@ namespace KolikSoftware.Eee.Client
             KolikSoftware.Controls.Options.OptionsPage optionsPage3 = new KolikSoftware.Controls.Options.OptionsPage();
             KolikSoftware.Controls.Options.OptionsPage optionsPage4 = new KolikSoftware.Controls.Options.OptionsPage();
             KolikSoftware.Controls.Options.OptionsPage optionsPage5 = new KolikSoftware.Controls.Options.OptionsPage();
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("ertertert");
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -52,11 +53,7 @@ namespace KolikSoftware.Eee.Client
             this.notifyIconActionCombo = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.showNotificationCheck = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.jabberPasswordText = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.jabberIdText = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
+            this.serviceList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mediaBarVisibilityCombo = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -84,11 +81,11 @@ namespace KolikSoftware.Eee.Client
             this.autoAwayDelayText = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.bottomPanel.SuspendLayout();
             this.options.SuspendLayout();
             this.serviceGroup.SuspendLayout();
             this.notificationsGroupBox.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.proxyGroup.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -172,13 +169,13 @@ namespace KolikSoftware.Eee.Client
             this.options.AllowDrop = true;
             this.options.Controls.Add(this.serviceGroup);
             this.options.Controls.Add(this.notificationsGroupBox);
-            this.options.Controls.Add(this.groupBox3);
             this.options.Controls.Add(this.groupBox2);
             this.options.Controls.Add(this.proxyGroup);
             this.options.Controls.Add(this.groupBox1);
             this.options.Controls.Add(this.advancedList);
             this.options.Controls.Add(this.clientGroup);
             this.options.Controls.Add(this.messagesGroup);
+            this.options.Controls.Add(this.serviceList);
             this.options.Controls.Add(this.awayModeGroup);
             this.options.Dock = System.Windows.Forms.DockStyle.Fill;
             this.options.Location = new System.Drawing.Point(0, 0);
@@ -191,7 +188,7 @@ namespace KolikSoftware.Eee.Client
             optionsPage3.Image = global::KolikSoftware.Eee.Client.Properties.Resources.OptionsLayout;
             optionsPage4.Caption = "Advanced";
             optionsPage4.Image = global::KolikSoftware.Eee.Client.Properties.Resources.OptionsAdvanced;
-            optionsPage5.Caption = "Jabber";
+            optionsPage5.Caption = "Services";
             optionsPage5.Image = global::KolikSoftware.Eee.Client.Properties.Resources.Jabber;
             this.options.Pages.Add(optionsPage1);
             this.options.Pages.Add(optionsPage2);
@@ -279,59 +276,22 @@ namespace KolikSoftware.Eee.Client
             this.showNotificationCheck.Text = "&Show bubble notification";
             this.showNotificationCheck.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // serviceList
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.jabberPasswordText);
-            this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Controls.Add(this.jabberIdText);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Location = new System.Drawing.Point(12, 66);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(371, 82);
-            this.groupBox3.TabIndex = 17;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Tag = 4;
-            this.groupBox3.Text = "Credentials";
-            // 
-            // jabberPasswordText
-            // 
-            this.jabberPasswordText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.jabberPasswordText.Location = new System.Drawing.Point(67, 45);
-            this.jabberPasswordText.Name = "jabberPasswordText";
-            this.jabberPasswordText.Size = new System.Drawing.Size(298, 20);
-            this.jabberPasswordText.TabIndex = 3;
-            this.jabberPasswordText.UseSystemPasswordChar = true;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(8, 48);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(53, 13);
-            this.label13.TabIndex = 2;
-            this.label13.Text = "Password";
-            // 
-            // jabberIdText
-            // 
-            this.jabberIdText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.jabberIdText.Location = new System.Drawing.Point(67, 19);
-            this.jabberIdText.Name = "jabberIdText";
-            this.jabberIdText.Size = new System.Drawing.Size(298, 20);
-            this.jabberIdText.TabIndex = 1;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 22);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 13);
-            this.label12.TabIndex = 0;
-            this.label12.Text = "Jabber ID";
+            this.serviceList.CheckBoxes = true;
+            this.serviceList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2});
+            this.serviceList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            listViewItem6.StateImageIndex = 0;
+            this.serviceList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem6});
+            this.serviceList.Location = new System.Drawing.Point(12, 73);
+            this.serviceList.Name = "serviceList";
+            this.serviceList.Size = new System.Drawing.Size(371, 202);
+            this.serviceList.TabIndex = 17;
+            this.serviceList.Tag = 4;
+            this.serviceList.UseCompatibleStateImageBehavior = false;
+            this.serviceList.View = System.Windows.Forms.View.Details;
             // 
             // groupBox2
             // 
@@ -626,6 +586,10 @@ namespace KolikSoftware.Eee.Client
             this.label8.TabIndex = 1;
             this.label8.Text = "min before entering Auto Away mode when idle.";
             // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Width = 360;
+            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okButton;
@@ -646,8 +610,6 @@ namespace KolikSoftware.Eee.Client
             this.serviceGroup.PerformLayout();
             this.notificationsGroupBox.ResumeLayout(false);
             this.notificationsGroupBox.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.proxyGroup.ResumeLayout(false);
@@ -706,11 +668,8 @@ namespace KolikSoftware.Eee.Client
         private System.Windows.Forms.ComboBox mediaBarVisibilityCombo;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox enterSendsBox;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox jabberIdText;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox jabberPasswordText;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ListView serviceList;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
 
 
 

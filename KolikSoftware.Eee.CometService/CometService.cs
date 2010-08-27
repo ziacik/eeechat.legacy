@@ -180,6 +180,11 @@ namespace KolikSoftware.Eee.CometService
             }
         }
 
+        public void ReplyTo(Post post, string message)
+        {
+            SendMessage(post.Room, post.From, message);
+        }
+
         public void SendMessage(Room room, User recipient, string message)
         {
             if (this.CurrentUser == null)

@@ -20,6 +20,8 @@ namespace KolikSoftware.Eee.Client
 {
     public partial class BackgroundServiceController : Component, IEeeService
     {
+        public bool Enabled { get; set; }
+
         #region Private Members
         Dictionary<BackgroundWorker, InvokeInfo> Workers { get; set; }
         #endregion
@@ -56,7 +58,8 @@ namespace KolikSoftware.Eee.Client
         {
             foreach (IEeeService service in PluginHelper.Services)
             {
-                a(service);
+                if (service.Enabled)
+                    a(service);
             }
         }
 
@@ -546,7 +549,9 @@ namespace KolikSoftware.Eee.Client
 
         public void Connect(string login, SecureString password)
         {
-            DoForAllServices(s => DoConnect(s, 0, login, password));
+            //TODO: DoForAllServices(s => DoConnect(s, 0, login, password));
+            DoConnect(PluginHelper.Services[0], 0, login, password);
+            PluginHelper.Services[1].Connect(login, password);
         }
 
         void DoConnect(IEeeService service, int sleepSecs, string login, SecureString password)
@@ -615,7 +620,8 @@ namespace KolikSoftware.Eee.Client
 
         public IList<User> GetUsers()
         {
-            DoForAllServices(s => DoGetUsers(s, 0));
+            //TODO: DoForAllServices(s => DoGetUsers(s, 0));
+            DoGetUsers(PluginHelper.Services[0], 0);
             return null;
         }
 
@@ -640,7 +646,8 @@ namespace KolikSoftware.Eee.Client
 
         public IList<Room> GetRooms()
         {
-            DoForAllServices(s => DoGetRooms(s, 0));
+            //TODO: DoForAllServices(s => DoGetRooms(s, 0));
+            DoGetRooms(PluginHelper.Services[0], 0);
             return null;
         }
 
@@ -783,7 +790,7 @@ namespace KolikSoftware.Eee.Client
         {
             if (posts != null && posts.Count > 0)
             {
-                bool canScroll = this.Form.GetPlugin<BrowserPlugin>().CanScroll();
+                bool canScroll = this.Form.GetPlugin<IBrowserPlugin>().CanScroll();
                 bool willScroll = false;
 
                 foreach (Post post in posts)
@@ -811,13 +818,13 @@ namespace KolikSoftware.Eee.Client
                             this.Form.notificationManager.AddNotification(post.From.Login, post.From.Color, post.Text, postType);
                         }
 
-                        this.Form.GetPlugin<BrowserPlugin>().AddMessage(post, this.FirstGetMessages, false);
+                        this.Form.GetPlugin<IBrowserPlugin>().AddMessage(post, this.FirstGetMessages, false);
                         willScroll = canScroll;
                     }
                 }
 
                 if (willScroll)
-                    this.Form.GetPlugin<BrowserPlugin>().ScrollDown();
+                    this.Form.GetPlugin<IBrowserPlugin>().ScrollDown();
             }
         }
 
@@ -853,6 +860,11 @@ namespace KolikSoftware.Eee.Client
             );
         }
 
+        public void ReplyTo(Post post, string message)
+        {
+            DoForAllServices(s => DoReply(s, 0, post, message, null));
+        }
+
         public void SendMessage(Room room, User recipient, string message)
         {
             DoForAllServices(s => DoSendMessage(s, 0, room, recipient, message, null));
@@ -867,7 +879,7 @@ namespace KolikSoftware.Eee.Client
             else if (retryNo > 0)
                 sleepSecs = 5;
 
-            BrowserPlugin browserPlugin = this.Form.GetPlugin<BrowserPlugin>();
+            var browserPlugin = this.Form.GetPlugin<IBrowserPlugin>();
 
             if (post == null)
             {
@@ -885,9 +897,13 @@ namespace KolikSoftware.Eee.Client
                     Text = HttpUtility.HtmlEncode(message)
                 };
 
-                browserPlugin.AddMessage(post, false, false);
-                browserPlugin.SetPostPending(post);
-                browserPlugin.ScrollDown();
+                //TODO:
+                if (service == PluginHelper.Services[0])
+                {
+                    browserPlugin.AddMessage(post, false, false);
+                    browserPlugin.SetPostPending(post);
+                    browserPlugin.ScrollDown();
+                }
             }
 
             InvokeInBackground(
@@ -911,6 +927,70 @@ namespace KolikSoftware.Eee.Client
                     {
                         OnErrorOccured(new ErrorOccuredEventArgs(e));
                         DoSendMessage(service, retryNo + 1, room, recipient, message, post);
+                    }
+                }
+            );
+        }
+
+        void DoReply(IEeeService service, int retryNo, Post repliedPost, string message, Post post)
+        {
+            int sleepSecs = 0;
+
+            if (retryNo > 5)
+                sleepSecs = 60;
+            else if (retryNo > 0)
+                sleepSecs = 5;
+
+            var browserPlugin = this.Form.GetPlugin<IBrowserPlugin>();
+
+            if (post == null)
+            {
+                var recipient = repliedPost.From;
+
+                //TODO: Review
+                if (recipient != null && message.StartsWith(recipient.Login + ":"))
+                    message = message.Substring(recipient.Login.Length + 1).Trim();
+
+                post = new Post()
+                {
+                    From = service.CurrentUser,
+                    GlobalId = Guid.NewGuid().ToString(),
+                    Room = repliedPost.Room,
+                    To = recipient,
+                    Sent = DateTime.Now,
+                    Text = HttpUtility.HtmlEncode(message)
+                };
+
+                //TODO:
+                if (service == PluginHelper.Services[0])
+                {
+                    browserPlugin.AddMessage(post, false, false);
+                    browserPlugin.SetPostPending(post);
+                    browserPlugin.ScrollDown();
+                }
+            }
+
+            InvokeInBackground(
+                sleepSecs,
+                () =>
+                {
+                    service.ReplyTo(repliedPost, message);
+                },
+                r =>
+                {
+                    browserPlugin.SetPostSent(post);
+                },
+                e =>
+                {
+                    if (e is ServiceException && ((ServiceException)e).Type == ServiceException.ExceptionType.UnknownRecipient)
+                    {
+                        post.Text = "<i>Message undeliverable - recipient unknown</i><br />" + post.Text;
+                        browserPlugin.UpdatePost(post);
+                    }
+                    else
+                    {
+                        OnErrorOccured(new ErrorOccuredEventArgs(e));
+                        DoReply(service, retryNo + 1, repliedPost, message, post);
                     }
                 }
             );

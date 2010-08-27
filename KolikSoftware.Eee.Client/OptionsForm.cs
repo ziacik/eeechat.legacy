@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using KolikSoftware.Eee.Client.Notifications;
 using KolikSoftware.Eee.Client.Helpers;
+using KolikSoftware.Eee.Client.PluginCore;
+using KolikSoftware.Eee.Service;
 
 namespace KolikSoftware.Eee.Client
 {
@@ -30,8 +32,22 @@ namespace KolikSoftware.Eee.Client
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            SetupServiceList();
             Properties.Settings.Default.Save();
             LoadAdvancedSettings();
+        }
+
+        private void SetupServiceList()
+        {
+            this.serviceList.Items.Clear();
+
+            foreach (var service in PluginHelper.Services)
+            {
+                var serviceName = service.GetType().Name;
+                var item = new ListViewItem(serviceName);
+                item.Tag = service;
+                this.serviceList.Items.Add(item);
+            }
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -47,8 +63,6 @@ namespace KolikSoftware.Eee.Client
 
         void LoadAdvancedSettings()
         {
-            this.jabberIdText.Text = Properties.Settings.Default.JabberID;
-            this.jabberPasswordText.Text = Properties.Settings.Default.JabberPassword;
             this.refreshRateText.Text = Properties.Settings.Default.RefreshRate.ToString();
             this.notifyIconActionCombo.SelectedIndex = (int)Properties.Settings.Default.IconNotificationType;
             this.mediaBarVisibilityCombo.SelectedIndex = (int)Properties.Settings.Default.MediaBarVisible;
@@ -60,10 +74,39 @@ namespace KolikSoftware.Eee.Client
                 string settingName = item.Tag as string;
                 item.Checked = (bool)Properties.Settings.Default.PropertyValues[settingName].PropertyValue;
             }
+
+            foreach (ListViewItem item in this.serviceList.Items)
+            {
+                string serviceName = item.Text;
+                var service = (IEeeService)item.Tag;
+                item.Checked = service.Enabled;
+            }
         }
 
         void SaveAdvancedSettings()
         {
+            if (!this.serviceList.Items[0].Checked)
+                this.serviceList.Items[0].Checked = true;
+
+            foreach (ListViewItem item in this.serviceList.Items)
+            {
+                var serviceName = item.Text;
+                var property = Properties.Settings.Default.PropertyValues["Service." + serviceName];
+                if (property == null)
+                {
+                    var prop = new System.Configuration.SettingsProperty("Service." + serviceName);
+                    property = new System.Configuration.SettingsPropertyValue(prop);
+                    Properties.Settings.Default.PropertyValues.Add(property);
+                }
+                property.PropertyValue = item.Checked;
+                var service = (IEeeService)item.Tag;
+
+                if (service.Enabled && !item.Checked)
+                    DisableService(service);
+                else if (!service.Enabled && item.Checked)
+                    EnableService(service);
+            }
+
             foreach (ListViewItem item in this.advancedList.Items)
             {
                 string settingName = item.Tag as string;
@@ -81,11 +124,18 @@ namespace KolikSoftware.Eee.Client
                 this.templateChanged = true;
                 Properties.Settings.Default.MessageTemplateNo = this.templateCombo.SelectedIndex + 1;
             }
+        }
 
-            Properties.Settings.Default.JabberID = this.jabberIdText.Text;
+        void DisableService(IEeeService service)
+        {
+            service.Disconnect();
+            service.Enabled = false;
+        }
 
-            if (Properties.Settings.Default.JabberPassword != this.jabberPasswordText.Text)
-                Properties.Settings.Default.JabberPassword = Security.Encrypt(this.jabberPasswordText.Text, true);
+        void EnableService(IEeeService service)
+        {            
+            service.Connect(null, null);
+            service.Enabled = true;
         }
 
         int ParseInt(int setting, string value)

@@ -15,7 +15,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public void Init(MainForm mainForm)
         {
             this.Form = mainForm;
-            this.Form.GetPlugin<BrowserPlugin>().Browser.Navigating += new GeckoNavigatingEventHandler(Browser_Navigating);
+            //TODO: this.Form.GetPlugin<BrowserPlugin>().Browser.Navigating += new GeckoNavigatingEventHandler(Browser_Navigating);
             this.Form.UsersToolStrip.AllowDrop = true;
             this.Form.UsersToolStrip.DragEnter += new DragEventHandler(UsersToolStrip_DragEnter);
             this.Form.UsersToolStrip.DragDrop += new DragEventHandler(UsersToolStrip_DragDrop);

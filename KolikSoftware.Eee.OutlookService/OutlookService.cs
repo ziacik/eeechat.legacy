@@ -10,6 +10,7 @@ namespace KolikSoftware.Eee.Service
 {
     public class OutlookService : IEeeService
     {
+        public bool Enabled { get; set; }
         protected Application OutlookApplication { get; private set; }
 
         public string ApplicationVersion { get; set; }
@@ -24,11 +25,18 @@ namespace KolikSoftware.Eee.Service
             //TODO:
         }
 
+        IServiceConfiguration configuration;
+
         public IServiceConfiguration Configuration
         {
             get 
             {
-                return null;
+                if (this.configuration == null)
+                {
+                    this.configuration = new BindServiceConfiguration();
+                }
+
+                return this.configuration;
             }
         }
 
@@ -70,7 +78,7 @@ namespace KolikSoftware.Eee.Service
 
                 int quoteIndex = text.IndexOf("From:");
                 if (quoteIndex > 0)
-                    text = text.Substring(0, quoteIndex);
+                    text = text.Substring(0, quoteIndex).Trim();
 
                 Post post = new Post
                 {
@@ -119,8 +127,6 @@ namespace KolikSoftware.Eee.Service
                 Thread.Sleep(1000);
             }
 
-            Thread.Sleep(3000);
-
             List<Post> posts = this.PendingPosts;
             this.PendingPosts = new List<Post>();
 
@@ -148,11 +154,21 @@ namespace KolikSoftware.Eee.Service
         {
         }
 
-        public User CurrentUser { get; set; }        
+        public User CurrentUser { get; set; }
+
+        public void ReplyTo(Post post, string message)
+        {
+            message += Environment.NewLine + "__________________" + Environment.NewLine;
+            message += "Odpoved na:" + Environment.NewLine + post.Text;
+            SendMessage(post.Room, post.From, message);
+        }
 
         public void SendMessage(Room room, User recipient, string message)
         {
-            if (recipient != null && recipient.Login.IndexOf('@') < 0)
+            if (recipient == null)
+                return;
+
+            if (recipient.Login.IndexOf('@') < 0)
                 return;
 
             if (message.StartsWith(recipient.Login + ":"))

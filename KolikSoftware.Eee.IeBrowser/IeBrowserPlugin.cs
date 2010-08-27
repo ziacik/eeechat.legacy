@@ -1,73 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using KolikSoftware.Eee.Client.MainFormPlugins;
+using KolikSoftware.Eee.Client;
 using System.Windows.Forms;
 using KolikSoftware.Eee.Service.Domain;
-using Skybound.Gecko;
+using System.IO;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
-namespace KolikSoftware.Eee.Client.MainFormPlugins
+namespace KolikSoftware.Eee.IeBrowser
 {
-    public class BrowserPlugin : IMainFormPlugin
+    public class IeBrowserPlugin : IBrowserPlugin
     {
         public MainForm Form { get; set; }
-        public GeckoWebBrowser Browser { get; set; }
+        public WebBrowser Browser { get; set; }
         public string MessageTemplate { get; set; }
         public string DialogTemplate { get; set; }
-        public List<Post> AllPosts { get; set; }
-        public Dictionary<Post, GeckoElement> ElementsByPost { get; set; }
+        public IList<Post> AllPosts { get; private set; }
+        public Dictionary<Post, HtmlElement> ElementsByPost { get; set; }
 
         public void Init(MainForm mainForm)
         {
             SetupProxy();
 
             this.AllPosts = new List<Post>();
-            this.ElementsByPost = new Dictionary<Post, GeckoElement>();
+            this.ElementsByPost = new Dictionary<Post, HtmlElement>();
 
             this.IsFirstRun = true;
 
             this.Form = mainForm;
-            this.Browser = this.Form.Browser;            
-            this.Browser.DocumentCompleted += new EventHandler(Browser_DocumentCompleted);
-            this.Browser.Navigating += new GeckoNavigatingEventHandler(Browser_Navigating);
+            this.Browser = new WebBrowser();
+            this.Browser.Dock = DockStyle.Fill;
+            this.Form.BrowserContainer.Controls.Add(this.Browser);
+            this.Browser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(Browser_DocumentCompleted);
+            this.Browser.Navigating += new WebBrowserNavigatingEventHandler(Browser_Navigating);
 
             this.MessageTemplate = File.ReadAllText(Path.Combine(Application.StartupPath, @"Templates/MessageTemplate.html"));
             this.DialogTemplate = File.ReadAllText(Path.Combine(Application.StartupPath, @"Templates/DialogTemplate.html"));
+
+            this.IsFirstRun = false;
+            string templatePath = Path.Combine(Application.StartupPath, @"Templates\ChatTemplate.html");
+            this.Browser.Navigate("file:///" + templatePath.Replace('\\', '/'));
         }
 
-        void Browser_Navigating(object sender, GeckoNavigatingEventArgs e)
+        void Browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (!e.Uri.IsLoopback & e.Uri.AbsolutePath != "blank")
+            if (!e.Url.IsLoopback & e.Url.AbsolutePath != "blank")
             {
                 e.Cancel = true;
-                Process.Start(e.Uri.ToString()); //TODO: vulnerability? also, catch exceptions
+                Process.Start(e.Url.ToString()); //TODO: vulnerability? also, catch exceptions
             }
         }
 
-        public bool CanScroll()
-        {
-            if (this.ElementsByPost.Count == 0)
-                return true;
-
-            GeckoElement lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
-            bool isLastInView = lastElement.OffsetTop < (this.Browser.Window.ScrollY + this.Browser.ClientSize.Height);
-
-            return isLastInView;
-        }
-
-        public void ScrollDown()
-        {
-            if (this.AllPosts.Count > 0)
-            {
-                GeckoElement lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
-                lastElement.ScrollIntoView(false);
-            }
-        }
-
-        void Browser_DocumentCompleted(object sender, EventArgs e)
+        void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (this.IsRefresh)
             {
@@ -88,9 +75,27 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             }
             else if (this.IsFirstRun)
             {
-                this.IsFirstRun = false;
-                string templatePath = Path.Combine(Application.StartupPath, @"Templates\ChatTemplate.html");
-                this.Browser.Navigate("file:///" + templatePath.Replace('\\', '/'));
+            }
+        }
+
+        public bool CanScroll()
+        {
+            if (this.ElementsByPost.Count == 0)
+                return true;
+
+            HtmlElement lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
+            //TODO:bool isLastInView = lastElement.OffsetTop < (this.Browser.Window.ScrollY + this.Browser.ClientSize.Height);
+
+            bool isLastInView = true;
+            return isLastInView;
+        }
+
+        public void ScrollDown()
+        {
+            if (this.AllPosts.Count > 0)
+            {
+                var lastElement = this.ElementsByPost[this.AllPosts[this.AllPosts.Count - 1]];
+                lastElement.ScrollIntoView(false);
             }
         }
 
@@ -101,7 +106,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
         public void Reload()
         {
             this.IsRefresh = true;
-            this.Browser.Reload();
+            this.Browser.Refresh();
 
         }
 #endif
@@ -207,8 +212,8 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
             {
                 this.HadRef = true;
 
-                GeckoElement referenceElement = this.ElementsByPost[referenceConversation];
-                referenceElement.Parent.RemoveChild(referenceElement);
+                var referenceElement = this.ElementsByPost[referenceConversation];
+                referenceElement.OuterHtml = ""; //TODO: review
 
                 Conversation conversation = (Conversation)postToAdd;
                 referenceConversation.Posts.AddRange(conversation.Posts);
@@ -239,20 +244,21 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
                 if (appendToPost != null)
                 {
-                    GeckoElement referenceElement = this.ElementsByPost[appendToPost];
-                    referenceElement.Parent.RemoveChild(referenceElement);
+                    var referenceElement = this.ElementsByPost[appendToPost];
+                    referenceElement.OuterHtml = ""; //TODO:
+                    //referenceElement.Parent.RemoveChild(referenceElement);
 
                     appendToPost.Text = appendToPost.Text + Environment.NewLine + "-" + Environment.NewLine + postToAdd.Text;
                     postToAdd = appendToPost;
                 }
             }
 
-            GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
+            var messageDiv = this.Browser.Document.CreateElement("div");
 
             if (postToAdd.To != null)
-                messageDiv.ClassName = "Message Private";
+                messageDiv.SetAttribute("class", "Message Private");
             else
-                messageDiv.ClassName = "Message Public";
+                messageDiv.SetAttribute("class", "Message Public");
 
             string html = PostToHtml(postToAdd);
 
@@ -260,7 +266,7 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
             this.Browser.Document.Body.AppendChild(messageDiv);
 
-            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, postToAdd);
+            //TODO: this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, postToAdd);
 
             if (postToAdd == post)
             {
@@ -279,40 +285,40 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         public void SetPostPending(Post post)
         {
-            GeckoElement element;
+            HtmlElement element;
 
             if (this.ElementsByPost.TryGetValue(post, out element))
             {
-                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                foreach (HtmlElement node in element.GetElementsByTagName("div"))
                 {
-                    if (node.ClassName == "Status")
-                        node.ClassName = "Pending";
+                    if (node.GetAttribute("class") == "Status")
+                        node.SetAttribute("class", "Pending");
                 }
             }
         }
 
         public void SetPostSent(Post post)
         {
-            GeckoElement element;
+            HtmlElement element;
 
             if (this.ElementsByPost.TryGetValue(post, out element))
             {
-                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                foreach (HtmlElement node in element.GetElementsByTagName("div"))
                 {
-                    if (node.ClassName == "Pending")
-                        node.ClassName = "Sent";
+                    if (node.GetAttribute("class") == "Pending")
+                        node.SetAttribute("class", "Sent");
                 }
             }
         }
 
         public void UpdatePost(Post post)
         {
-            GeckoElement postDiv = this.ElementsByPost[post];
+            var postDiv = this.ElementsByPost[post];
             string html = PostToHtml(post);
             postDiv.InnerHtml = html;
 
             //TODO: to treba inac, lebo toto urobi viacnasobny resolve pri appende.
-            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
+            //TODO: this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
         }
 
         string ConversationToHtml(Conversation conversation)
@@ -412,19 +418,10 @@ namespace KolikSoftware.Eee.Client.MainFormPlugins
 
         void SetupProxy()
         {
-            GeckoPreferences.User["network.proxy.type"] = 5;
-/*            if (!string.IsNullOrEmpty(this.Form.Service.ProxySettings.Server))
-            {
-                string[] server = this.Form.Service.ProxySettings.Server.Split(':');
-                GeckoPreferences.User["network.proxy.http"] = server[0];
-                GeckoPreferences.User["network.proxy.http_port"] = int.Parse(server[1]);
-
-
-            }*/
         }
 
         void Browser_VisibleChanged(object sender, EventArgs e)
         {
         }
-    }   
- }
+    }
+}

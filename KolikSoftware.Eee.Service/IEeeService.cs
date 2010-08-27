@@ -10,6 +10,8 @@ namespace KolikSoftware.Eee.Service
     /// </summary>
     public interface IEeeService
     {
+        bool Enabled { get; set; }
+
         /// <summary>
         /// Service configuration.
         /// </summary>
@@ -74,6 +76,11 @@ namespace KolikSoftware.Eee.Service
         /// Sends a new message to the server.
         /// </summary>
         void SendMessage(Room room, User recipient, string message);
+
+        /// <summary>
+        /// Sends a new message to the server as a reply to another post (take recipient and room from the post).
+        /// </summary>
+        void ReplyTo(Post post, string message);
 
         /// <summary>
         /// Uploads file. Returns null if fails or link to file if success.

@@ -27,10 +27,10 @@
     </UpgradeBackupLocation>
     <SignAssembly>false</SignAssembly>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ManifestCertificateThumbprint>29AE0ECE95C4C278DDA001E310FC2B98A0095E59</ManifestCertificateThumbprint>
-    <ManifestKeyFile>EeeClient_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>86C2CBB2CD7C2BFC1BD99C1815255CEB5E19B7C3</ManifestCertificateThumbprint>
+    <ManifestKeyFile>KolikSoftware.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -41,6 +41,7 @@
     </SccProvider>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ManifestTimestampUrl>http://timestamp.verisign.com/scripts/timstamp.dll</ManifestTimestampUrl>
     <PublishUrl>C:\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -54,14 +55,15 @@
     <InstallUrl>http://www.eeechat.net/</InstallUrl>
     <SupportUrl>http://www.eeechat.net</SupportUrl>
     <ProductName>Eee Client 2010</ProductName>
-    <PublisherName>Kolik%27s</PublisherName>
+    <PublisherName>Kolik Software</PublisherName>
     <SuiteName>Eee Chat</SuiteName>
+    <CreateWebPageOnPublish>false</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>8</ApplicationRevision>
-    <ApplicationVersion>10.0.0.8</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
+    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationVersion>10.0.0.10</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -117,7 +119,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Components\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Skybound.Gecko, Version=1.9.1.0, Culture=neutral, PublicKeyToken=3209ac31600d1857, processorArchitecture=x86">
+    <Reference Include="Skybound.Gecko, Version=1.9.1.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\Gecko\Skybound.Gecko.dll</HintPath>
     </Reference>
@@ -152,6 +154,10 @@
     <ProjectReference Include="..\KolikSoftware.Eee.CometService\KolikSoftware.Eee.CometService.csproj">
       <Project>{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}</Project>
       <Name>KolikSoftware.Eee.CometService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KolikSoftware.Eee.OutlookService\KolikSoftware.Eee.OutlookService.csproj">
+      <Project>{B2124DCD-A000-4803-9CFE-6A089A0EC7EB}</Project>
+      <Name>KolikSoftware.Eee.OutlookService</Name>
     </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
       <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
@@ -213,8 +219,8 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainFormPlugins\BrowserPlugin.cs" />
     <Compile Include="MainFormPlugins\CommandPostPlugin.cs" />
+    <Compile Include="MainFormPlugins\IBrowserPlugin.cs" />
     <Compile Include="MainFormPlugins\LinkResolver.cs" />
     <Compile Include="MainFormPlugins\RoomStatePlugin.cs" />
     <Compile Include="MainFormPlugins\EditorPlugin.cs" />

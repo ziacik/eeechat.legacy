@@ -5,16 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}</ProjectGuid>
+    <ProjectGuid>{2D099E47-3D8A-446A-B005-C17FE7B742A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KolikSoftware.Eee.CometService</RootNamespace>
-    <AssemblyName>KolikSoftware.Eee.CometService</AssemblyName>
+    <RootNamespace>KolikSoftware.Eee.IeBrowser</RootNamespace>
+    <AssemblyName>KolikSoftware.Eee.IeBrowser</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\KolikSoftware.Eee.Client\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -38,6 +35,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -48,10 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CometService.cs" />
+    <Compile Include="IeBrowserPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KolikSoftware.Eee.Client\KolikSoftware.Eee.Client.csproj">
+      <Project>{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}</Project>
+      <Name>KolikSoftware.Eee.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
       <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
       <Name>KolikSoftware.Eee.Service</Name>

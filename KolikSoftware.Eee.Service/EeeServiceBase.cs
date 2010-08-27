@@ -16,9 +16,12 @@ namespace KolikSoftware.Eee.Service
 {
     public class EeeServiceBase
     {
+        public bool Enabled { get; set; }
+
         public IServiceConfiguration Configuration { get; protected set; }
         public ProxySettings ProxySettings { get; set; }
         public User CurrentUser { get; protected set; }
+
         protected string PasswordHash { get; private set; }
 
         protected void CreateHash(AuthenticationData authenticationData, SecureString password)

@@ -11,7 +11,7 @@ namespace KolikSoftware.Eee.Client.PluginCore
     public static class PluginHelper
     {
         public static List<IEeeService> Services = new List<IEeeService>();
-        public static List<IMainFormPlugin> MainFormPlugins { get; set; }
+        public static List<IMainFormPlugin> MainFormPlugins = new List<IMainFormPlugin>();
 
         public static void LoadPlugins()
         {
@@ -19,6 +19,9 @@ namespace KolikSoftware.Eee.Client.PluginCore
             {
                 LoadPluginsFrom(dllFile);
             }
+
+            if (Services.Count > 0 && !Services[0].Enabled)
+                Services[0].Enabled = true;
         }
 
         static void LoadPluginsFrom(string dllFile)
@@ -36,7 +39,7 @@ namespace KolikSoftware.Eee.Client.PluginCore
                 {
                     if (serviceType.IsAssignableFrom(pluginType))
                     {
-                        Services.Add((IEeeService)Activator.CreateInstance(pluginType));
+                        Services.Add(CreateService(pluginType));
                     }
                     else if (mainFormPluginType.IsAssignableFrom(pluginType))
                     {
@@ -44,6 +47,16 @@ namespace KolikSoftware.Eee.Client.PluginCore
                     }
                 }
             }
+        }
+
+        static IEeeService CreateService(Type pluginType)
+        {
+            var service = (IEeeService)Activator.CreateInstance(pluginType);
+            var serviceName = service.GetType().Name;
+            var property = Properties.Settings.Default.PropertyValues["Service." + serviceName];
+            var enabled = property != null && (bool)property.PropertyValue;
+            service.Enabled = enabled;
+            return service;
         }
     }
 }

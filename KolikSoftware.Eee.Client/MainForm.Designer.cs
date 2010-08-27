@@ -162,7 +162,6 @@ namespace KolikSoftware.Eee.Client
             this.uploadingLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.disconnectedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.Browser = new Skybound.Gecko.GeckoWebBrowser();
             this.externalUsersToolStrip = new System.Windows.Forms.ToolStrip();
             this.mediaToolStrip = new System.Windows.Forms.ToolStrip();
             this.closeMediaBarToolItem = new System.Windows.Forms.ToolStripButton();
@@ -227,6 +226,7 @@ namespace KolikSoftware.Eee.Client
             this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
             this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
             this.ReplyUsersMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.BrowserContainer = new System.Windows.Forms.Panel();
             this.notifyMenu.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.toolbarContainer.BottomToolStripPanel.SuspendLayout();
@@ -754,7 +754,7 @@ namespace KolikSoftware.Eee.Client
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.Browser);
+            this.splitContainer1.Panel1.Controls.Add(this.BrowserContainer);
             this.splitContainer1.Panel1.Controls.Add(this.externalUsersToolStrip);
             this.splitContainer1.Panel1.Controls.Add(this.mediaToolStrip);
             // 
@@ -767,14 +767,6 @@ namespace KolikSoftware.Eee.Client
             this.splitContainer1.SplitterDistance = 399;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // Browser
-            // 
-            this.Browser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Browser.Location = new System.Drawing.Point(0, 0);
-            this.Browser.Name = "Browser";
-            this.Browser.Size = new System.Drawing.Size(590, 399);
-            this.Browser.TabIndex = 8;
             // 
             // externalUsersToolStrip
             // 
@@ -1289,6 +1281,9 @@ namespace KolikSoftware.Eee.Client
             // 
             // Service
             // 
+            this.Service.ApplicationVersion = null;
+            this.Service.Enabled = false;
+            this.Service.FirstGetMessages = true;
             this.Service.Form = null;
             this.Service.ProxySettings = null;
             this.Service.ServiceUrl = null;
@@ -1346,6 +1341,14 @@ namespace KolikSoftware.Eee.Client
             // 
             this.ReplyUsersMenuStrip.Name = "ReplyUsersMenuStrip";
             this.ReplyUsersMenuStrip.Size = new System.Drawing.Size(61, 4);
+            // 
+            // BrowserContainer
+            // 
+            this.BrowserContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BrowserContainer.Location = new System.Drawing.Point(0, 0);
+            this.BrowserContainer.Name = "BrowserContainer";
+            this.BrowserContainer.Size = new System.Drawing.Size(590, 399);
+            this.BrowserContainer.TabIndex = 8;
             // 
             // MainForm
             // 
@@ -1492,12 +1495,12 @@ namespace KolikSoftware.Eee.Client
         private ToolStripMenuItem uploadMediaMenuItem;
         private ToolStrip externalUsersToolStrip;
         private GeckoWebBrowser webBrowser;
-        public GeckoWebBrowser Browser;
         public BackgroundServiceController Service;
         public ToolStrip UsersToolStrip;
         public ToolStrip RoomsToolStrip;
         public RichTextBox Editor;
         public ContextMenuStrip ReplyUsersMenuStrip;
+        public Panel BrowserContainer;
 
 
     }

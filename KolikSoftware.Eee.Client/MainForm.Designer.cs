@@ -219,11 +219,8 @@ namespace KolikSoftware.Eee.Client
             this.Service = new KolikSoftware.Eee.Client.BackgroundServiceController(this.components);
             this.activatingHotkey = new KolikSoftware.Eee.Client.Helpers.GlobalHotKey(this.components);
             this.notificationManager = new KolikSoftware.Eee.Client.Notifications.NotificationManager(this.components);
-            this.historyManager = new KolikSoftware.Eee.Client.History.HistoryManager(this.components);
             this.loginManager = new KolikSoftware.Eee.Client.LoginProcess.LoginManager(this.components);
             this.autoAwayMonitor = new KolikSoftware.Eee.Client.Notifications.AutoAwayMonitor(this.components);
-            this.updateManager = new KolikSoftware.Eee.Client.Updating.UpdateManager(this.components);
-            this.mediaPlayer = new KolikSoftware.Eee.Client.Media.MediaPlayer(this.components);
             this.webBrowser = new Skybound.Gecko.GeckoWebBrowser();
             this.ReplyUsersMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BrowserContainer = new System.Windows.Forms.Panel();
@@ -812,7 +809,6 @@ namespace KolikSoftware.Eee.Client
             this.closeMediaBarToolItem.Name = "closeMediaBarToolItem";
             this.closeMediaBarToolItem.Size = new System.Drawing.Size(21, 37);
             this.closeMediaBarToolItem.Text = "Close";
-            this.closeMediaBarToolItem.Click += new System.EventHandler(this.closeMediaBarToolItem_Click);
             // 
             // toolStripSeparator15
             // 
@@ -829,7 +825,6 @@ namespace KolikSoftware.Eee.Client
             this.playToolItem2.Name = "playToolItem2";
             this.playToolItem2.Size = new System.Drawing.Size(21, 20);
             this.playToolItem2.Text = "Play";
-            this.playToolItem2.Click += new System.EventHandler(this.playToolItem_Click);
             // 
             // pauseToolItem2
             // 
@@ -840,7 +835,6 @@ namespace KolikSoftware.Eee.Client
             this.pauseToolItem2.Name = "pauseToolItem2";
             this.pauseToolItem2.Size = new System.Drawing.Size(21, 20);
             this.pauseToolItem2.Text = "Pause";
-            this.pauseToolItem2.Click += new System.EventHandler(this.pauseToolItem_Click);
             // 
             // stopToolItem2
             // 
@@ -851,7 +845,6 @@ namespace KolikSoftware.Eee.Client
             this.stopToolItem2.Name = "stopToolItem2";
             this.stopToolItem2.Size = new System.Drawing.Size(21, 20);
             this.stopToolItem2.Text = "Stop";
-            this.stopToolItem2.Click += new System.EventHandler(this.stopToolItem_Click);
             // 
             // backToolItem
             // 
@@ -862,7 +855,6 @@ namespace KolikSoftware.Eee.Client
             this.backToolItem.Name = "backToolItem";
             this.backToolItem.Size = new System.Drawing.Size(21, 20);
             this.backToolItem.Text = "Previous";
-            this.backToolItem.Click += new System.EventHandler(this.backToolItem_Click);
             // 
             // forwardToolItem
             // 
@@ -873,7 +865,6 @@ namespace KolikSoftware.Eee.Client
             this.forwardToolItem.Name = "forwardToolItem";
             this.forwardToolItem.Size = new System.Drawing.Size(21, 20);
             this.forwardToolItem.Text = "Next";
-            this.forwardToolItem.Click += new System.EventHandler(this.forwardToolItem_Click);
             // 
             // toolStripSeparator16
             // 
@@ -1106,7 +1097,6 @@ namespace KolikSoftware.Eee.Client
             this.playToolItem.Size = new System.Drawing.Size(23, 22);
             this.playToolItem.Text = "Play";
             this.playToolItem.ToolTipText = "Play";
-            this.playToolItem.Click += new System.EventHandler(this.playToolItem_Click);
             // 
             // pauseToolItem
             // 
@@ -1118,7 +1108,6 @@ namespace KolikSoftware.Eee.Client
             this.pauseToolItem.Name = "pauseToolItem";
             this.pauseToolItem.Size = new System.Drawing.Size(23, 22);
             this.pauseToolItem.Text = "Pause";
-            this.pauseToolItem.Click += new System.EventHandler(this.pauseToolItem_Click);
             // 
             // stopToolItem
             // 
@@ -1130,7 +1119,6 @@ namespace KolikSoftware.Eee.Client
             this.stopToolItem.Name = "stopToolItem";
             this.stopToolItem.Size = new System.Drawing.Size(23, 22);
             this.stopToolItem.Text = "Stop";
-            this.stopToolItem.Click += new System.EventHandler(this.stopToolItem_Click);
             // 
             // UsersToolStrip
             // 
@@ -1307,10 +1295,6 @@ namespace KolikSoftware.Eee.Client
             this.notificationManager.NotifyIcon = this.notifyIcon;
             this.notificationManager.Activate += new System.EventHandler<KolikSoftware.Eee.Client.Notifications.NotificationManager.ActivateEventArgs>(this.notificationManager_Activate);
             // 
-            // historyManager
-            // 
-            this.historyManager.ServiceController = this.Service;
-            // 
             // loginManager
             // 
             this.loginManager.ServiceController = this.Service;
@@ -1323,11 +1307,6 @@ namespace KolikSoftware.Eee.Client
             // autoAwayMonitor
             // 
             this.autoAwayMonitor.AutoAway += new System.EventHandler<KolikSoftware.Eee.Client.Notifications.AutoAwayMonitor.AutoAwayEventArgs>(this.autoAwayMonitor_AutoAway);
-            // 
-            // mediaPlayer
-            // 
-            this.mediaPlayer.ModeChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.ModeChangedEventArgs>(this.mediaPlayer_ModeChanged);
-            this.mediaPlayer.MediaChanged += new System.EventHandler<KolikSoftware.Eee.Client.Media.MediaPlayer.MediaChangedEventArgs>(this.mediaPlayer_MediaChanged);
             // 
             // webBrowser
             // 
@@ -1427,7 +1406,6 @@ namespace KolikSoftware.Eee.Client
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripStatusLabel errorLabel;
         public KolikSoftware.Eee.Client.Notifications.NotificationManager notificationManager;
-        private KolikSoftware.Eee.Client.History.HistoryManager historyManager;
         private KolikSoftware.Eee.Client.LoginProcess.LoginManager loginManager;
         private ToolStripStatusLabel connectionProblemsLabel;
         private ContextMenuStrip userMenu;
@@ -1447,7 +1425,6 @@ namespace KolikSoftware.Eee.Client
         private ToolStripSeparator toolStripSeparator11;
         private ToolTip userInfoToolTip;
         private ToolStripStatusLabel updatesLabel;
-        private KolikSoftware.Eee.Client.Updating.UpdateManager updateManager;
         private ToolStripButton uploadToolItem;
         private ToolStripStatusLabel uploadingLabel;
         private ToolStripSeparator toolStripSeparator10;
@@ -1467,7 +1444,6 @@ namespace KolikSoftware.Eee.Client
         private ToolStripLabel searchLabel;
         private ToolStripSeparator toolStripSeparator12;
         private ToolStripButton playToolItem;
-        private KolikSoftware.Eee.Client.Media.MediaPlayer mediaPlayer;
         private ToolStripStatusLabel downloadingLabel;
         private ToolStripButton pauseToolItem;
         private ToolStripButton stopToolItem;

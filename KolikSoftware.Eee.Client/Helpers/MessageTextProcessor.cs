@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using KolikSoftware.Eee.Service;
-using System.Text.RegularExpressions;
-using System.Xml.Xsl;
-using System.Xml;
 using System.IO;
 using System.Reflection;
-using KolikSoftware.Eee.Client.Media;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Xsl;
 
 namespace KolikSoftware.Eee.Client.Helpers
 {

@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Kolik Software")]
-[assembly: AssemblyProduct("Eee Client 2010")]
-[assembly: AssemblyCopyright("© Kolik Software 2008-2010")]
+[assembly: AssemblyProduct("Eee Chat")]
+[assembly: AssemblyCopyright("Copyright © Kolik Software 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("221bef6c-6a23-47cc-8032-e622926ebb65")]
+[assembly: Guid("7246b187-c621-46c8-b87f-0797f11c7dd4")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("10.0.0.10")]
-[assembly: AssemblyFileVersion("10.0.0.10")]
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("10.0.0.22")]
+[assembly: AssemblyFileVersion("10.0.0.22")]

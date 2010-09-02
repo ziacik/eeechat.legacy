@@ -551,7 +551,7 @@ namespace KolikSoftware.Eee.Client
         {
             //TODO: DoForAllServices(s => DoConnect(s, 0, login, password));
             DoConnect(PluginHelper.Services[0], 0, login, password);
-            PluginHelper.Services[1].Connect(login, password);
+            //PluginHelper.Services[1].Connect(login, password);
         }
 
         void DoConnect(IEeeService service, int sleepSecs, string login, SecureString password)

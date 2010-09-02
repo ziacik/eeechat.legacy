@@ -1,168 +1,104 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
-  <UsingTask TaskName="BuildIncrementer.Incrementer" AssemblyFile="C:\Development\Components\BuildIncrementer.dll" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A77A7BD9-BA44-4EF2-B1DA-CDCAE322BF2C}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>ApplicationIcon.ico</ApplicationIcon>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
-    <AssemblyName>EeeClient</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EF41517B-3188-49E2-BA8C-73F4A781AD5A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KolikSoftware.Eee.Client</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AssemblyName>KolikSoftware.Eee.Client</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
     <StartupObject>KolikSoftware.Eee.Client.MainForm</StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <SignAssembly>false</SignAssembly>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ManifestCertificateThumbprint>86C2CBB2CD7C2BFC1BD99C1815255CEB5E19B7C3</ManifestCertificateThumbprint>
-    <ManifestKeyFile>KolikSoftware.pfx</ManifestKeyFile>
+    <ApplicationIcon>Resources\ApplicationIcon.ico</ApplicationIcon>
+    <ManifestCertificateThumbprint>86D0B327BF261DEB49A0EC6FDEF2B8FE3346068D</ManifestCertificateThumbprint>
+    <ManifestKeyFile>KolikSoftware.Eee.Client_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ManifestTimestampUrl>http://timestamp.verisign.com/scripts/timstamp.dll</ManifestTimestampUrl>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>C:\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Background</UpdateMode>
-    <UpdateInterval>1</UpdateInterval>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>true</UpdatePeriodically>
+    <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://www.eeechat.net/</InstallUrl>
-    <SupportUrl>http://www.eeechat.net</SupportUrl>
-    <ProductName>Eee Client 2010</ProductName>
-    <PublisherName>Kolik Software</PublisherName>
-    <SuiteName>Eee Chat</SuiteName>
-    <CreateWebPageOnPublish>false</CreateWebPageOnPublish>
-    <WebPage>index.html</WebPage>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>10.0.0.10</ApplicationVersion>
-    <UseApplicationTrust>true</UseApplicationTrust>
-    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationVersion>10.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>false</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>none</DebugType>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.1.271, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+    <Reference Include="KolikSoftware.Eee.GeckoBrowser, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Components\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\Plugins\KolikSoftware.Eee.GeckoBrowser.dll</HintPath>
     </Reference>
     <Reference Include="Skybound.Gecko, Version=1.9.1.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\Gecko\Skybound.Gecko.dll</HintPath>
     </Reference>
-    <Reference Include="System">
-      <Name>System</Name>
-    </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Design">
-      <Name>System.Design</Name>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
-    <Reference Include="System.Web">
-      <Name>System.Web</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Name>System.Windows.Forms</Name>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
-    <ProjectReference Include="..\KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj">
-      <Project>{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}</Project>
-      <Name>KolikSoftware.Controls.Options</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KolikSoftware.Eee.CometService\KolikSoftware.Eee.CometService.csproj">
-      <Project>{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}</Project>
-      <Name>KolikSoftware.Eee.CometService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KolikSoftware.Eee.OutlookService\KolikSoftware.Eee.OutlookService.csproj">
-      <Project>{B2124DCD-A000-4803-9CFE-6A089A0EC7EB}</Project>
-      <Name>KolikSoftware.Eee.OutlookService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
-      <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
-      <Name>KolikSoftware.Eee.Service</Name>
-    </ProjectReference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -174,16 +110,15 @@
     <Compile Include="AwayModeReasonDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AwayModeReasonDialog.Designer.cs">
+    <Compile Include="AwayModeReasonDialog.designer.cs">
       <DependentUpon>AwayModeReasonDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="BackgroundServiceController.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BackgroundServiceController.Designer.cs">
+    <Compile Include="BackgroundServiceController.designer.cs">
       <DependentUpon>BackgroundServiceController.cs</DependentUpon>
     </Compile>
-    <None Include="app.config" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers\GlobalHotKey.cs">
       <SubType>Component</SubType>
@@ -195,12 +130,6 @@
     <Compile Include="Helpers\MessageTextProcessor.cs" />
     <Compile Include="Helpers\MessageVisibilityHelper.cs" />
     <Compile Include="Helpers\ToolstripSettingsSerializer.cs" />
-    <Compile Include="History\HistoryManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="History\HistoryManager.Designer.cs">
-      <DependentUpon>HistoryManager.cs</DependentUpon>
-    </Compile>
     <Compile Include="LoginProcess\AccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,31 +145,19 @@
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFormPlugins\CommandPostPlugin.cs" />
-    <Compile Include="MainFormPlugins\IBrowserPlugin.cs" />
-    <Compile Include="MainFormPlugins\LinkResolver.cs" />
-    <Compile Include="MainFormPlugins\RoomStatePlugin.cs" />
     <Compile Include="MainFormPlugins\EditorPlugin.cs" />
+    <Compile Include="MainFormPlugins\IBrowserPlugin.cs" />
     <Compile Include="MainFormPlugins\IMainFormPlugin.cs" />
     <Compile Include="MainFormPlugins\LinkFinder.cs" />
+    <Compile Include="MainFormPlugins\LinkResolver.cs" />
+    <Compile Include="MainFormPlugins\RoomStatePlugin.cs" />
     <Compile Include="MainFormPlugins\SmileFinder.cs" />
     <Compile Include="MainFormPlugins\UploadPlugin.cs" />
     <Compile Include="MainFormPlugins\UserStatePlugin.cs" />
-    <Compile Include="Media\MediaPlayer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Media\MediaPlayer.Designer.cs">
-      <DependentUpon>MediaPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Media\MediaPlayerNotifyHelper.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Media\MediaPlayerNotifyHelper.Designer.cs">
-      <DependentUpon>MediaPlayerNotifyHelper.cs</DependentUpon>
-    </Compile>
     <Compile Include="Notifications\AutoAwayMonitor.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -256,26 +173,64 @@
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OptionsForm.Designer.cs">
+    <Compile Include="OptionsForm.designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginCore\PluginHelper.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AwayModeReasonDialog.resx">
+      <DependentUpon>AwayModeReasonDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BackgroundServiceController.resx">
+      <DependentUpon>BackgroundServiceController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginProcess\AccountForm.resx">
+      <DependentUpon>AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notifications\NotificationManager.resx">
+      <DependentUpon>NotificationManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\ErrorForm.resx">
+      <DependentUpon>ErrorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\UserFeedbackForm.resx">
+      <DependentUpon>UserFeedbackForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UploadInfoBox.resx">
+      <DependentUpon>UploadInfoBox.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\ChatTemplate.html.old" />
+    <None Include="Templates\MessageTemplate.html.old" />
+    <None Include="Templates\NewStyle.css.old" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Reporting\UserFeedbackForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reporting\UserFeedbackForm.Designer.cs">
-      <DependentUpon>UserFeedbackForm.cs</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Reporting\ErrorForm.cs">
       <SubType>Form</SubType>
@@ -283,161 +238,78 @@
     <Compile Include="Reporting\ErrorForm.Designer.cs">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Security\Security.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Security\UserCredentialsDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Updating\UpdateForm.cs">
+    <Compile Include="Reporting\UserFeedbackForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Updating\UpdateForm.Designer.cs">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
+    <Compile Include="Reporting\UserFeedbackForm.Designer.cs">
+      <DependentUpon>UserFeedbackForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Updating\UpdateManager.cs">
+    <Compile Include="Security\Security.cs" />
+    <Compile Include="Security\UserCredentialsDialog.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Updating\UpdateManager.Designer.cs">
-      <DependentUpon>UpdateManager.cs</DependentUpon>
     </Compile>
     <Compile Include="UploadInfoBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UploadInfoBox.Designer.cs">
+    <Compile Include="UploadInfoBox.designer.cs">
       <DependentUpon>UploadInfoBox.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AwayModeReasonDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AwayModeReasonDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BackgroundServiceController.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>BackgroundServiceController.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="History\HistoryManager.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>HistoryManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="licenses.licx" />
-    <EmbeddedResource Include="LoginProcess\AccountForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AccountForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Media\MediaPlayer.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MediaPlayer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Media\MediaPlayerNotifyHelper.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MediaPlayerNotifyHelper.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notifications\NotificationManager.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>NotificationManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionsForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OptionsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\UserFeedbackForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>UserFeedbackForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\ErrorForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ErrorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Updating\UpdateForm.resx">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Updating\UpdateManager.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>UpdateManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UploadInfoBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>UploadInfoBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Resources\OptionsConnection.png" />
-    <None Include="Resources\ConnectionProblems.png" />
-    <None Include="Resources\ConnectionProblemsBig.png" />
-    <None Include="Resources\Ignore.png" />
-    <None Include="Resources\ApplicationVeryBig.png" />
-    <None Include="Resources\Appearance.png" />
-    <Content Include="ApplicationIcon.ico" />
-    <None Include="Resources\ApplicationBig.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Appearance.png" />
+    <Content Include="Resources\ApplicationBig.png" />
     <Content Include="Resources\ApplicationIcon.ico" />
-    <None Include="Resources\ErrorBig.png" />
-    <None Include="Resources\AwayMode.png" />
-    <None Include="Resources\AwayModeBig.png" />
-    <None Include="Resources\Connect.png" />
-    <None Include="Resources\AwayMode.ico" />
-    <None Include="Resources\Follow.png" />
-    <None Include="Resources\FeedbackBig.png" />
-    <None Include="Resources\HistoryDayLeft.png" />
-    <None Include="Resources\HistoryDayRight.png" />
-    <None Include="Resources\HistoryMonthLeft.png" />
-    <None Include="Resources\HistoryMonthRight.png" />
-    <None Include="Resources\Help.png" />
-    <None Include="Resources\History.png" />
-    <None Include="Resources\Feedback.png" />
-    <None Include="Resources\ConnectBig.png" />
-    <None Include="Resources\Download.png" />
-    <None Include="Resources\DownloadBig.png" />
-    <None Include="Resources\Close.png" />
-    <None Include="Resources\Back.png" />
-    <None Include="Resources\Forward.png" />
-    <None Include="Resources\Copy.png" />
-    <None Include="Resources\ExternalUser.png" />
-    <None Include="Resources\Jabber.png" />
-    <Content Include="Resources\Mail.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\StopIgnoring.png" />
-    <None Include="Resources\Updates.png" />
-    <None Include="Resources\UpdatesBig.png" />
-    <None Include="Resources\OptionsAdvanced.png" />
-    <Content Include="Resources\Media.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\Upload.png" />
-    <None Include="Resources\StretchToggle.png" />
-    <None Include="Resources\NewAccountBig.png" />
-    <None Include="Resources\NewAccount.png" />
-    <None Include="Resources\Notification.png" />
-    <None Include="Resources\Notification.ico" />
-    <None Include="Resources\Reply.png" />
-    <None Include="Resources\Options.png" />
-    <None Include="Resources\Smilie.png" />
-    <None Include="Resources\Search.png" />
-    <None Include="Resources\Play.png" />
-    <None Include="Resources\Pause.png" />
-    <None Include="Resources\Stop.png" />
-    <None Include="Resources\UploadBig.png" />
-    <Content Include="Resources\Url.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\VolumeUp.png" />
-    <None Include="Resources\VolumeDown.png" />
+    <Content Include="Resources\ApplicationVeryBig.png" />
+    <Content Include="Resources\AwayMode.ico" />
+    <Content Include="Resources\AwayMode.png" />
+    <Content Include="Resources\AwayModeBig.png" />
+    <Content Include="Resources\Back.png" />
+    <Content Include="Resources\Close.png" />
+    <Content Include="Resources\Connect.png" />
+    <Content Include="Resources\ConnectBig.png" />
+    <Content Include="Resources\ConnectionProblems.png" />
+    <Content Include="Resources\ConnectionProblemsBig.png" />
+    <Content Include="Resources\Copy.png" />
+    <Content Include="Resources\Download.png" />
+    <Content Include="Resources\DownloadBig.png" />
+    <Content Include="Resources\ErrorBig.png" />
+    <Content Include="Resources\ExternalUser.png" />
+    <Content Include="Resources\Feedback.png" />
+    <Content Include="Resources\FeedbackBig.png" />
+    <Content Include="Resources\Follow.png" />
+    <Content Include="Resources\Forward.png" />
+    <Content Include="Resources\Help.png" />
+    <Content Include="Resources\History.png" />
+    <Content Include="Resources\HistoryDayLeft.png" />
+    <Content Include="Resources\HistoryDayRight.png" />
+    <Content Include="Resources\HistoryMonthLeft.png" />
+    <Content Include="Resources\HistoryMonthRight.png" />
+    <Content Include="Resources\Ignore.png" />
+    <Content Include="Resources\Jabber.png" />
+    <Content Include="Resources\Mail.gif" />
+    <Content Include="Resources\Media.gif" />
+    <Content Include="Resources\NewAccount.png" />
+    <Content Include="Resources\NewAccountBig.png" />
+    <Content Include="Resources\Notification.ico" />
+    <Content Include="Resources\Notification.png" />
+    <Content Include="Resources\Options.png" />
+    <Content Include="Resources\OptionsAdvanced.png" />
+    <Content Include="Resources\OptionsConnection.png" />
+    <Content Include="Resources\Pause.png" />
+    <Content Include="Resources\Play.png" />
+    <Content Include="Resources\Reply.png" />
+    <Content Include="Resources\Search.png" />
+    <Content Include="Resources\Smilie.png" />
+    <Content Include="Resources\Stop.png" />
+    <Content Include="Resources\StopIgnoring.png" />
+    <Content Include="Resources\StretchToggle.png" />
+    <Content Include="Resources\Updates.png" />
+    <Content Include="Resources\UpdatesBig.png" />
+    <Content Include="Resources\Upload.png" />
+    <Content Include="Resources\UploadBig.png" />
+    <Content Include="Resources\Url.gif" />
+    <Content Include="Resources\VolumeDown.png" />
+    <Content Include="Resources\VolumeUp.png" />
     <Content Include="Smilies\bad.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -591,25 +463,38 @@
     <Content Include="Templates\DialogTemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\MessageTemplate7.xslt" />
-    <Content Include="Templates\MessageTemplate5.xslt" />
-    <Content Include="Templates\MessageTemplate6.xslt" />
-    <Content Include="Templates\MessageTemplate4.xslt" />
-    <Content Include="Templates\MessageTemplate1.xslt" />
-    <Content Include="Templates\MessageTemplate2.xslt" />
-    <Content Include="Templates\MessageTemplate3.xslt" />
     <Content Include="Templates\MessageTemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\MusicPlayer.swf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Templates\MessageTemplate1.xslt" />
+    <Content Include="Templates\MessageTemplate2.xslt" />
+    <Content Include="Templates\MessageTemplate3.xslt" />
+    <Content Include="Templates\MessageTemplate4.xslt" />
+    <Content Include="Templates\MessageTemplate5.xslt" />
+    <Content Include="Templates\MessageTemplate6.xslt" />
+    <Content Include="Templates\MessageTemplate7.xslt" />
+    <Content Include="Templates\MusicPlayer.swf" />
     <Content Include="Templates\NewStyle.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Pending.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\Test.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj">
+      <Project>{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}</Project>
+      <Name>KolikSoftware.Controls.Options</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KolikSoftware.Eee.CometService\KolikSoftware.Eee.CometService.csproj">
+      <Project>{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}</Project>
+      <Name>KolikSoftware.Eee.CometService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj">
+      <Project>{F41504E2-DCA4-4559-A84E-C393CB951C83}</Project>
+      <Name>KolikSoftware.Eee.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -630,33 +515,25 @@
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5</ProductName>
-      <Install>true</Install>
+      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Shell32">
-      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <Target Name="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Incrementer AssemblyFileLocation="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs">
-    </Incrementer>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
   </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

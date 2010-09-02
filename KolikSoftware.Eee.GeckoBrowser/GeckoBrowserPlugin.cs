@@ -101,15 +101,12 @@ namespace KolikSoftware.Eee.GeckoBrowser
         public bool IsRefresh { get; set; }
         public bool IsFirstRun { get; set; }
 
-#if DEBUG
         public void Reload()
         {
             this.IsRefresh = true;
             this.Browser.Reload();
 
         }
-#endif
-
         public bool HadRef { get; set; }
 
         static readonly Regex TextRecipientRegex = new Regex(@"^(\w+):", RegexOptions.Compiled | RegexOptions.Singleline);

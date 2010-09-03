@@ -49,6 +49,11 @@ td
 	-moz-box-shadow: 2px 2px 2px #d0d0d9;	
 }
 
+.Unseen
+{
+	border: solid 1px Red;
+}
+
 .Message.Public
 {
 	background-color: #fbfeff;

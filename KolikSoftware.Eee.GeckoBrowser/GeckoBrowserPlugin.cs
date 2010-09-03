@@ -251,9 +251,9 @@ namespace KolikSoftware.Eee.GeckoBrowser
             GeckoElement messageDiv = this.Browser.Document.CreateElement("div");
 
             if (postToAdd.To != null)
-                messageDiv.ClassName = "Message Private";
+                messageDiv.ClassName = "Message Private Unseen";
             else
-                messageDiv.ClassName = "Message Public";
+                messageDiv.ClassName = "Message Public Unseen";
 
             string html = PostToHtml(postToAdd);
 
@@ -276,6 +276,33 @@ namespace KolikSoftware.Eee.GeckoBrowser
             /// Must use original so that we are able to use SetPostSent.
             this.ElementsByPost[post] = messageDiv;
             this.ElementsByPost[postToAdd] = messageDiv;
+        }
+
+        public void SetPostUnseen(Post post)
+        {
+            GeckoElement element;
+
+            if (this.ElementsByPost.TryGetValue(post, out element))
+            {
+                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                {
+                    node.ClassName = "Unseen";
+                }
+            }
+        }
+
+        public void SetPostSeen(Post post)
+        {
+            GeckoElement element;
+
+            if (this.ElementsByPost.TryGetValue(post, out element))
+            {
+                foreach (GeckoElement node in element.GetElementsByTagName("div"))
+                {
+                    if (node.ClassName == "Unseen")
+                        node.ClassName = "";
+                }
+            }
         }
 
         public void SetPostPending(Post post)

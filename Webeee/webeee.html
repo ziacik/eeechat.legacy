@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" href="Style/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="Script/jquery-1.4.3.min.js"></script>
+		<script type="text/javascript" src="Script/jquery-ui-1.8.6.custom.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$.getJSON('http://comet.service.eeechat.net/AuthenticationData.php?Login=pha', function(data) {
+					$('#tabs-1').html('pha = ' + data.Salt);
+				});				
+			
+				// Tabs
+				$('#tabs').tabs();
+			
+				//Autocomplete
+				$("#messageInput").autocomplete({
+					source: ["kacenka", "kolik", "pha", "firewalker", "btb", "sajo", "sisquo", "test"]
+				});
+
+				// Dialog			
+				$('#dialog').dialog({
+					autoOpen: true,
+					width: 600,
+					modal: true,
+					buttons: {
+						"Prihl·siù": function() { 
+							$(this).dialog("close"); 
+						}, 
+						"Zruöiù": function() { 
+							$(this).dialog("close"); 
+						} 
+					}
+				});				
+				
+			});
+			
+			
+		</script>
+	</head>
+	<body>
+		<div id="tabs">
+			<ul>
+				<li><a href="#tabs-1">Vöetci</a></li>
+				<li><a href="#tabs-2">kacenka</a></li>
+			</ul>
+			<div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+			<div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+		</div>	
+		<div>
+			<input id="messageInput" style="z-index: 100; position: relative" title="type &quot;a&quot;" />
+		</div>
+		<!-- ui-dialog -->
+		<div id="dialog" title="Dialog Title">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
+		
+	</body>
+</html>

@@ -78,8 +78,8 @@ namespace KolikSoftware.Eee.Client.LoginProcess
             }
         }
 
-        static readonly Regex LoginRegex = new Regex("^[a-zA-Z0-9]{3,12}$", RegexOptions.Compiled);
-        static readonly Regex PasswordRegex = new Regex("^[a-zA-Z0-9_]{5,20}$", RegexOptions.Compiled);
+        static readonly Regex LoginRegex = new Regex("^[a-zA-Z0-9]{3,}$", RegexOptions.Compiled);
+        static readonly Regex PasswordRegex = new Regex("^[a-zA-Z0-9_]{5,}$", RegexOptions.Compiled);
 
         bool ValidateInput()
         {
@@ -109,13 +109,13 @@ namespace KolikSoftware.Eee.Client.LoginProcess
 
             if (LoginRegex.IsMatch(this.loginText.Text) == false)
             {
-                MessageBox.Show(this, "Login name may only contain these characters: a-z, A-Z and numbers and must be at least 3 and at most 12 characters long.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Login name may only contain these characters: a-z, A-Z and numbers and must be at least 3 characters long.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             if (PasswordRegex.IsMatch(this.passwordText.Text) == false)
             {
-                MessageBox.Show(this, "Password may only contain these characters: a-z, A-Z, underscore and numbers and must be at least 5 and at most 20 characters long.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Password may only contain these characters: a-z, A-Z, underscore and numbers and must be at least 5 characters long.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 

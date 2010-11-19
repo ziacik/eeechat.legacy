@@ -1,7 +1,8 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>C:\Publish\</PublishUrlHistory>
-    <InstallUrlHistory>http://www.eeechat.net/</InstallUrlHistory>
+    <InstallUrlHistory>http://www.eeechat.net/Install/Server2/|http://www.eeechat.net/</InstallUrlHistory>
     <SupportUrlHistory>
     </SupportUrlHistory>
     <UpdateUrlHistory>

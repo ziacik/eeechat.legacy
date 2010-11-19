@@ -1,9 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Service", "KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj", "{F41504E2-DCA4-4559-A84E-C393CB951C83}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Controls.Options", "KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj", "{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{B612E285-A9C9-48C9-84E1-535698FC8E8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json", "Json", "{D34250B0-C07B-4BA8-8FD7-BB8972A206B6}"
@@ -22,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json", "Json", "{D34250B0-C
 		Server\JsonBind\UserState.php = Server\JsonBind\UserState.php
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Service", "KolikSoftware.Eee.Service\KolikSoftware.Eee.Service.csproj", "{F41504E2-DCA4-4559-A84E-C393CB951C83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Controls.Options", "KolikSoftware.Controls.Options\KolikSoftware.Controls.Options.csproj", "{AB62C790-6DF8-4DB3-9F3A-072D76D0E1A7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.CometService", "KolikSoftware.Eee.CometService\KolikSoftware.Eee.CometService.csproj", "{219481BF-18BB-44FA-B4F2-AB4FAC9FF0E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.OutlookService", "KolikSoftware.Eee.OutlookService\KolikSoftware.Eee.OutlookService.csproj", "{B2124DCD-A000-4803-9CFE-6A089A0EC7EB}"
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.IeBrowser", "KolikSoftware.Eee.IeBrowser\KolikSoftware.Eee.IeBrowser.csproj", "{2D099E47-3D8A-446A-B005-C17FE7B742A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KolikSoftware.Eee.Client", "KolikSoftware.Eee.Client\KolikSoftware.Eee.Client.csproj", "{EF41517B-3188-49E2-BA8C-73F4A781AD5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{19C64DCE-52FF-4C85-9877-140344A1203A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,12 @@ Global
 		{EF41517B-3188-49E2-BA8C-73F4A781AD5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF41517B-3188-49E2-BA8C-73F4A781AD5A}.Release|x86.ActiveCfg = Release|x86
 		{EF41517B-3188-49E2-BA8C-73F4A781AD5A}.Release|x86.Build.0 = Release|x86
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19C64DCE-52FF-4C85-9877-140344A1203A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

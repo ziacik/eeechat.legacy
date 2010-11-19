@@ -261,7 +261,7 @@ namespace KolikSoftware.Eee.GeckoBrowser
 
             this.Browser.Document.Body.AppendChild(messageDiv);
 
-            //TODO: this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, postToAdd);
+            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(messageDiv, postToAdd);
 
             if (postToAdd == post)
             {
@@ -340,7 +340,7 @@ namespace KolikSoftware.Eee.GeckoBrowser
             postDiv.InnerHtml = html;
 
             //TODO: to treba inac, lebo toto urobi viacnasobny resolve pri appende.
-            //TODO: this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
+            this.Form.GetPlugin<LinkResolver>().ResolveLinksIn(postDiv, post);
         }
 
         string ConversationToHtml(Conversation conversation)

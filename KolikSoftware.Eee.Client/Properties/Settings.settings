@@ -84,7 +84,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="NewServiceUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://comet.service.eeechat.net</Value>
+      <Value Profile="(Default)">http://comet2.service.eeechat.net</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -43,6 +43,11 @@ namespace KolikSoftware.Eee.Service
         void Disconnect();
 
         /// <summary>
+        /// Registers new user. Returns false if the user already exists.
+        /// </summary>
+        bool RegisterUser(string login, SecureString password, int color);
+
+        /// <summary>
         /// Gets the list of the connected users.
         /// </summary>
         IList<User> GetUsers();
@@ -109,11 +114,6 @@ namespace KolikSoftware.Eee.Service
         /// Checks whether login, password combination is right.
         /// </summary>
         bool CheckUser(string login, string passwordHash);
-
-        /// <summary>
-        /// Registers new user. Returns false if the user already exists or register fails.
-        /// </summary>
-        bool RegisterUser(string login, SecureString password, int color);
 
         /// <summary>
         /// Sets the away mode and sends a comment.

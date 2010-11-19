@@ -80,7 +80,7 @@ namespace KolikSoftware.Eee.Client
             get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return version.Major.ToString() + "." + version.Minor.ToString() + " Gecko"; //TODO:
+                return version.Major.ToString() + "." + version.Minor.ToString() + " Gecko Server2"; //TODO:
             }
         }
 

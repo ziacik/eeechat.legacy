@@ -56,6 +56,14 @@ namespace KolikSoftware.Eee.CometService
             }
         }
 
+        class RegisterArguments
+        {
+            public string Login { get; set; }
+            public string PasswordHash { get; set; }
+            public string Salt { get; set; }
+            public int Color { get; set; }
+        }
+
         public DynamicArgumentsHelper ArgumentsHelper { get; set; }
         public string ApplicationVersion { get; set; }
 
@@ -177,6 +185,29 @@ namespace KolikSoftware.Eee.CometService
                     return new List<Post>();
                 else
                     throw;
+            }
+        }
+
+        public bool RegisterUser(string login, SecureString password, int color)
+        {
+            var salt = SecurityHelper.CreateSalt(6);
+            var hash = SecurityHelper.CreatePasswordHash(password, salt);
+
+            var args = new RegisterArguments { Login = login, Color = color, Salt = salt, PasswordHash = hash };
+
+            try
+            {
+                var result = Action("Register", () => args.Login, () => args.Color, () => args.Salt, () => args.PasswordHash);
+
+                if (result.Result != "OK")
+                    throw new ServiceException(result.Result); //TODO:
+                else
+                    return true;
+                //TODO: throw new ServiceException(result.Result);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

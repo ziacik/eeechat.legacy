@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace KolikSoftware.Eee.Service.Core
 {
-    internal static class SecurityHelper
+    public static class SecurityHelper
     {
         public static string CreatePasswordHash(SecureString password, string salt)
         {

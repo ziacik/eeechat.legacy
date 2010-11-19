@@ -996,8 +996,29 @@ namespace KolikSoftware.Eee.Client
             );
         }
 
-        public void RegisterUser(string login, SecureString password, int color)
+        public bool RegisterUser(string login, SecureString password, int color)
         {
+            DoForAllServices(s => DoRegisterUser(s, login, password, color));
+            return true;
+        }
+
+        void DoRegisterUser(IEeeService service, string login, SecureString password, int color)
+        {
+            InvokeInBackground(
+                0,
+                () =>
+                {
+                    service.RegisterUser(login, password, color);
+                },
+                r =>
+                {
+                    OnRegistered(RegisteredEventArgs.Empty);
+                },
+                e =>
+                {
+                    OnRegisterFailed(RegisterFailedEventArgs.Empty);
+                }
+            );
         }
 
         public void SetAwayMode(string comment)
